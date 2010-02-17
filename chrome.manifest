@@ -1,0 +1,7 @@
+content wmsinspector chrome/content/wmsinspector/
+
+locale wmsinspector ca chrome/locale/ca/wmsinspector/
+
+skin wmsinspector default/1.0 chrome/skin/default/wmsinspector/
+
+overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/wmsinspectorOverlay.xul

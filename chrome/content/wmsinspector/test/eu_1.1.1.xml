@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://schemas.opengis.net/wms/1.1.1/WMS_MS_Capabilities.dtd">
+<WMT_MS_Capabilities version="1.1.1">
+  <Service>
+    <Name>OGC:WMS</Name>
+    <Title>World Generic Map Service with EuroGlobalMap data for Europe</Title>
+    <Abstract>This is a generic map service of the world including datasets of worldwide coverage (VMAP0, ESRI ArcWorld, USGS GTOPO) and EuroGlobalMap for areas covering Europe (copyright EuroGeographics)</Abstract>
+    <KeywordList><Keyword>VMAP0, ArcWorld, EGM, GTOPO, Europe, EuroGeographics, EuroGlobalMap</Keyword></KeywordList>
+
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer"/>
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson>Stephen Peedell</ContactPerson>
+        <ContactOrganization>European Commission Joint Research Centre</ContactOrganization>
+      </ContactPersonPrimary>
+      <ContactPosition>Action Leader</ContactPosition>
+
+      <ContactAddress>
+        <AddressType>Postal</AddressType>
+        <Address>Via Fermi 2749 - TP262</Address>
+        <City>Ispra</City>
+        <StateOrProvince>Varese</StateOrProvince>
+        <PostCode>21027</PostCode>
+
+        <Country>Italy</Country>
+      </ContactAddress>
+      <ContactVoiceTelephone>+390332786153</ContactVoiceTelephone>
+      <ContactFacsimileTelephone>+390332786325</ContactFacsimileTelephone>
+      <ContactElectronicMailAddress>stephen.peedell@jrc.ec.europa.eu</ContactElectronicMailAddress>
+    </ContactInformation>
+    <Fees>no fees</Fees>
+
+    <AccessConstraints>The Commission is authorized to disseminate geographic data, derived geographic data and other derived products as web map services on the Intranet of the Commission as well as on the Internet, if the source is acknowledged</AccessConstraints>
+  </Service>
+  <Capability>
+    <Request>
+      <GetCapabilities>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer"/></Get></HTTP>
+
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        <Format>image/bmp</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/tiff</Format>
+        <Format>image/png</Format>
+
+        <Format>image/gif</Format>
+        <Format>image/svg+xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer"/></Get></HTTP>
+        </DCPType>
+      </GetMap>
+      <GetFeatureInfo>
+        <Format>application/vnd.ogc.wms_xml</Format>
+
+        <Format>text/xml</Format>
+        <Format>text/html</Format>
+        <Format>text/plain</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer"/></Get></HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+
+    </Request>
+    <Exception>
+      <Format>application/vnd.ogc.se_xml</Format>
+      <Format>application/vnd.ogc.se_inimage</Format>
+      <Format>application/vnd.ogc.se_blank</Format>
+    </Exception>
+   <Layer>
+
+    <Title>Layers</Title>
+    <SRS>EPSG:4326</SRS>
+    <SRS>EPSG:3034</SRS>
+    <LatLonBoundingBox minx="-180.000000" miny="-64.555556" maxx="180.000000" maxy="90.000000"/>
+    <BoundingBox SRS="EPSG:3034" minx="-34732818.454135" miny="-30610944.236334" maxx="42732818.454147" maxy="37604675.033560"/>
+      <Layer queryable="1">
+        <Name>0</Name>
+
+        <Title>seabackground</Title>
+        <Abstract>seabackground</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555556" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-31211635.980803" miny="-27510233.769954" maxx="39211635.980803" maxy="34503965.066746"/>
+        <Style>
+
+          <Name>default</Name>
+          <Title>seabackground</Title>
+          <LegendURL width="100" height="12">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default0.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+
+      </Layer>
+      <Layer>
+        <Title>Orography</Title>
+        <Abstract>Orography</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555556" maxx="180.000000" maxy="90.000000"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="-31211635.980803" miny="-27510233.769954" maxx="39211635.980803" maxy="34503965.066746"/>
+      <Layer>
+        <Name>2</Name>
+        <Title>Hillshade</Title>
+        <Abstract>Hillshade</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555556" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-31211635.980803" miny="-27510233.769954" maxx="39211635.980803" maxy="34503965.066746"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Hillshade</Title>
+          <LegendURL width="100" height="113">
+            <Format>image/png</Format>
+
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default2.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer>
+        <Name>3</Name>
+        <Title>Gtopo 1km</Title>
+        <Abstract>Gtopo 1km</Abstract>
+
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555556" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-31211635.980803" miny="-27510233.769954" maxx="39211635.980803" maxy="34503965.066746"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Gtopo 1km</Title>
+
+          <LegendURL width="100" height="105">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default3.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer>
+        <Name>4</Name>
+
+        <Title>SRTM Hillshade</Title>
+        <Abstract>SRTM Hillshade</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-58.454536" miny="18.562229" maxx="82.973316" maxy="72.208941"/>
+        <BoundingBox SRS="EPSG:3034" minx="457457.947916" miny="45016.941108" maxx="8034259.393803" maxy="5039512.914655"/>
+        <Style>
+
+          <Name>default</Name>
+          <Title>SRTM Hillshade</Title>
+          <LegendURL width="100" height="85">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default4.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+
+        <ScaleHint min="0.0" max="3960.000000"/>
+      </Layer>
+      <Layer>
+        <Name>5</Name>
+        <Title>SRTM DEM</Title>
+        <Abstract>SRTM DEM</Abstract>
+        <SRS>EPSG:4326</SRS>
+
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-58.454536" miny="18.562229" maxx="82.973316" maxy="72.208941"/>
+        <BoundingBox SRS="EPSG:3034" minx="457457.947916" miny="45016.941108" maxx="8034259.393803" maxy="5039512.914655"/>
+        <Style>
+          <Name>default</Name>
+          <Title>SRTM DEM</Title>
+          <LegendURL width="100" height="105">
+
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default5.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="3960.000000"/>
+      </Layer>
+      </Layer>
+      <Layer>
+
+        <Title>Hydrography</Title>
+        <Abstract>Hydrography</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-31211653.140122" miny="-27510234.269498" maxx="39211653.140134" maxy="34503962.230927"/>
+      <Layer queryable="1">
+
+        <Name>7</Name>
+        <Title>hydro_inland_water selection</Title>
+        <Abstract>hydro_inland_water selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="-31211653.140122" miny="-27510234.269498" maxx="39211653.140134" maxy="34503962.230927"/>
+        <Style>
+          <Name>default</Name>
+          <Title>hydro_inland_water selection</Title>
+          <LegendURL width="100" height="14">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default7.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>8</Name>
+        <Title>Watercourse Line</Title>
+        <Abstract>Watercourse Line</Abstract>
+
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-100.348549" miny="6.886613" maxx="113.231219" maxy="87.778664"/>
+        <BoundingBox SRS="EPSG:3034" minx="-2793352.443159" miny="134894.357153" maxx="7003397.766826" maxy="7174194.380878"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Watercourse Line</Title>
+
+          <LegendURL width="100" height="11">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default8.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="1188.003960"/>
+      </Layer>
+      <Layer queryable="1">
+
+        <Name>9</Name>
+        <Title>Watercourse Area</Title>
+        <Abstract>Watercourse Area</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-50.860521" miny="30.019333" maxx="68.133217" maxy="72.706318"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="1189823.042934" miny="959160.372054" maxx="6610014.807149" maxy="5098266.949109"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Watercourse Area</Title>
+          <LegendURL width="100" height="11">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default9.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>10</Name>
+        <Title>Lake</Title>
+        <Abstract>Lake</Abstract>
+
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-99.304500" miny="8.164682" maxx="111.380101" maxy="87.365747"/>
+        <BoundingBox SRS="EPSG:3034" minx="-2552298.982136" miny="155134.093266" maxx="6986623.142747" maxy="7099658.343248"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Lake</Title>
+
+          <LegendURL width="100" height="24">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default10.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      </Layer>
+      <Layer>
+
+        <Title>City (points)</Title>
+        <Abstract>City (points)</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-23155453.323763" miny="-19454034.453559" maxx="31155453.323740" maxy="28371712.658835"/>
+      <Layer>
+
+        <Title>Other Cities</Title>
+        <Abstract>Other Cities</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-23155453.323763" miny="-19454034.453559" maxx="31155453.323740" maxy="28371712.658835"/>
+      <Layer queryable="1">
+
+        <Name>13</Name>
+        <Title>Populated Places selection</Title>
+        <Abstract>Populated Places selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="-23155453.323763" miny="-19454034.453559" maxx="31155453.323740" maxy="28371712.658835"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Populated Places selection</Title>
+          <LegendURL width="100" height="12">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default13.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="1188.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>14</Name>
+        <Title>Non Capitals under 250,000 selection</Title>
+        <Abstract>Non Capitals under 250,000 selection</Abstract>
+
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-23056865.274641" miny="-19355446.406086" maxx="31056865.276337" maxy="27132036.844182"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Non Capitals under 250,000 selection</Title>
+
+          <LegendURL width="100" height="37">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default14.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="1188.000000" max="3960.000000"/>
+      </Layer>
+      <Layer queryable="1">
+
+        <Name>15</Name>
+        <Title>Non Capitals over 250,000 selection</Title>
+        <Abstract>Non Capitals over 250,000 selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-59.321797" maxx="180.000000" maxy="90.000000"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="-17413886.651976" miny="-13712467.781607" maxx="25413886.651930" maxy="21510927.620209"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Non Capitals over 250,000 selection</Title>
+          <LegendURL width="100" height="46">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default15.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="3168.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>16</Name>
+        <Title>Non Captials over 250,000</Title>
+        <Abstract>Non Captials over 250,000</Abstract>
+
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-23056865.275539" miny="-19355446.405704" maxx="31056865.275625" maxy="28296669.024685"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Non Captials over 250,000</Title>
+
+          <LegendURL width="100" height="63">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default16.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="3168.000396" max="15840.000000"/>
+      </Layer>
+      </Layer>
+
+      <Layer>
+        <Title>National Capitals</Title>
+        <Abstract>National Capitals</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-23056865.275539" miny="-19355446.405704" maxx="31056865.275625" maxy="28296669.024685"/>
+
+      <Layer queryable="1">
+        <Name>18</Name>
+        <Title>Under 50,000 selection</Title>
+        <Abstract>Under 50,000 selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-21233270.940215" miny="-17531852.070356" maxx="29233270.940295" maxy="26908578.381743"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Under 50,000 selection</Title>
+          <LegendURL width="100" height="108">
+            <Format>image/png</Format>
+
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default18.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="7920.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>19</Name>
+        <Title>50,000 to 250,000 selection</Title>
+
+        <Abstract>50,000 to 250,000 selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-49.013263" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-11597887.700119" miny="-9154707.877967" maxx="20856126.748103" maxy="18673468.108601"/>
+        <Style>
+          <Name>default</Name>
+
+          <Title>50,000 to 250,000 selection</Title>
+          <LegendURL width="100" height="91">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default19.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="7920.000000"/>
+      </Layer>
+
+      <Layer queryable="1">
+        <Name>20</Name>
+        <Title>250,000 to 1 million selection</Title>
+        <Abstract>250,000 to 1 million selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-180.000000" miny="-57.777179" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-16040335.389970" miny="-12872875.796390" maxx="24574294.665841" maxy="20308281.260964"/>
+        <Style>
+          <Name>default</Name>
+          <Title>250,000 to 1 million selection</Title>
+          <LegendURL width="100" height="85">
+            <Format>image/png</Format>
+
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default20.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="3168.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>21</Name>
+        <Title>250,000 to 1 million</Title>
+
+        <Abstract>250,000 to 1 million</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-23056865.275539" miny="-19355446.405704" maxx="31056865.275625" maxy="28296669.024685"/>
+        <Style>
+          <Name>default</Name>
+
+          <Title>250,000 to 1 million</Title>
+          <LegendURL width="100" height="127">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default21.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="3168.000396" max="23760.000000"/>
+      </Layer>
+
+      <Layer queryable="1">
+        <Name>22</Name>
+        <Title>1 million and over selection</Title>
+        <Abstract>1 million and over selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-180.000000" miny="-53.165256" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-14349301.358865" miny="-10729209.315362" maxx="22430628.186439" maxy="11108044.843113"/>
+        <Style>
+          <Name>default</Name>
+          <Title>1 million and over selection</Title>
+          <LegendURL width="100" height="89">
+            <Format>image/png</Format>
+
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default22.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="3168.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>23</Name>
+        <Title>1 million and over</Title>
+
+        <Abstract>1 million and over</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-23056865.275539" miny="-19355446.405704" maxx="31056865.275625" maxy="28296669.024685"/>
+        <Style>
+          <Name>default</Name>
+
+          <Title>1 million and over</Title>
+          <LegendURL width="100" height="137">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default23.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="3168.000396" max="39600.000000"/>
+      </Layer>
+
+      </Layer>
+      </Layer>
+      <Layer>
+        <Title>Population</Title>
+        <Abstract>Population</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-22066116.214054" miny="-18364697.343893" maxx="30066116.213974" maxy="27542526.792466"/>
+      <Layer>
+        <Title>Polygons</Title>
+        <Abstract>Polygons</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-22066116.214054" miny="-18364697.343893" maxx="30066116.213974" maxy="27542526.792466"/>
+      <Layer queryable="1">
+        <Name>26</Name>
+        <Title>Built-up Areas</Title>
+        <Abstract>Built-up Areas</Abstract>
+        <SRS>EPSG:4326</SRS>
+
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-54.933304" miny="22.270746" maxx="71.774429" maxy="72.138401"/>
+        <BoundingBox SRS="EPSG:3034" minx="778213.063513" miny="154913.267091" maxx="6955055.692871" maxy="5031204.563705"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Built-up Areas</Title>
+          <LegendURL width="100" height="35">
+
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default26.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="396.000396"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>27</Name>
+
+        <Title>Built-up Areas</Title>
+        <Abstract>Built-up Areas</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-54.933304" miny="22.270746" maxx="71.774429" maxy="72.138401"/>
+        <BoundingBox SRS="EPSG:3034" minx="778213.063513" miny="154913.267091" maxx="6955055.692871" maxy="5031204.563705"/>
+        <Style>
+
+          <Name>default</Name>
+          <Title>Built-up Areas</Title>
+          <LegendURL width="100" height="35">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default27.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+
+        <ScaleHint min="396.000396" max="3168.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>28</Name>
+        <Title>pop_built_up_areas selection</Title>
+        <Abstract>pop_built_up_areas selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-22066116.214054" miny="-18364697.343893" maxx="30066116.213974" maxy="27542526.792466"/>
+        <Style>
+          <Name>default</Name>
+          <Title>pop_built_up_areas selection</Title>
+          <LegendURL width="100" height="8">
+
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default28.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="3168.000000"/>
+      </Layer>
+      </Layer>
+      <Layer>
+
+        <Title>Points</Title>
+        <Abstract>Points</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-96.078772" miny="7.316375" maxx="104.226455" maxy="85.493004"/>
+        <BoundingBox SRS="EPSG:3034" minx="-2708464.301508" miny="138261.440948" maxx="6997127.877845" maxy="6788619.203680"/>
+      <Layer queryable="1">
+
+        <Name>30</Name>
+        <Title>Built-up Point   </Title>
+        <Abstract>Built-up Point   </Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-96.078772" miny="7.349502" maxx="104.226455" maxy="85.493004"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="-2708464.301508" miny="144329.012629" maxx="6997127.877845" maxy="6788619.203680"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Built-up Point   </Title>
+          <LegendURL width="100" height="35">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default30.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="198.000396"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>31</Name>
+        <Title>Name Point</Title>
+        <Abstract>Name Point</Abstract>
+
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-64.294313" miny="20.579727" maxx="76.407679" maxy="74.926235"/>
+        <BoundingBox SRS="EPSG:3034" minx="316717.966278" miny="142571.475233" maxx="6936970.721412" maxy="5364517.987319"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Name Point</Title>
+
+          <LegendURL width="100" height="30">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default31.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="198.000396"/>
+      </Layer>
+      <Layer queryable="1">
+
+        <Name>32</Name>
+        <Title>Built-up Areas centroids</Title>
+        <Abstract>Built-up Areas centroids</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-63.378223" miny="20.207277" maxx="67.277395" maxy="73.888859"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="223577.780116" miny="138261.440948" maxx="6412144.241598" maxy="5239236.145025"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Built-up Areas centroids</Title>
+          <LegendURL width="100" height="9">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default32.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="396.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>33</Name>
+        <Title>Built-up Areas centroids</Title>
+        <Abstract>Built-up Areas centroids</Abstract>
+
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-54.832622" miny="22.286911" maxx="71.616703" maxy="72.096659"/>
+        <BoundingBox SRS="EPSG:3034" minx="781220.856960" miny="155726.468007" maxx="6947820.212189" maxy="5026290.843523"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Built-up Areas centroids</Title>
+
+          <LegendURL width="100" height="9">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default33.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="396.000396" max="3168.000396"/>
+      </Layer>
+      </Layer>
+
+      </Layer>
+      <Layer>
+        <Title>Transportation</Title>
+        <Abstract>Transportation</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-94.579659" miny="7.764943" maxx="101.556270" maxy="84.691465"/>
+
+        <BoundingBox SRS="EPSG:3034" minx="-2610613.981375" miny="133809.650310" maxx="7008623.048128" maxy="6664941.010713"/>
+      <Layer queryable="1">
+        <Name>35</Name>
+        <Title>Road</Title>
+        <Abstract>Road</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-66.745076" miny="19.299072" maxx="76.905777" maxy="74.727971"/>
+        <BoundingBox SRS="EPSG:3034" minx="-9206.120148" miny="133809.650310" maxx="7008623.048128" maxy="5340449.317087"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Road</Title>
+          <LegendURL width="100" height="55">
+            <Format>image/png</Format>
+
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default35.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="198.000396" max="792.000396"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>36</Name>
+        <Title>Road</Title>
+
+        <Abstract>Road</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-66.745076" miny="19.299072" maxx="76.905777" maxy="74.727971"/>
+        <BoundingBox SRS="EPSG:3034" minx="-9206.120148" miny="133809.650310" maxx="7008623.048128" maxy="5340449.317087"/>
+        <Style>
+          <Name>default</Name>
+
+          <Title>Road</Title>
+          <LegendURL width="100" height="98">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default36.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="198.000396"/>
+      </Layer>
+
+      <Layer queryable="1">
+        <Name>37</Name>
+        <Title>Airfield</Title>
+        <Abstract>Airfield</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+
+        <LatLonBoundingBox minx="-94.579659" miny="7.825617" maxx="100.908439" maxy="84.691465"/>
+        <BoundingBox SRS="EPSG:3034" minx="-2610613.981375" miny="144793.387876" maxx="6925094.733419" maxy="6664941.010713"/>
+        <Style>
+          <Name>default</Name>
+          <Title>Airfield</Title>
+          <LegendURL width="100" height="33">
+            <Format>image/png</Format>
+
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default37.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.0" max="396.000396"/>
+      </Layer>
+      </Layer>
+      <Layer>
+        <Title>Borders</Title>
+
+        <Abstract>Borders</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-31211653.140121" miny="-27510234.269520" maxx="39211653.140127" maxy="34503962.230927"/>
+      <Layer queryable="1">
+        <Name>39</Name>
+
+        <Title>CNTR_RG_01M_2006</Title>
+        <Abstract>CNTR_RG_01M_2006</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-31211653.140121" miny="-27510234.269520" maxx="39211653.140127" maxy="34503962.230927"/>
+        <Style>
+
+          <Name>default</Name>
+          <Title>CNTR_RG_01M_2006</Title>
+          <LegendURL width="100" height="9">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default39.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+
+        <ScaleHint min="2772.000000" max="19800.000000"/>
+      </Layer>
+      <Layer queryable="1">
+        <Name>40</Name>
+        <Title>CNTR_BN_01M_2006</Title>
+        <Abstract>CNTR_BN_01M_2006</Abstract>
+        <SRS>EPSG:4326</SRS>
+
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-180.000000" miny="-64.555555" maxx="180.000000" maxy="90.000000"/>
+        <BoundingBox SRS="EPSG:3034" minx="-31211653.140121" miny="-27510234.269520" maxx="39211653.140127" maxy="34503962.230927"/>
+        <Style>
+          <Name>default</Name>
+          <Title>CNTR_BN_01M_2006</Title>
+          <LegendURL width="100" height="9">
+
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default40.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+      </Layer>
+      <Layer queryable="1">
+        <Name>41</Name>
+        <Title>GISCO countries centroids selection</Title>
+
+        <Abstract>GISCO countries centroids selection</Abstract>
+        <SRS>EPSG:4326</SRS>
+        <SRS>EPSG:3034</SRS>
+        <LatLonBoundingBox minx="-44.414889" miny="30.792665" maxx="57.011920" maxy="70.643911"/>
+        <BoundingBox SRS="EPSG:3034" minx="1421096.494749" miny="961136.484801" maxx="6101444.424051" maxy="4856516.740965"/>
+        <Style>
+          <Name>default</Name>
+
+          <Title>GISCO countries centroids selection</Title>
+          <LegendURL width="100" height="7">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default41.png" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+          </LegendURL>
+        </Style>
+        <ScaleHint min="2772.000000" max="19800.000000"/>
+      </Layer>
+
+      </Layer>
+    </Layer>
+  </Capability>
+</WMT_MS_Capabilities>

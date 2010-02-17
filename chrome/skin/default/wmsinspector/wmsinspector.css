@@ -1,0 +1,66 @@
+.wiToolbar{
+    height: 25px;
+    display: -moz-box;
+}
+
+.toolbarbutton-iconic {
+    width: 16px !important;
+    height: 16px !important;
+    margin: 0 4px 0 1px !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.toolbarbutton-iconic > .toolbarbutton-icon {
+    padding: 0;
+}
+
+.toolbarbutton-iconic > .toolbarbutton-text {
+    display: none;
+}
+
+.wiImgLink{
+    cursor: pointer;
+}
+
+
+#wiStatusBarImage{
+    list-style-image: url("chrome://wmsinspector/skin/wmsinspector.png") !important;
+
+}
+
+
+#wiCloseButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/close.png") !important;
+}
+
+#wiCloseButton:hover {
+    list-style-image: url("chrome://wmsinspector/skin/icons/closeHover.png") !important;
+}
+
+#wiCloseButton:hover:active {
+    list-style-image: url("chrome://wmsinspector/skin/icons/closeActive.png") !important;
+}
+
+#wiConfigButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/config.png");
+}
+
+#wiConfigButton:hover {
+    list-style-image: url("chrome://wmsinspector/skin/icons/configHover.png");
+}
+
+#wiRefreshButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/refresh.png");
+}
+
+#wiCapabilitiesButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/getcapabilities.png");
+}
+
+#wiMsg{
+    /*background-color:*/
+    font-weight: bold;
+    color: #FF0000;
+}

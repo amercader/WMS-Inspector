@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<dialog xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="wiOptionsDialog"
+        title="&wmsinspector.options.title;"
+        buttons="accept,cancel"
+        onload="WI.OptionsDialog.init();"
+        ondialogaccept="WI.OptionsDialog.onAccept();">
+
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/optionsDialog.js"/>
+
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
+    </stringbundleset>
+
+    <tabbox>
+        <tabs>
+            <tab label="&wmsinspector.common.editor;"/>
+        </tabs>
+
+        <tabpanels>
+            <tabpanel>
+                <vbox pack="center" flex="1">
+                    <label value="&wmsinspector.options.chooseaneditor;" />
+                    <hbox>
+                        <textbox id="wiEditorPath" value="" style="width:200px;"/>
+                        <button label="&wmsinspector.common.change;" oncommand="WI.OptionsDialog.selectEditor();"/>
+                    </hbox>
+
+                </vbox>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+
+
+</dialog>

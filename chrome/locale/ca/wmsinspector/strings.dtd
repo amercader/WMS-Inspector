@@ -1,0 +1,94 @@
+<!-- Common -->
+<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.yes "Si">
+<!ENTITY wmsinspector.common.no "No">
+<!ENTITY wmsinspector.common.close "Tancar">
+<!ENTITY wmsinspector.common.options "Opcions">
+<!ENTITY wmsinspector.common.server "Servidor">
+<!ENTITY wmsinspector.common.service "Servei">
+<!ENTITY wmsinspector.common.version "Versi&#243;">
+<!ENTITY wmsinspector.common.copy "Copiar">
+<!ENTITY wmsinspector.common.edit "Editar">
+<!ENTITY wmsinspector.common.change "Canviar">
+<!ENTITY wmsinspector.common.output "Sortida">
+<!ENTITY wmsinspector.common.openinanewtab "Obrir en una nova pestanya">
+<!ENTITY wmsinspector.common.editor "Editor">
+<!ENTITY wmsinspector.common.browser "Navegador">
+
+<!-- Toolbar -->
+<!ENTITY wmsinspector.toolbar.refresh "Actualitzar serveis">
+<!ENTITY wmsinspector.toolbar.groupby "Agrupar per">
+<!ENTITY wmsinspector.toolbar.requesttype "Tipus de crida">
+<!ENTITY wmsinspector.toolbar.service "Servei">
+<!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
+<!ENTITY wmsinspector.toolbar.options "Obrir les opcions de configuraci&#243;">
+
+<!-- Tree -->
+<!ENTITY wmsinspector.tree.servicecol "Servei \ Nom par&#224;metre">
+<!ENTITY wmsinspector.tree.paramcol "Valor par&#224;metre">
+
+<!-- GetCapabilities dialog -->
+<!ENTITY wmsinspector.getcapabilities.title "Crida GetCapabilities">
+<!ENTITY wmsinspector.getcapabilities.outputHTML "Informe HTML">
+<!ENTITY wmsinspector.getcapabilities.outputXML "Arxiu XML original">
+<!ENTITY wmsinspector.getcapabilities.openin "Obrir en:">
+
+<!-- EditParameter dialog -->
+<!ENTITY wmsinspector.editparameter.title "Editar par&#224;metre">
+
+<!-- Options dialog -->
+<!ENTITY wmsinspector.options.title "Opcions">
+<!ENTITY wmsinspector.options.chooseaneditor "Escolliu un editor">
+
+<!-- Default XSL templates for GetCapabilities reports -->
+
+<!ENTITY wmsinspector.xsl.reporttitle "Informe de capacitats">
+<!ENTITY wmsinspector.xsl.service "Servei">
+<!ENTITY wmsinspector.xsl.generalinfo "Dades generals">
+<!ENTITY wmsinspector.xsl.version "Versi&#243;">
+<!ENTITY wmsinspector.xsl.name "Nom">
+<!ENTITY wmsinspector.xsl.title "T&#237;tol">
+<!ENTITY wmsinspector.xsl.onlineresource "Recurs en l&#237;nia">
+<!ENTITY wmsinspector.xsl.abstract "Resum">
+<!ENTITY wmsinspector.xsl.keywords "Paraules clau">
+<!ENTITY wmsinspector.xsl.contactdetails "Dades de contacte">
+<!ENTITY wmsinspector.xsl.contactperson "Persona de contacte">
+<!ENTITY wmsinspector.xsl.contactorganization "Organitzaci&#243;">
+<!ENTITY wmsinspector.xsl.contactposition "C&#224;rrec">
+<!ENTITY wmsinspector.xsl.contactaddress "Adre&#231;a">
+<!ENTITY wmsinspector.xsl.contacttelephone "Tel&#232;fon">
+<!ENTITY wmsinspector.xsl.contactfax "Fax">
+<!ENTITY wmsinspector.xsl.contactemail "Correu electr&#242;nic">
+<!ENTITY wmsinspector.xsl.accessconditions "Restriccions d'accés">
+<!ENTITY wmsinspector.xsl.fees "Tarifes">
+<!ENTITY wmsinspector.xsl.accessconstraints "Limitacions d'accés">
+<!ENTITY wmsinspector.xsl.layerlimit "L&#237;mit de capes">
+<!ENTITY wmsinspector.xsl.maxwidth "Amplada m&#224;xima">
+<!ENTITY wmsinspector.xsl.maxheight "Al&#231;ada m&#224;xima">
+
+<!ENTITY wmsinspector.xsl.capabilities "Capacitats">
+<!ENTITY wmsinspector.xsl.availablerequests "Crides disponibles">
+<!ENTITY wmsinspector.xsl.exceptions "Excepcions">
+<!ENTITY wmsinspector.xsl.userdefinedsymbolization "Simbolitzaci&#243; de l'usuari">
+<!ENTITY wmsinspector.xsl.supportsld "Suporta SLD">
+<!ENTITY wmsinspector.xsl.userlayer "Suporta capes de l'usuari">
+<!ENTITY wmsinspector.xsl.userstyle "Suporta estils de l'usuari">
+<!ENTITY wmsinspector.xsl.remotewfs "Suporta WFS remot">
+<!ENTITY wmsinspector.xsl.layers "Capes">
+<!ENTITY wmsinspector.xsl.srs "SRS">
+<!ENTITY wmsinspector.xsl.crs "CRS">
+<!ENTITY wmsinspector.xsl.queryable "Consultable">
+<!ENTITY wmsinspector.xsl.opaque "Opaca">
+<!ENTITY wmsinspector.xsl.legend "Llegenda">
+<!ENTITY wmsinspector.xsl.extent "Extensi&#243;">
+<!ENTITY wmsinspector.xsl.resolution "Resoluci&#243;">
+<!ENTITY wmsinspector.xsl.scalehint "Rang d'escala">
+<!ENTITY wmsinspector.xsl.maxscale "Escala m&#224;xima">
+<!ENTITY wmsinspector.xsl.minscale "Escala m&#237;nima">
+<!ENTITY wmsinspector.xsl.metadata "Metadades">
+<!ENTITY wmsinspector.xsl.attribution "Atribuci&#243;">
+<!ENTITY wmsinspector.xsl.logo "Logotip">
+<!ENTITY wmsinspector.xsl.undefined "No s'ha definit">
+<!ENTITY wmsinspector.xsl.layertitleundefined "No s'ha definit el t&#237;tol de la capa">
+<!ENTITY wmsinspector.xsl.mandatoryelement "Aquest element &#233;s obligatori">
+<!ENTITY wmsinspector.xsl.generatedby "Generat per">

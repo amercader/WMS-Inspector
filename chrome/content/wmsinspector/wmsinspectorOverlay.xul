@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<overlay id="wiOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/requests.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
+
+<script type="application/x-javascript" src="chrome://wmsinspector/content/test/test.js"/>
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
+    </stringbundleset>
+
+    <popup id="contentAreaContextMenu">
+        <menuseparator/>
+        <menu label="&wmsinspector.common.name;" id="wiContext" >
+            <menupopup id="wiContextPopUp" onpopupshowing="WI.Overlay.checkSelection()">
+                <menuitem id="wiContextGetCapabilitesReport" label="GetCapabilities Report"
+                          oncommand="WI.Overlay.checkGetCapabilities()"/>
+            </menupopup>
+        </menu>
+    </popup>
+
+    <vbox id="appcontent" >
+        <splitter id="wiContentSplitter" hidden="true"/>
+        <vbox id="wiContent" persist="height" hidden="true">
+            <hbox id="wiMenuContainer">
+                <hbox id="wiMenuBarLeft" flex="1">
+                    <toolbox id="wiMenuLeftToolbox" flex="1">
+                        <toolbar id="wiMenuLeftToolbar" class="wiToolbar" style="display: -moz-box;">
+                            <toolbarbutton id="wiRefreshButton" label="&wmsinspector.toolbar.refresh;" tooltiptext="&wmsinspector.toolbar.refresh;" oncommand="WI.Overlay.refreshServiceImages();"/>
+                            <toolbarseparator />
+                            <toolbaritem>
+                                <label id="wiGroupByMenuLabel" value="&wmsinspector.toolbar.groupby;" align="center" style="margin-top:6px"/>
+                                <menulist id="wiGroupByMenu" oncommand="WI.Overlay.groupTree(this.selectedIndex);">
+                                    <menupopup>
+                                        <menuitem value="0" label="&wmsinspector.toolbar.service;"/>
+                                        <menuitem value="1" label="&wmsinspector.toolbar.requesttype;"/>
+                                    </menupopup>
+                                </menulist>
+                            </toolbaritem>
+                            <toolbarseparator />
+                            <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WI.Overlay.openGetCapabilitiesDialog();" />
+                            <!--
+                            <toolbarbutton id="witestButton" label="test" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="testFile();" />
+                            <toolbarbutton id="witestButton" label="test22" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="test1();" />
+                            
+                            <toolbarbutton id="witestButton" label="test55" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WI.Overlay.selectEditor();" />
+
+<toolbarbutton id="witestButton" label="test44" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="showGetCapabilitiesReportVersionTest();" />
+<toolbarbutton id="witestButton" label="test66" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="test66();" />
+-->
+                        </toolbar>
+                    </toolbox>
+                </hbox>
+                <hbox id="wiMenuBarRight" flex="1" align="right">
+                    <toolbox id="wiMenuRightToolbox" flex="1">
+                        <toolbar id="wiMenuRightToolbar" align="right" class="wiToolbar"  style="display: -moz-box;">
+<toolbarbutton id="wiConfigButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="WI.Overlay.openOptionsDialog();"/>
+<toolbarseparator />
+<toolbarbutton id="wiCloseButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.common.close;" oncommand="WI.Overlay.togglePanel()" />
+                        </toolbar>
+                    </toolbox>
+                </hbox>
+            </hbox>
+            <hbox id="wiTreeImageContainer" flex="1">
+                <vbox id="wiTreeContainer" flex="1">
+
+                    <tree flex="1"
+                          seltype="single"
+                          id="wiTree"
+                          onclick="WI.Overlay.onTreeClicked(event);"
+                          ondblclick="WI.Overlay.onTreeDoubleClicked(event);"
+                          oncontextmenu="WI.Overlay.onContextMenu(event);"
+                          
+                          >
+<!--onselect="WI.Overlay.onTreeClicked(event);"-->
+
+                        <treecols>
+                            <treecol id="wiTreeNameColumn" label="&wmsinspector.tree.servicecol;" flex="1" primary="true" persist="width"/>
+                            <splitter class="tree-splitter" />
+                            <treecol id="wiTreeValueColumn" label="&wmsinspector.tree.paramcol;" flex="2" persist="width"/>
+                        </treecols>
+
+                    </tree>
+
+
+                    <menupopup id="gtTreeContextMenuURL1" >
+                        <menuitem allowevents="true" label="&wmsinspector.common.copy;" oncommand="WI.Overlay.doContextMenuAction(1,event);"/>
+
+                    </menupopup>
+
+                    <menupopup id="gtTreeContextMenuURL2" >
+                        <menuitem label="&wmsinspector.common.copy;" oncommand="WI.Overlay.doContextMenuAction(1,event);"/>
+                        <menuseparator/>
+                        <menuitem label="&wmsinspector.common.openinanewtab;" oncommand="WI.Overlay.doContextMenuAction(2,event);"/>
+                    </menupopup>
+
+                    <menupopup id="gtTreeContextMenuURL3">
+                        <menuitem label="&wmsinspector.common.copy;" oncommand="WI.Overlay.doContextMenuAction(1,event);"/>
+                        <menuseparator/>
+                        <menuitem label="&wmsinspector.common.edit;" oncommand="WI.Overlay.doContextMenuAction(3,event);"/>
+                    </menupopup>
+                </vbox>
+
+                <splitter id="wiTreeSplitter" collapsed="false"/>
+
+                <vbox id="wiImageContainer" flex="1">
+                        <browser type="content" id="wiBrowser" flex="1" />
+                </vbox>
+            </hbox>
+
+
+        </vbox>
+    </vbox>
+
+    <!-- Status bar panel-->
+    <statusbar id="status-bar">
+        <statusbarpanel id="wiStatusBar" onclick="WI.Overlay.togglePanel()">
+            <image id="wiStatusBarImage" class="wiImgLink" tooltiptext="&wmsinspector.common.name;" />
+        </statusbarpanel>
+    </statusbar>
+
+</overlay>
+
+

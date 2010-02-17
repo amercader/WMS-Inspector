@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://schemas.opengis.net/wms/1.1.1/WMS_MS_Capabilities.dtd">
+<WMT_MS_Capabilities version="1.1.1">
+    <Service>
+        <Name>OGC:WMS</Name>
+        <Title>Servicio WMS de Cartografia Base del Gobierno de Aragon</Title>
+        <Abstract>El servicio ofrece diversos productos geograficos y cartograficos base a cerca de todo o una parte del territorio de Aragon. Son informaciones que tienen un interes por si mismas que sirven de soporte para situar sobre ellas otros datos, o a traves de los contenidos originarios poder elaborar nuevas informaciones. </Abstract>
+        <KeywordList>
+            <Keyword>Servicios</Keyword>
+        </KeywordList>
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/AragonBase_WMS" xlink:type="simple"/>
+        <ContactInformation>
+            <ContactPersonPrimary>
+
+                <ContactPerson> Sergio Monteagudo Latorre </ContactPerson>
+                <ContactOrganization> Centro de Documentacion e Informacion Territorial de Aragón. Departamento de Política Territorial , Justicia e Interior. Gobierno de Aragón.</ContactOrganization>
+            </ContactPersonPrimary>
+            <ContactPosition> Jefe de Sección de Sistemas de Informacion Territorial. </ContactPosition>
+            <ContactAddress>
+                <AddressType>postal</AddressType>
+                <Address>C/ Coso, 33-35, 2ª planta</Address>
+                <City>Zaragoza</City>
+
+                <StateOrProvince>Aragón</StateOrProvince>
+                <PostCode>50003</PostCode>
+                <Country>Spain</Country>
+            </ContactAddress>
+            <ContactVoiceTelephone>976715576</ContactVoiceTelephone>
+            <ContactFacsimileTelephone>976714357</ContactFacsimileTelephone>
+            <ContactElectronicMailAddress>sitar@aragon.es</ContactElectronicMailAddress>
+        </ContactInformation>
+        <Fees>No</Fees>
+        <AccessConstraints>No</AccessConstraints>
+
+    </Service>
+    <Capability>
+        <Request>
+            <GetCapabilities>
+                <Format>application/vnd.ogc.wms_xml</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/AragonWMS" xlink:type="simple"/>
+                        </Get>
+                    </HTTP>
+                </DCPType>
+            </GetCapabilities>
+            <GetMap>
+                <Format>image/png</Format>
+
+                <Format>image/jpeg</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/AragonWMS" xlink:type="simple"/>
+                        </Get>
+                    </HTTP>
+                </DCPType>
+            </GetMap>
+            <GetFeatureInfo>
+                <Format>application/vnd.ogc.wms_xml</Format>
+                <Format>text/xml</Format>
+                <Format>text/html</Format>
+
+                <Format>text/plain</Format>
+                <DCPType>
+                    <HTTP>
+                        <Get>
+                            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/AragonWMS" xlink:type="simple"/>
+                        </Get>
+                    </HTTP>
+                </DCPType>
+            </GetFeatureInfo>
+        </Request>
+        <Exception>
+            <Format>application/vnd.ogc.se_xml</Format>
+            <Format>application/vnd.ogc.se_inimage</Format>
+            <Format>application/vnd.ogc.se_blank</Format>
+
+        </Exception>
+        <Layer queryable="0" opaque="0" noSubsets="0">
+            <Title>AragonBase_WMS</Title>
+            <SRS>EPSG:23030</SRS>
+            <SRS>EPSG:23031</SRS>
+            <SRS>EPSG:4326</SRS>
+            <SRS>EPSG:4267</SRS>
+            <SRS>EPSG:4269</SRS>
+            <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+            <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+            <LatLonBoundingBox minx="-2.1897420544" miny="39.8129260336" maxx="0.8048467545" maxy="42.9445162552"/>
+            
+            <Layer queryable="1">
+                <Name>CurvaDirectora5000</Name>
+                <Title>Curvas Directoras 5000</Title>
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-1.9453656923" miny="39.8108746953" maxx="0.8071075518" maxy="42.9446492941"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/CurvaDirectora5000.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>CurvaNivel5000</Name>
+                <Title>Curvas de Nivel 5000</Title>
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-1.9461886082" miny="39.8107527501" maxx="0.8071217642" maxy="42.9446345577"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/CurvaNivel5000.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Alti1000Ter</Name>
+                <Title>Altimetria 1000 Teruel</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+
+                <SRS>EPSG:4326</SRS>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <LatLonBoundingBox minx="-1.9461886082" miny="39.8107527501" maxx="0.8071217642" maxy="42.9446345577"/>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Alti1000Hue</Name>
+                <Title>Altimetria 1000 Huesca</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <LatLonBoundingBox minx="-1.9461886082" miny="39.8107527501" maxx="0.8071217642" maxy="42.9446345577"/>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Alti1000Zar</Name>
+                <Title>Altimetria 1000 Zaragoza</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <LatLonBoundingBox minx="-1.9461886082" miny="39.8107527501" maxx="0.8071217642" maxy="42.9446345577"/>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Planimetria5000</Name>
+                <Title>Planimetria 5000</Title>
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-1.9464506882" miny="39.8015528542" maxx="0.8077029431" maxy="42.9422395757"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+
+            <Layer queryable="1">
+                <Name>Plani1000Ter</Name>
+                <Title>Planimetria 1000 Teruel</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+
+                <LatLonBoundingBox minx="-1.9461886082" miny="39.8107527501" maxx="0.8071217642" maxy="42.9446345577"/>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Plani1000Hue</Name>
+                <Title>Planimetria 1000 Huesca</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <LatLonBoundingBox minx="-1.9461886082" miny="39.8107527501" maxx="0.8071217642" maxy="42.9446345577"/>
+
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Plani1000Zar</Name>
+                <Title>Planimetria 1000 Zaragoza</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <LatLonBoundingBox minx="-1.9461886082" miny="39.8107527501" maxx="0.8071217642" maxy="42.9446345577"/>
+                <ScaleHint min="NaN" max="NaN"/>
+
+            </Layer>
+            <Layer queryable="1">
+                <Name>Localidad</Name>
+                <Title>Localidad</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.1762907759" miny="39.8446152021" maxx="0.7817606112" maxy="42.8853934502"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Localidad.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Altimetria</Name>
+                <Title>Altimetria</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.1876932776" miny="39.9328333435" maxx="0.8014683396" maxy="42.9447904666"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Altimetria.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Rio</Name>
+                <Title>Rio</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.1883618991" miny="39.9304476728" maxx="0.7775315814" maxy="42.9187469736"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Rio.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Ferrocarril</Name>
+                <Title>Ferrocarril</Title>
+
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-2.1848977358" miny="39.9928178101" maxx="0.4760438935" maxy="42.8156919746"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Ferrocarril.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+
+                <Name>Carretera</Name>
+                <Title>Carretera</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.2027779579" miny="39.8434917253" maxx="0.7828547754" maxy="42.9187204672"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Carretera.xml" xlink:type="simple"/>
+
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>ToponimoLocalidad</Name>
+                <Title>Toponimos de Localidad</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.1762907759" miny="39.8446152021" maxx="0.7817606112" maxy="42.8853934502"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/ToponimosLocalidad.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>ToponimoProvincia</Name>
+                <Title>Toponimos de Provincia</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+
+                <LatLonBoundingBox minx="-2.6327037613" miny="39.6966680812" maxx="1.8202989755" maxy="44.769442871"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/ToponimosProvincia.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>ToponimoMunicipio</Name>
+                <Title>Toponimos de Municipio</Title>
+                <SRS>EPSG:23030</SRS>
+
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.1478551197" miny="39.8747319731" maxx="0.7576678479" maxy="42.8924203317"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/ToponimosMunicipio.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>ToponimoComarca</Name>
+
+                <Title>Toponimos de Comarca</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-1.7825595496" miny="40.1956890339" maxx="0.5281528696" maxy="42.6575471517"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/ToponimosComarca.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+
+            </Layer>
+            <Layer queryable="1">
+                <Name>ToponimoRio</Name>
+                <Title>Toponimos de Rio</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.252385286" miny="39.7815700568" maxx="0.8926585775" maxy="42.9323498093"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Rio.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>FechaOrtofoto</Name>
+                <Title>Fecha de Vuelo Ortofoto</Title>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.2045419159" miny="39.7957088676" maxx="0.8483153927" maxy="42.9591153174"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/FechaVueloOrtofoto.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="0">
+                <Name>PNOA_2006_30</Name>
+                <Title>Ortofoto PNOA 2006 Huso 30</Title>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-2.2068102262" miny="39.8125229861" maxx="0.17531437" maxy="42.9807624405"/>
+                <ScaleHint min="NaN" max="NaN"/>
+
+            </Layer>
+            <Layer queryable="0">
+                <Name>PNOA_2006_31</Name>
+                <Title>Ortofoto PNOA 2006 Huso 31</Title>
+                <SRS>EPSG:4326</SRS>
+                <LatLonBoundingBox minx="-0.2112819616" miny="40.6359421855" maxx="1.0071870595" maxy="42.7959517156"/>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="0">
+                <Name>Ortofoto</Name>
+                <Title>Ortofoto</Title>
+                <SRS>EPSG:23030</SRS>
+
+                <SRS>EPSG:23031</SRS>
+                <SRS>EPSG:4326</SRS>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <LatLonBoundingBox minx="-2.2043135161" miny="39.8168560782" maxx="0.8126294098" maxy="42.9591162943"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Ortofoto.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Provincia</Name>
+
+                <Title>Provincia</Title>
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-2.1927163644" miny="39.8112264774" maxx="0.8031772547" maxy="42.9443775379"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Provincia.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+
+            </Layer>
+            <Layer queryable="1">
+                <Name>Comarca</Name>
+                <Title>Comarca</Title>
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-2.189767548" miny="39.8107635754" maxx="0.8048467394" maxy="42.944516246"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Comarca.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>Municipio</Name>
+                <Title>Municipio</Title>
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-2.189767548" miny="39.8107635754" maxx="0.8048467394" maxy="42.944516246"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/Municipio.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+            <Layer queryable="1">
+                <Name>ComunidadAutonoma</Name>
+                <Title>Comunidad Autonoma</Title>
+                <SRS>EPSG:4326</SRS>
+                <SRS>EPSG:23030</SRS>
+
+                <SRS>EPSG:23031</SRS>
+                <LatLonBoundingBox minx="-2.189767548" miny="39.8107635754" maxx="0.8048467394" maxy="42.944516246"/>
+                <BoundingBox SRS="EPSG:23030" minx="568050.5" miny="4413836.5" maxx="811303" maxy="4756698"/>
+                <BoundingBox SRS="EPSG:23031" minx="56200.500" miny="4409516.50" maxx="335300.500" maxy="4772285.50"/>
+                <MetadataURL type="TC211">
+                    <Format>text/xml</Format>
+                    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sitar.aragon.es/metadatosWMS/AragonWMS/ComunidadAutonoma.xml" xlink:type="simple"/>
+                </MetadataURL>
+                <ScaleHint min="NaN" max="NaN"/>
+            </Layer>
+
+        </Layer>
+    </Capability>
+</WMT_MS_Capabilities>

@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://schemas.opengis.net/wms/1.1.1/WMS_MS_Capabilities.dtd"
+ [
+ <!ELEMENT VendorSpecificCapabilities EMPTY>
+ ]>  <!-- end of DOCTYPE declaration -->
+
+<WMT_MS_Capabilities     version="1.1.1">
+
+<!-- MapServer version 5.2.0 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP OUTPUT=SWF OUTPUT=SVG SUPPORTS=PROJ SUPPORTS=FREETYPE SUPPORTS=ICONV SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=FASTCGI SUPPORTS=THREADS INPUT=EPPL7 INPUT=POSTGIS INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE -->
+
+<Service>
+  <Name></Name>
+  <Title>Servidor Cartografia Diputació de Girona - Espais Protegits</Title>
+  <Abstract>Servidor Cartografia Diputació de Girona - Espais Protegits</Abstract>
+        <KeywordList>
+          <Keyword>DDGI</Keyword>
+          <Keyword>Diputació de Girona</Keyword>
+          <Keyword>WMS</Keyword>
+          <Keyword>Reference</Keyword>
+          <Keyword>DDGI</Keyword>
+          <Keyword>Diputació de Girona</Keyword>
+          <Keyword>WMS</Keyword>
+          <Keyword>Reference</Keyword>          <Keyword>DDGI</Keyword>
+          <Keyword>Diputació de Girona</Keyword>
+          <Keyword>WMS</Keyword>
+          <Keyword>Reference</Keyword>
+        </KeywordList>
+  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/>
+ 
+  <ContactInformation>
+    <ContactPersonPrimary>
+      
+      <ContactOrganization>Geodata Sistemas S.L.</ContactOrganization>
+    </ContactPersonPrimary>
+      <ContactPosition>Chief Responsable</ContactPosition>
+    <ContactAddress>
+        <AddressType>postal</AddressType>
+        <Address>Bac de Roda 136, 1r 1a</Address>
+        <City>Barcelona</City>
+        <StateOrProvince>Barcelona</StateOrProvince>
+        <PostCode>08020</PostCode>
+        <Country>Spain</Country>
+    </ContactAddress>
+      <ContactVoiceTelephone>0034933035367</ContactVoiceTelephone>
+      <ContactFacsimileTelephone>0034933035315</ContactFacsimileTelephone>
+  <ContactElectronicMailAddress>info@geodata.es</ContactElectronicMailAddress>
+  </ContactInformation>
+
+    <!---
+    <ContactInformation>
+    <ContactPersonPrimary>
+      <ContactPerson>Guillem Terradas</ContactPerson>
+      <ContactOrganization>Geodata Sistemas S.L.</ContactOrganization>
+    </ContactPersonPrimary>
+      <ContactPosition>Chief Responsable</ContactPosition>
+    <ContactAddress>
+        <AddressType />
+        <Address ></Address >
+        <City />
+        <StateOrProvince />
+        <PostCode />
+        <Country />
+    </ContactAddress>
+      <ContactVoiceTelephone>0034933035367</ContactVoiceTelephone>
+      <ContactFacsimileTelephone>0034933035315</ContactFacsimileTelephone>
+  <ContactElectronicMailAddress>info@geodata.es</ContactElectronicMailAddress>
+  </ContactInformation>
+-->
+  
+  <Fees>Gratuit / Gratuito / Free</Fees>
+  <AccessConstraints>Cap restriccio, en base a un us responsable / Ninguna restriccion, en base a un uso responsable / No restrictions, assuming a responsible use</AccessConstraints>
+</Service>
+
+<Capability>
+  <Request>
+    <GetCapabilities>
+      <Format>application/vnd.ogc.wms_xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetCapabilities>
+    <GetMap>
+      <Format>image/gif</Format>
+      <Format>image/png</Format>
+      <Format>image/png; mode=24bit</Format>
+      <Format>image/jpeg</Format>
+      <Format>image/vnd.wap.wbmp</Format>
+      <Format>image/tiff</Format>
+      <Format>image/svg+xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetMap>
+    <GetFeatureInfo>
+      <Format>text/plain</Format>
+      <Format>application/vnd.ogc.gml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetFeatureInfo>
+    <DescribeLayer>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Post>
+        </HTTP>
+      </DCPType>
+    </DescribeLayer>
+    <GetLegendGraphic>
+      <Format>image/gif</Format>
+      <Format>image/png</Format>
+      <Format>image/png; mode=24bit</Format>
+      <Format>image/jpeg</Format>
+      <Format>image/vnd.wap.wbmp</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetLegendGraphic>
+    <GetStyles>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetStyles>
+  </Request>
+  <Exception>
+    <Format>application/vnd.ogc.se_xml</Format>
+    <Format>application/vnd.ogc.se_inimage</Format>
+    <Format>application/vnd.ogc.se_blank</Format>
+  </Exception>
+  <VendorSpecificCapabilities />
+  <UserDefinedSymbolization SupportSLD="1" UserLayer="0" UserStyle="1" RemoteWFS="0"/>
+  <Layer>
+    <Name>referencia</Name>
+    <Title>Servidor Cartografia Diputació de Girona - Espais Protegits</Title>
+    <SRS>EPSG:23031</SRS>
+    <SRS>EPSG:25831</SRS>
+    <SRS>EPSG:4326</SRS>
+    <SRS>EPSG:4258</SRS>
+    <LatLonBoundingBox minx="1.79008" miny="41.2522" maxx="2.39388" maxy="41.5371" />
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>zonhum</Name>
+        <Title></Title>
+        <SRS>EPSG:23031</SRS>
+        <LatLonBoundingBox minx="0.128878" miny="40.5174" maxx="3.30828" maxy="42.6765" />
+        <Style>
+          <Name>default</Name>
+          <Title>default</Title>
+          <LegendURL width="190" height="45">
+             <Format>image/png</Format>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=zonhum&amp;format=image/png&amp;STYLE=default"/>
+          </LegendURL>
+        </Style>
+    </Layer>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>pein</Name>
+        <Title>PEIN</Title>
+        <SRS>EPSG:23031</SRS>
+        <LatLonBoundingBox minx="0.0665639" miny="40.5433" maxx="3.33669" maxy="42.8855" />
+        <BoundingBox SRS="EPSG:23031" maxx="532739.500000" maxy="4749834.500000" minx="258981.500000" miny="4486315.500000" resx="1.000000" resy="-1.000000"/>
+    </Layer>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>xarnat2k</Name>
+        <Title>Xarxa Natura 2000</Title>
+        <SRS>EPSG:23031</SRS>
+        <LatLonBoundingBox minx="0.0664585" miny="40.4919" maxx="3.33669" maxy="42.8855" />
+    </Layer>
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>ceinp</Name>
+        <Title>Xarxa Natura 2000</Title>
+        <SRS>EPSG:23031</SRS>
+        <LatLonBoundingBox minx="1.61097" miny="41.6432" maxx="3.2951" maxy="42.4831" />
+        <Style>
+          <Name>default</Name>
+          <Title>default</Title>
+          <LegendURL width="156" height="85">
+             <Format>image/png</Format>
+             <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://oslo.geodata.es/wms52/ddgi/servidor/espaisprotegits?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=ceinp&amp;format=image/png&amp;STYLE=default"/>
+          </LegendURL>
+        </Style>
+    </Layer>
+  </Layer>
+</Capability>
+</WMT_MS_Capabilities>

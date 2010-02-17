@@ -1,0 +1,2125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink">
+<head>
+<title>Test xslt</title>
+<style type="text/css">
+                    
+                    body{
+                                font-family: "Georgia", "Garamond","Courier New";
+                                margin: 1em 3em;
+                                font-size: 0.9em
+                    }
+
+                    h1 { font-size: 1.5em}
+                    h2 {
+                        font-size: 1.25em;
+
+                    }
+                    h2:hover {
+                        text-decoration: underline;
+                        cursor: pointer
+
+                    }
+
+                    .header {
+                        background-repeat: no-repeat;
+                        background-position: 0 3px;
+                        padding-left: 20px
+                    }
+
+                    .collapsed {
+                        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAEdSURBVDjLY/j//z8DJZiB6gY0rH7xpW7li3YKDHj1v2bli38lix61k2VA5fJn/9eeeP+/fcOL/wlT7/aRbEDegkf/Vxx/93/xobf/S5c8/u/ecm0eSQYkTX/4f+HBN/8nbX/xf+bul/8Tp9/9r1N0dgnRBgT33QZqfPW/YdXj/42rH//v2vjkv3fHtf9SScceEWWAc8u1/xO2Pv9fsvjB//IlD4CGPPrvXH/5v2Tksc1EGWBaful/+/on/4sW3gfGxsP/9lUX/ksEH1gj6rqdhSgDlPPO/q9b8fB/5bIH/23LL/wXD9i7kqRAlEo6+b908f3/NiXn/4t57V1EcjRKRB75b1145r+o684FZCUkMb8D/0Uct88euMxEKgYA7Ojrv4CgE7EAAAAASUVORK5CYII=");
+                    }
+
+                    .expanded {
+                        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kLHRMBBsJe0EkAAAE2SURBVDjLY/z//z8DJYCJgUIw8AawwBji/gf/M3GzMDBxsjJw8rAwCHGyMvDxsjAIcLEy8HOyMfBwMjJws7MwsLOwMDAw/PtaHyLOg2LAv8/f56gqi6ZYGQkzcLIyMXCyMzNwskEwBxsTAzsbEwMrIyPD+Yc//zMxMEyG6WNEjgUxt10L1PXF4m2NBBl+/v7PwMTEyMDDzswgxMvKIMjNyvDk3W+Gt59+dXTHylZiNYCBgYFB3HvfInVd4Vh7I0GG37//M3CxMzNICLAx3Hn5i+H1x1/987OUipDVM2JLBxKB+1ZqaAmHORkKMXCyMTFcf/aT4dnbn/N3VGsmoatlxJWQJEMOrtHWEQ7m4GRmePjq+9LLvUYx2NThNEDMbQcLiwj/ekZOBv2ncy3lcEUj42hSptwAAPuRV3c2q1PAAAAAAElFTkSuQmCC");
+                    }
+
+
+                    .divIcon{
+                    width: 16px;
+                    height: 16px;
+                    display: inline-block;
+
+                    }
+
+                    .divIconError{
+                    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIsSURBVDjLpVNLSJQBEP7+h6uu62vLVAJDW1KQTMrINQ1vPQzq1GOpa9EppGOHLh0kCEKL7JBEhVCHihAsESyJiE4FWShGRmauu7KYiv6Pma+DGoFrBQ7MzGFmPr5vmDFIYj1mr1WYfrHPovA9VVOqbC7e/1rS9ZlrAVDYHig5WB0oPtBI0TNrUiC5yhP9jeF4X8NPcWfopoY48XT39PjjXeF0vWkZqOjd7LJYrmGasHPCCJbHwhS9/F8M4s8baid764Xi0Ilfp5voorpJfn2wwx/r3l77TwZUvR+qajXVn8PnvocYfXYH6k2ioOaCpaIdf11ivDcayyiMVudsOYqFb60gARJYHG9DbqQFmSVNjaO3K2NpAeK90ZCqtgcrjkP9aUCXp0moetDFEeRXnYCKXhm+uTW0CkBFu4JlxzZkFlbASz4CQGQVBFeEwZm8geyiMuRVntzsL3oXV+YMkvjRsydC1U+lhwZsWXgHb+oWVAEzIwvzyVlk5igsi7DymmHlHsFQR50rjl+981Jy1Fw6Gu0ObTtnU+cgs28AKgDiy+Awpj5OACBAhZ/qh2HOo6i+NeA73jUAML4/qWux8mt6NjW1w599CS9xb0mSEqQBEDAtwqALUmBaG5FV3oYPnTHMjAwetlWksyByaukxQg2wQ9FlccaK/OXA3/uAEUDp3rNIDQ1ctSk6kHh1/jRFoaL4M4snEMeD73gQx4M4PsT1IZ5AfYH68tZY7zv/ApRMY9mnuVMvAAAAAElFTkSuQmCC");
+                    }
+
+                    .divSection{
+                    margin-left: 1em
+                    }
+                    .divSubSection{
+                    margin-left: 1em
+                    }
+
+                    #tableLayers{
+                        width: 100%
+                    }
+
+                    .divLayer{
+                    /*background-color: red;*/
+                    margin: 0.5em 1em 0 1em;
+                    clear:both;
+
+                    }
+                    .headerLayer{
+                    /*background-color: #e6e6e6;*/
+                        cursor:pointer;
+                        padding-top: 3px;
+                        padding-bottom: 3px;
+                    }
+
+                    .headerLayer:hover{
+                    text-decoration: underline;
+                    /*background-color: #FFFFCC;*/
+
+                    }
+
+
+                    .divLegend{
+                        /*background-color: #FFFFFF;*/
+                        width: 20%;
+                        display:inline;
+                        float: left;
+                    }
+
+                    .tableDetails tr{
+                        background-color: #eee !important
+                    }
+                    .spanMethod{
+                        text-transform: uppercase;
+                        padding-right: 10px;
+                    }
+
+                    table{
+                    /*width: 100%*/
+                    border-collapse: collapse;
+                    }
+
+                    table td{
+                    padding: 2px 20px 2px 10px;
+                    vertical-align: top
+                    }
+                    table th{
+                    padding: 2px 20px 2px 10px;
+                    vertical-align: top
+                    }
+
+                    tr:nth-child(odd)		{ background-color:#eee; }
+                    tr:nth-child(even)		{ background-color:#FFFFCC; }
+
+                    th {
+
+                    text-align: left;
+
+                    }
+
+                    .thLayerName{
+                    text-align: center;
+
+
+                    }
+
+                    .imgHeader{
+                    vertical-align: middle
+                    }
+
+                    .imgHeaderMap{
+                    float:right;
+                    margin-top: 2px;
+                    margin-right: 2px;
+
+                    }
+
+                    .mandatory{
+                    color: red !important
+
+                    }
+
+                    .undefined{
+                    font-size: 0.8em;
+                    font-style: italic;
+                    color: gray
+                    }
+
+                    #footer{
+                        font-size: 0.7em;
+                        margin-top: 4em;
+                        border-top: 1px solid #EEEEEE;
+                        text-align: center;
+
+                    }
+                    
+
+                </style>
+</head>
+<body>
+<h1 xmlns="">Servei</h1>
+<div xmlns="" class="divSection">
+<h2 id="headerGeneralData" class="header expanded">
+                Dades generals
+            </h2>
+<div id="divGeneralData" class="divSubSection">
+<table>
+<tr>
+<th>Versió:</th>
+<td>1.1.1</td>
+</tr>
+<tr>
+<th>Nom:</th>
+<td>OGC:WMS</td>
+</tr>
+<tr>
+<th>Títol:</th>
+<td>World Generic Map Service with EuroGlobalMap data for Europe</td>
+</tr>
+<tr>
+<th>Recurs en línia:</th>
+<td>
+<a href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer">http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer</a>
+</td>
+</tr>
+<tr>
+<th>Descripció:</th>
+<td>This is a generic map service of the world including datasets of worldwide coverage (VMAP0, ESRI ArcWorld, USGS GTOPO) and EuroGlobalMap for areas covering Europe (copyright EuroGeographics)</td>
+</tr>
+<tr>
+<th>Paraules clau:</th>
+<td>VMAP0, ArcWorld, EGM, GTOPO, Europe, EuroGeographics, EuroGlobalMap</td>
+</tr>
+</table>
+</div>
+<h2 id="headerContactDetails" class="header collapsed">Dades de contacte</h2>
+<div style="display:none" id="divContactDetails" class="divSubSection">
+<table>
+<tr>
+<th>Persona de contacte:</th>
+<td>Stephen Peedell</td>
+</tr>
+<tr>
+<th>Organització:</th>
+<td>European Commission Joint Research Centre</td>
+</tr>
+<tr>
+<th>Càrrec:</th>
+<td>Action Leader</td>
+</tr>
+<tr>
+<th>Adreça (Postal):</th>
+<td>Via Fermi 2749 - TP262<br />
+<div>Ispra (Varese)</div>
+<div>21027 - Italy</div>
+</td>
+</tr>
+<tr>
+<th>Telèfon:</th>
+<td>+390332786153</td>
+</tr>
+<tr>
+<th>Fax:</th>
+<td>+390332786325</td>
+</tr>
+<tr>
+<th>Correu electrònic:</th>
+<td>
+<a href="mailto:stephen.peedell@jrc.ec.europa.eu">stephen.peedell@jrc.ec.europa.eu</a>
+</td>
+</tr>
+</table>
+</div>
+<h2 id="headerAccessConditions" class="header collapsed">Condicions d'accés</h2>
+<div style="display:none" id="divAccessConditions" class="divSubSection">
+<table>
+<tr>
+<th>Tarifes:</th>
+<td>no fees</td>
+</tr>
+<tr>
+<th>Limitacions d'accés:</th>
+<td>The Commission is authorized to disseminate geographic data, derived geographic data and other derived products as web map services on the Intranet of the Commission as well as on the Internet, if the source is acknowledged</td>
+</tr>
+</table>
+</div>
+</div>
+<h1 xmlns="">Capacitats</h1>
+<div xmlns="" class="divSection">
+<h2 id="headerAvailableRequests" class="header expanded">Crides disponibles</h2>
+<div id="divAvailableRequests" class="divSubSection">
+<table>
+<tr>
+<th>GetCapabilities</th>
+<td>
+<div>application/vnd.ogc.wms_xml</div>
+</td>
+<td>
+<div>
+<span class="spanMethod">Get</span>
+<a href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer">http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer</a>
+</div>
+</td>
+</tr>
+<tr>
+<th>GetMap</th>
+<td>
+<div>image/bmp</div>
+<div>image/jpeg</div>
+<div>image/tiff</div>
+<div>image/png</div>
+<div>image/gif</div>
+<div>image/svg+xml</div>
+</td>
+<td>
+<div>
+<span class="spanMethod">Get</span>
+<a href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer">http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer</a>
+</div>
+</td>
+</tr>
+<tr>
+<th>GetFeatureInfo</th>
+<td>
+<div>application/vnd.ogc.wms_xml</div>
+<div>text/xml</div>
+<div>text/html</div>
+<div>text/plain</div>
+</td>
+<td>
+<div>
+<span class="spanMethod">Get</span>
+<a href="http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer">http://plurel.jrc.ec.europa.eu/arcgis/services/worldwithEGM/MapServer/WMSServer</a>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<h2 id="headerAvailableExceptions" class="header collapsed">Excepcions</h2>
+<div style="display: none" id="divAvailableExceptions" class="divSubSection">
+<table>
+<tr>
+<td>application/vnd.ogc.se_xml</td>
+</tr>
+<tr>
+<td>application/vnd.ogc.se_inimage</td>
+</tr>
+<tr>
+<td>application/vnd.ogc.se_blank</td>
+</tr>
+</table>
+</div>
+<h2 id="headerLayers" class="header expanded">Capes</h2>
+<div id="divLayers" class="divSubSection">
+<table id="tableLayers">
+<tr>
+<th>Nom</th>
+<th>Títol</th>
+<th>SRS</th>
+<th>Consultable?</th>
+<th>Opaca?</th>
+</tr>
+<tr>
+<td>1_1<div style="margin-left:1em" id="headerLayer_1_1" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>
+<span class="undefined mandatory "> [No s'ha definit el títol de la capa] </span>
+<div title="Aquest element és obligatori!" class="divIcon divIconError" />
+</td>
+<td />
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:1em" id="divLayer_1_1">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>Extensió (WGS84):</th>
+<td>
+<span class="undefined"> [No s'ha definit] </span>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>2_1<div style="margin-left:2em" id="headerLayer_2_1" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Layers</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:2em" id="divLayer_2_1">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555556, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-34732818.454135, -30610944.236334, 42732818.454147, 37604675.033560</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>3_1<div style="margin-left:3em" id="headerLayer_3_1" class="header collapsed headerLayer">
+<strong>0</strong>
+</div>
+</td>
+<td>seabackground</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:3em" id="divLayer_3_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default0.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>seabackground</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555556, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211635.980803, -27510233.769954, 39211635.980803, 34503965.066746</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>3_2<div style="margin-left:3em" id="headerLayer_3_2" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Orography</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:3em" id="divLayer_3_2">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Orography</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555556, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211635.980803, -27510233.769954, 39211635.980803, 34503965.066746</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_1<div style="margin-left:4em" id="headerLayer_4_1" class="header collapsed headerLayer">
+<strong>2</strong>
+</div>
+</td>
+<td>Hillshade</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default2.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Hillshade</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555556, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211635.980803, -27510233.769954, 39211635.980803, 34503965.066746</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_2<div style="margin-left:4em" id="headerLayer_4_2" class="header collapsed headerLayer">
+<strong>3</strong>
+</div>
+</td>
+<td>Gtopo 1km</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default3.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Gtopo 1km</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555556, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211635.980803, -27510233.769954, 39211635.980803, 34503965.066746</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_3<div style="margin-left:4em" id="headerLayer_4_3" class="header collapsed headerLayer">
+<strong>4</strong>
+</div>
+</td>
+<td>SRTM Hillshade</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default4.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>SRTM Hillshade</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-58.454536, 18.562229, 82.973316, 72.208941</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>457457.947916, 45016.941108, 8034259.393803, 5039512.914655</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 3960.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_4<div style="margin-left:4em" id="headerLayer_4_4" class="header collapsed headerLayer">
+<strong>5</strong>
+</div>
+</td>
+<td>SRTM DEM</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_4">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default5.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>SRTM DEM</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-58.454536, 18.562229, 82.973316, 72.208941</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>457457.947916, 45016.941108, 8034259.393803, 5039512.914655</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 3960.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>3_3<div style="margin-left:3em" id="headerLayer_3_3" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Hydrography</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:3em" id="divLayer_3_3">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Hydrography</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211653.140122, -27510234.269498, 39211653.140134, 34503962.230927</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_1<div style="margin-left:4em" id="headerLayer_4_1" class="header collapsed headerLayer">
+<strong>7</strong>
+</div>
+</td>
+<td>hydro_inland_water selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default7.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>hydro_inland_water selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211653.140122, -27510234.269498, 39211653.140134, 34503962.230927</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_2<div style="margin-left:4em" id="headerLayer_4_2" class="header collapsed headerLayer">
+<strong>8</strong>
+</div>
+</td>
+<td>Watercourse Line</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default8.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Watercourse Line</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-100.348549, 6.886613, 113.231219, 87.778664</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-2793352.443159, 134894.357153, 7003397.766826, 7174194.380878</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 1188.003960</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_3<div style="margin-left:4em" id="headerLayer_4_3" class="header collapsed headerLayer">
+<strong>9</strong>
+</div>
+</td>
+<td>Watercourse Area</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default9.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Watercourse Area</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-50.860521, 30.019333, 68.133217, 72.706318</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>1189823.042934, 959160.372054, 6610014.807149, 5098266.949109</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_4<div style="margin-left:4em" id="headerLayer_4_4" class="header collapsed headerLayer">
+<strong>10</strong>
+</div>
+</td>
+<td>Lake</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_4">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default10.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Lake</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-99.304500, 8.164682, 111.380101, 87.365747</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-2552298.982136, 155134.093266, 6986623.142747, 7099658.343248</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>3_4<div style="margin-left:3em" id="headerLayer_3_4" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>City (points)</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:3em" id="divLayer_3_4">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>City (points)</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23155453.323763, -19454034.453559, 31155453.323740, 28371712.658835</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_1<div style="margin-left:4em" id="headerLayer_4_1" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Other Cities</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_1">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Other Cities</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23155453.323763, -19454034.453559, 31155453.323740, 28371712.658835</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_1<div style="margin-left:5em" id="headerLayer_5_1" class="header collapsed headerLayer">
+<strong>13</strong>
+</div>
+</td>
+<td>Populated Places selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default13.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Populated Places selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23155453.323763, -19454034.453559, 31155453.323740, 28371712.658835</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 1188.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_2<div style="margin-left:5em" id="headerLayer_5_2" class="header collapsed headerLayer">
+<strong>14</strong>
+</div>
+</td>
+<td>Non Capitals under 250,000 selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default14.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Non Capitals under 250,000 selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23056865.274641, -19355446.406086, 31056865.276337, 27132036.844182</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>1188.000000 - 3960.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_3<div style="margin-left:5em" id="headerLayer_5_3" class="header collapsed headerLayer">
+<strong>15</strong>
+</div>
+</td>
+<td>Non Capitals over 250,000 selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default15.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Non Capitals over 250,000 selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -59.321797, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-17413886.651976, -13712467.781607, 25413886.651930, 21510927.620209</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 3168.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_4<div style="margin-left:5em" id="headerLayer_5_4" class="header collapsed headerLayer">
+<strong>16</strong>
+</div>
+</td>
+<td>Non Captials over 250,000</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_4">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default16.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Non Captials over 250,000</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23056865.275539, -19355446.405704, 31056865.275625, 28296669.024685</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>3168.000396 - 15840.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_2<div style="margin-left:4em" id="headerLayer_4_2" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>National Capitals</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_2">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>National Capitals</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23056865.275539, -19355446.405704, 31056865.275625, 28296669.024685</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_1<div style="margin-left:5em" id="headerLayer_5_1" class="header collapsed headerLayer">
+<strong>18</strong>
+</div>
+</td>
+<td>Under 50,000 selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default18.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Under 50,000 selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-21233270.940215, -17531852.070356, 29233270.940295, 26908578.381743</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 7920.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_2<div style="margin-left:5em" id="headerLayer_5_2" class="header collapsed headerLayer">
+<strong>19</strong>
+</div>
+</td>
+<td>50,000 to 250,000 selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default19.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>50,000 to 250,000 selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -49.013263, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-11597887.700119, -9154707.877967, 20856126.748103, 18673468.108601</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 7920.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_3<div style="margin-left:5em" id="headerLayer_5_3" class="header collapsed headerLayer">
+<strong>20</strong>
+</div>
+</td>
+<td>250,000 to 1 million selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default20.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>250,000 to 1 million selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -57.777179, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-16040335.389970, -12872875.796390, 24574294.665841, 20308281.260964</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 3168.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_4<div style="margin-left:5em" id="headerLayer_5_4" class="header collapsed headerLayer">
+<strong>21</strong>
+</div>
+</td>
+<td>250,000 to 1 million</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_4">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default21.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>250,000 to 1 million</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23056865.275539, -19355446.405704, 31056865.275625, 28296669.024685</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>3168.000396 - 23760.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_5<div style="margin-left:5em" id="headerLayer_5_5" class="header collapsed headerLayer">
+<strong>22</strong>
+</div>
+</td>
+<td>1 million and over selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_5">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default22.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>1 million and over selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -53.165256, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-14349301.358865, -10729209.315362, 22430628.186439, 11108044.843113</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 3168.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_6<div style="margin-left:5em" id="headerLayer_5_6" class="header collapsed headerLayer">
+<strong>23</strong>
+</div>
+</td>
+<td>1 million and over</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_6">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default23.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>1 million and over</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-23056865.275539, -19355446.405704, 31056865.275625, 28296669.024685</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>3168.000396 - 39600.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>3_5<div style="margin-left:3em" id="headerLayer_3_5" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Population</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:3em" id="divLayer_3_5">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Population</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-22066116.214054, -18364697.343893, 30066116.213974, 27542526.792466</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_1<div style="margin-left:4em" id="headerLayer_4_1" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Polygons</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_1">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Polygons</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-22066116.214054, -18364697.343893, 30066116.213974, 27542526.792466</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_1<div style="margin-left:5em" id="headerLayer_5_1" class="header collapsed headerLayer">
+<strong>26</strong>
+</div>
+</td>
+<td>Built-up Areas</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default26.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Built-up Areas</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-54.933304, 22.270746, 71.774429, 72.138401</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>778213.063513, 154913.267091, 6955055.692871, 5031204.563705</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 396.000396</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_2<div style="margin-left:5em" id="headerLayer_5_2" class="header collapsed headerLayer">
+<strong>27</strong>
+</div>
+</td>
+<td>Built-up Areas</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default27.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Built-up Areas</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-54.933304, 22.270746, 71.774429, 72.138401</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>778213.063513, 154913.267091, 6955055.692871, 5031204.563705</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>396.000396 - 3168.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_3<div style="margin-left:5em" id="headerLayer_5_3" class="header collapsed headerLayer">
+<strong>28</strong>
+</div>
+</td>
+<td>pop_built_up_areas selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default28.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>pop_built_up_areas selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-22066116.214054, -18364697.343893, 30066116.213974, 27542526.792466</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 3168.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_2<div style="margin-left:4em" id="headerLayer_4_2" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Points</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_2">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Points</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-96.078772, 7.316375, 104.226455, 85.493004</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-2708464.301508, 138261.440948, 6997127.877845, 6788619.203680</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_1<div style="margin-left:5em" id="headerLayer_5_1" class="header collapsed headerLayer">
+<strong>30</strong>
+</div>
+</td>
+<td>Built-up Point   </td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default30.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Built-up Point   </td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-96.078772, 7.349502, 104.226455, 85.493004</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-2708464.301508, 144329.012629, 6997127.877845, 6788619.203680</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 198.000396</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_2<div style="margin-left:5em" id="headerLayer_5_2" class="header collapsed headerLayer">
+<strong>31</strong>
+</div>
+</td>
+<td>Name Point</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default31.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Name Point</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-64.294313, 20.579727, 76.407679, 74.926235</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>316717.966278, 142571.475233, 6936970.721412, 5364517.987319</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 198.000396</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_3<div style="margin-left:5em" id="headerLayer_5_3" class="header collapsed headerLayer">
+<strong>32</strong>
+</div>
+</td>
+<td>Built-up Areas centroids</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default32.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Built-up Areas centroids</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-63.378223, 20.207277, 67.277395, 73.888859</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>223577.780116, 138261.440948, 6412144.241598, 5239236.145025</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 396.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>5_4<div style="margin-left:5em" id="headerLayer_5_4" class="header collapsed headerLayer">
+<strong>33</strong>
+</div>
+</td>
+<td>Built-up Areas centroids</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:5em" id="divLayer_5_4">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default33.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Built-up Areas centroids</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-54.832622, 22.286911, 71.616703, 72.096659</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>781220.856960, 155726.468007, 6947820.212189, 5026290.843523</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>396.000396 - 3168.000396</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>3_6<div style="margin-left:3em" id="headerLayer_3_6" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Transportation</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:3em" id="divLayer_3_6">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Transportation</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-94.579659, 7.764943, 101.556270, 84.691465</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-2610613.981375, 133809.650310, 7008623.048128, 6664941.010713</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_1<div style="margin-left:4em" id="headerLayer_4_1" class="header collapsed headerLayer">
+<strong>35</strong>
+</div>
+</td>
+<td>Road</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default35.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Road</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-66.745076, 19.299072, 76.905777, 74.727971</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-9206.120148, 133809.650310, 7008623.048128, 5340449.317087</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>198.000396 - 792.000396</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_2<div style="margin-left:4em" id="headerLayer_4_2" class="header collapsed headerLayer">
+<strong>36</strong>
+</div>
+</td>
+<td>Road</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default36.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Road</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-66.745076, 19.299072, 76.905777, 74.727971</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-9206.120148, 133809.650310, 7008623.048128, 5340449.317087</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 198.000396</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_3<div style="margin-left:4em" id="headerLayer_4_3" class="header collapsed headerLayer">
+<strong>37</strong>
+</div>
+</td>
+<td>Airfield</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default37.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Airfield</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-94.579659, 7.825617, 100.908439, 84.691465</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-2610613.981375, 144793.387876, 6925094.733419, 6664941.010713</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>0.0 - 396.000396</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>3_7<div style="margin-left:3em" id="headerLayer_3_7" class="header collapsed headerLayer">
+<span class="undefined"> [No s'ha definit] </span>
+</div>
+</td>
+<td>Borders</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:3em" id="divLayer_3_7">
+<div class="divLegend">
+<span class="undefined" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>Borders</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211653.140121, -27510234.269520, 39211653.140127, 34503962.230927</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_1<div style="margin-left:4em" id="headerLayer_4_1" class="header collapsed headerLayer">
+<strong>39</strong>
+</div>
+</td>
+<td>CNTR_RG_01M_2006</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_1">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default39.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>CNTR_RG_01M_2006</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211653.140121, -27510234.269520, 39211653.140127, 34503962.230927</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>2772.000000 - 19800.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_2<div style="margin-left:4em" id="headerLayer_4_2" class="header collapsed headerLayer">
+<strong>40</strong>
+</div>
+</td>
+<td>CNTR_BN_01M_2006</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_2">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default40.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>CNTR_BN_01M_2006</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-180.000000, -64.555555, 180.000000, 90.000000</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>-31211653.140121, -27510234.269520, 39211653.140127, 34503962.230927</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>4_3<div style="margin-left:4em" id="headerLayer_4_3" class="header collapsed headerLayer">
+<strong>41</strong>
+</div>
+</td>
+<td>GISCO countries centroids selection</td>
+<td>EPSG:4326, EPSG:3034</td>
+<td>Si</td>
+<td>No</td>
+</tr>
+<tr>
+<td colspan="5">
+<div style="display:none; margin-left:4em" id="divLayer_4_3">
+<div class="divLegend">
+<img title="Llegenda" alt="Llegenda" src="http://plurel.jrc.ec.europa.eu/arcgisoutput/test_lcc_MapServer/wms/default41.png" />
+</div>
+<table class="tableDetails">
+<tr>
+<th>
+                                    Descripció:
+                                </th>
+<td>GISCO countries centroids selection</td>
+</tr>
+<tr>
+<th>Extensió (WGS84):</th>
+<td>-44.414889, 30.792665, 57.011920, 70.643911</td>
+</tr>
+<tr>
+<th>
+                                    Extensió (EPSG:3034):
+                                </th>
+<td>1421096.494749, 961136.484801, 6101444.424051, 4856516.740965</td>
+</tr>
+<tr>
+<th>
+                                    Rang d'escala:
+                                </th>
+<td>2772.000000 - 19800.000000</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="footer">
+                    Generat per WMSInspector
+                </div>
+<script type="text/javascript">
+<!--
+                        
+                    var headers = document.getElementsByTagName("h2");
+                    registerEvents(headers);
+                                        var divs = document.getElementById("divLayers").getElementsByTagName("div");
+                        for (var i = 0; i < divs.length; i++){
+                                                if (divs[i].className.indexOf("header") !== -1)
+                                                        divs[i].addEventListener("click", toggleDiv, false);
+                        }
+
+                                        function registerEvents(elements){
+                                for (var i = 0; i < elements.length; i++){
+                                    elements[i].addEventListener("click", toggleDiv, false);
+                                }
+                                        }
+                    function toggleDiv(e){
+                        var header = e.currentTarget;
+                        var div = document.getElementById(header.id.replace(/header/,"div"));
+                        if (div){
+                            var expand = (div.style.display == "none")
+                            div.style.display = (expand) ? "block" : "none";
+                                                        var from = (expand) ? "collapsed" : "expanded";
+                                                        var to = (expand) ? "expanded" : "collapsed";
+                                                        var re = new RegExp(from,"g");
+                            header.className = header.className.replace(re,to);
+                        }
+                    }
+                    
+                    -->
+</script>
+</body>
+</html>

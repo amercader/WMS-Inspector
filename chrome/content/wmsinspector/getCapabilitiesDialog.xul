@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<dialog xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+				id="wiGetCapabilitiesDialog"
+				title="&wmsinspector.getcapabilities.title;"
+                                onload="WI.GetCapabilitiesDialog.init();"
+                                buttons="cancel,extra2"
+                                defaultButton="extra2"
+                                width="380"
+                                height="300"
+>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/requests.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/getCapabilitiesDialog.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorReport.js"/>
+    
+	
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
+    </stringbundleset>
+
+
+    <groupbox>
+        <caption label="&wmsinspector.common.server;"/>
+        <hbox align="center" flex="1">
+            <textbox id="wiTextServer" class="padded" flex="1" />
+        </hbox>
+    </groupbox>
+    <groupbox>
+        <caption label="&wmsinspector.common.options;"/>
+        <hbox align="center" flex="1">
+            <label id="wiServiceTypeMenuLabel" value="&wmsinspector.common.service;" align="center" />
+            <menulist id="wiServiceTypeMenu">
+                <menupopup>
+                    <menuitem value="0" label="WMS"/>
+                    <menuitem value="1" label="WFS"/>
+                </menupopup>
+            </menulist>
+            <label id="wiVersionMenuLabel" value="&wmsinspector.common.version;" align="center" />
+            <menulist id="wiVersionMenu">
+                <menupopup>
+                </menupopup>
+            </menulist>
+        </hbox>
+    </groupbox>
+
+    <groupbox>
+        <caption label="&wmsinspector.common.output;"/>
+        <vbox flex="1">
+            <checkbox id="wiGetcapabilitiesOutputHTML" label="&wmsinspector.getcapabilities.outputHTML;" persist="checked"/>
+            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" persist="checked" onclick="WI.GetCapabilitiesDialog.updateOutputRadios();"/>
+        </vbox>
+            
+        <hbox id="wiGetcapabilitiesOutputOptionsBox" style="margin-left: 22px" align="center" >
+            <label id="wiVersionMenuLabel" value="&wmsinspector.getcapabilities.openin;" />
+            <radiogroup id="wiGetcapabilitiesOutputOptions" orient="horizontal">
+              <radio id="wiGetcapabilitiesOutputBrowser" label="&wmsinspector.common.browser;" selected="true" persist="selected" />
+              <radio id="wiGetcapabilitiesOutputEditor" label="&wmsinspector.common.editor;" persist="selected" />
+            </radiogroup>
+            <button id="wiConfigButton" class="wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="window.opener.WI.Overlay.openOptionsDialog();" style="width: 25px" />
+           
+        </hbox>
+    </groupbox>
+</dialog>

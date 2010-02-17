@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE WMT_MS_Capabilities SYSTEM "http://schemas.opengis.net/wms/1.1.1/WMS_MS_Capabilities.dtd"
+ [
+ <!ELEMENT VendorSpecificCapabilities EMPTY>
+ ]>  <!-- end of DOCTYPE declaration -->
+
+<WMT_MS_Capabilities version="1.1.1">
+
+<!-- MapServer 5.0 vg 1.56 GRAFCAN 2008 -->
+
+<Service>
+  <Name>OGC:WMS</Name>
+  <Title>IDECanarias OrtoExpress</Title>
+
+  <Abstract>Ortofotos Express de Canarias. Propiedad del Gobierno de Canarias.</Abstract>
+        <KeywordList>
+          <Keyword>WMS</Keyword>
+          <Keyword>ORTOFOTOS</Keyword>
+          <Keyword>FOTOGRAFIA</Keyword>
+          <Keyword>AEREA</Keyword>
+
+          <Keyword>ORTOEXPRESS</Keyword>
+          <Keyword>CANARIAS</Keyword>
+          <Keyword>GRAFCAN</Keyword>
+          <Keyword>ORTHOPHOTO</Keyword>
+          <Keyword>CANARY</Keyword>
+          <Keyword>ISLANDS</Keyword>
+
+          <Keyword>AERIAL</Keyword>
+          <Keyword>PHOTO</Keyword>
+        </KeywordList>
+  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/>
+  <ContactInformation>
+    <ContactPersonPrimary>
+      <ContactPerson></ContactPerson>
+      <ContactOrganization>Cartografica de Canarias S.A. (GRAFCAN)</ContactOrganization>
+
+    </ContactPersonPrimary>
+  <ContactElectronicMailAddress>info@grafcan.com</ContactElectronicMailAddress>
+  </ContactInformation>
+  <Fees>none</Fees>
+  <AccessConstraints>Acceso libre. Prohibido el uso comercial y la descarga masiva de información.</AccessConstraints>
+</Service>
+
+<Capability>
+  <Request>
+
+    <GetCapabilities>
+      <Format>application/vnd.ogc.wms_xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Post>
+        </HTTP>
+      </DCPType>
+
+    </GetCapabilities>
+    <GetMap>
+      <Format>image/jpeg</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Post>
+        </HTTP>
+
+      </DCPType>
+    </GetMap>
+    <GetFeatureInfo>
+      <Format>text/html</Format>
+      <Format>text/plain</Format>
+      <Format>application/vnd.ogc.gml</Format>
+      <DCPType>
+
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetFeatureInfo>
+    <DescribeLayer>
+      <Format>text/xml</Format>
+
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Post>
+        </HTTP>
+      </DCPType>
+    </DescribeLayer>
+    <GetLegendGraphic>
+      <Format>image/jpeg</Format>
+
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetLegendGraphic>
+    <GetStyles>
+      <Format>text/xml</Format>
+
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Get>
+          <Post><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?"/></Post>
+        </HTTP>
+      </DCPType>
+    </GetStyles>
+  </Request>
+  <Exception>
+
+    <Format>application/vnd.ogc.se_xml</Format>
+    <Format>application/vnd.ogc.se_inimage</Format>
+    <Format>application/vnd.ogc.se_blank</Format>
+  </Exception>
+  <VendorSpecificCapabilities />
+  <UserDefinedSymbolization SupportSLD="1" UserLayer="0" UserStyle="1" RemoteWFS="0"/>
+  <Layer>
+
+    <Name>WMS_OrtoExpress</Name>
+    <Title>IDECanarias OrtoExpress</Title>
+    <SRS>EPSG:32628</SRS>
+    <SRS>EPSG:4326</SRS>
+    <SRS>EPSG:32627</SRS>
+    <LatLonBoundingBox minx="-18.3099" miny="26.1839" maxx="-13.1373" maxy="29.8305" />
+
+    <BoundingBox SRS="EPSG:32628"
+                minx="180000" miny="2.9e+006" maxx="680000" maxy="3.3e+006" />
+    <Layer queryable="1" opaque="0" cascaded="0">
+        <Name>ortoexpress</Name>
+        <Title>OrtoExpress</Title>
+        <SRS>EPSG:32628</SRS>
+        <ScaleHint min="1.49670854528891" max="0" />
+        <!-- WARNING: Only MINSCALEDENOM and no MAXSCALEDENOM specified in the mapfile. A default value of 0 has been returned for the Max ScaleHint but this is probably not what you want. -->
+
+    </Layer>
+  </Layer>
+</Capability>
+</WMT_MS_Capabilities>
+
+
