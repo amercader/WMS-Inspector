@@ -1,0 +1,31 @@
+WMS Inspector
+======
+
+A Firefox add-on with tools for working with Web Map Services (WMS)
+
+Description
+------------
+
+WMS Inspector provides a set of tools for integrators and developers that work
+with the Web Map Service (WMS) standard. It aims to ease repetitive tasks like
+debugging requests or checking which individual services are used from an
+online mapping application. It also focuses on provide a user-friendly output of
+the different services' capabilities.
+
+To get more information about the WMS standard visit
+<http://www.opengeospatial.org/standards/wms>
+
+Install
+----------
+Coming soon
+
+Support
+----------
+Coming soon
+
+License
+----------
+WMS Inspector is released under the GNU GENERAL PUBLIC LICENSE version 3 (GPLv3)
+Please check the file LICENSE or the following URL for the full details of this
+license
+<http://www.gnu.org/licenses/gpl.html>
