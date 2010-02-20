@@ -1,6 +1,8 @@
 content wmsinspector chrome/content/wmsinspector/
 
-locale wmsinspector ca chrome/locale/ca/wmsinspector/
+locale wmsinspector en-US chrome/locale/en-US/wmsinspector/
+locale wmsinspector ca-AD chrome/locale/ca-AD/wmsinspector/
+locale wmsinspector es-ES chrome/locale/es-ES/wmsinspector/
 
 skin wmsinspector default/1.0 chrome/skin/default/wmsinspector/
 

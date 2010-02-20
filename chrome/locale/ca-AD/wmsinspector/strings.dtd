@@ -16,7 +16,7 @@
 <!ENTITY wmsinspector.common.browser "Navegador">
 
 <!-- Toolbar -->
-<!ENTITY wmsinspector.toolbar.refresh "Actualitzar serveis">
+<!ENTITY wmsinspector.toolbar.refresh "Actualitzar crides">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar per">
 <!ENTITY wmsinspector.toolbar.requesttype "Tipus de crida">
 <!ENTITY wmsinspector.toolbar.service "Servei">
@@ -59,9 +59,9 @@
 <!ENTITY wmsinspector.xsl.contacttelephone "Tel&#232;fon">
 <!ENTITY wmsinspector.xsl.contactfax "Fax">
 <!ENTITY wmsinspector.xsl.contactemail "Correu electr&#242;nic">
-<!ENTITY wmsinspector.xsl.accessconditions "Restriccions d'accés">
+<!ENTITY wmsinspector.xsl.accessconditions "Restriccions d'acc&#233;s">
 <!ENTITY wmsinspector.xsl.fees "Tarifes">
-<!ENTITY wmsinspector.xsl.accessconstraints "Limitacions d'accés">
+<!ENTITY wmsinspector.xsl.accessconstraints "Limitacions d'acc&#233;s">
 <!ENTITY wmsinspector.xsl.layerlimit "L&#237;mit de capes">
 <!ENTITY wmsinspector.xsl.maxwidth "Amplada m&#224;xima">
 <!ENTITY wmsinspector.xsl.maxheight "Al&#231;ada m&#224;xima">
@@ -82,7 +82,7 @@
 <!ENTITY wmsinspector.xsl.legend "Llegenda">
 <!ENTITY wmsinspector.xsl.extent "Extensi&#243;">
 <!ENTITY wmsinspector.xsl.resolution "Resoluci&#243;">
-<!ENTITY wmsinspector.xsl.scalehint "Rang d'escala">
+<!ENTITY wmsinspector.xsl.scalehint "Interval d'escala">
 <!ENTITY wmsinspector.xsl.maxscale "Escala m&#224;xima">
 <!ENTITY wmsinspector.xsl.minscale "Escala m&#237;nima">
 <!ENTITY wmsinspector.xsl.metadata "Metadades">
