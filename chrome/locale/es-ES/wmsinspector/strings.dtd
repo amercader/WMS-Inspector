@@ -58,7 +58,7 @@
 <!ENTITY wmsinspector.xsl.contactaddress "Direcci&#243;n">
 <!ENTITY wmsinspector.xsl.contacttelephone "Tel&#233;fono">
 <!ENTITY wmsinspector.xsl.contactfax "Fax">
-<!ENTITY wmsinspector.xsl.contactomail "Correo electr&#243;nico">
+<!ENTITY wmsinspector.xsl.contactemail "Correo electr&#243;nico">
 <!ENTITY wmsinspector.xsl.accessconditions "Restricciones de acceso">
 <!ENTITY wmsinspector.xsl.fees "Tarifas">
 <!ENTITY wmsinspector.xsl.accessconstraints "Limitacions de acceso">
