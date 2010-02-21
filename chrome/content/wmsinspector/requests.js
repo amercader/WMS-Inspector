@@ -1,4 +1,4 @@
-//TODO: multiple requests
+﻿//TODO: multiple requests
 function wiRequest(type,url,data,onSuccess,onError){
     this.type = type;
     this.url = url;

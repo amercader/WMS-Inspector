@@ -1,4 +1,4 @@
-
+﻿
 WI.EditParameterDialog = {
     frameId: null,
     imageId: null,
