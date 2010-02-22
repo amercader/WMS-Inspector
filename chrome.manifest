@@ -1,4 +1,4 @@
-﻿content wmsinspector chrome/content/wmsinspector/
+content wmsinspector chrome/content/wmsinspector/
 
 locale wmsinspector en-US chrome/locale/en-US/wmsinspector/
 locale wmsinspector ca-AD chrome/locale/ca-AD/wmsinspector/

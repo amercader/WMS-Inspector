@@ -1,4 +1,4 @@
-﻿var WIImages = {
+var WIImages = {
     currentServiceImages: [],
 
     lastSeqId: 0,

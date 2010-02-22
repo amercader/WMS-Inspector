@@ -1,4 +1,4 @@
-﻿const wiCellNoServicesFound = "wiCellNoServicesFound";
+const wiCellNoServicesFound = "wiCellNoServicesFound";
 
 window.addEventListener("load", wiLoad, false);
 window.addEventListener("unload", wiUnload, false);

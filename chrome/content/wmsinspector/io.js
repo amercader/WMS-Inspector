@@ -1,4 +1,4 @@
-﻿//Folder name for WMSInspector stuff in Temporary dir
+//Folder name for WMSInspector stuff in Temporary dir
 const wiTempDirName = "wmsinspector";
 
 //Naming template for temporary files

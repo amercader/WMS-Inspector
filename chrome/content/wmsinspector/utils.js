@@ -1,4 +1,4 @@
-﻿//Preferences branch for WMSInspector stuff
+//Preferences branch for WMSInspector stuff
 const wiPrefBranch = "extensions.wmsinspector.";
 
 //WMSInspector namespace

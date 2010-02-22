@@ -1,4 +1,4 @@
-﻿
+
 WI.GetCapabilitiesDialog = {
     prefs: null,
 	

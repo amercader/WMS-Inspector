@@ -1,4 +1,4 @@
-﻿WI.OptionsDialog = {
+WI.OptionsDialog = {
     
     prefs: null,
     
