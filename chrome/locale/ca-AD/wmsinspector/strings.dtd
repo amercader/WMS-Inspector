@@ -15,6 +15,10 @@
 <!ENTITY wmsinspector.common.editor "Editor">
 <!ENTITY wmsinspector.common.browser "Navegador">
 
+<!-- Index page -->
+<!ENTITY wmsinspector.index.welcome "Benvinguts al WMS Inspector">
+<!ENTITY wmsinspector.index.description "Feu clic en &quot;Actualitzar crides&quot; per comprovar si el document actual cont&#233; crides a serveis WMS.">
+
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Actualitzar crides">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar per">

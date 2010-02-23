@@ -15,6 +15,10 @@
 <!ENTITY wmsinspector.common.editor "Editor">
 <!ENTITY wmsinspector.common.browser "Browser">
 
+<!-- Index page -->
+<!ENTITY wmsinspector.index.welcome "Welcome to the WMS Inspector">
+<!ENTITY wmsinspector.index.description "Click &quot;Refresh requests&quot; to check if the current document contains WMS requests.">
+
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Refresh requests">
 <!ENTITY wmsinspector.toolbar.groupby "Group By">

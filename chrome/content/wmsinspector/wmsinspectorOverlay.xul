@@ -112,7 +112,7 @@
                 <splitter id="wiTreeSplitter" collapsed="false"/>
 
                 <vbox id="wiImageContainer" flex="1">
-                        <browser type="content" id="wiBrowser" flex="1" />
+                        <browser type="content" id="wiBrowser" flex="1" src="chrome://wmsinspector/content/index.xhtml" />
                 </vbox>
             </hbox>
 

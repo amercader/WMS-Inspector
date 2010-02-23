@@ -60,7 +60,42 @@
 }
 
 #wiMsg{
-    /*background-color:*/
     font-weight: bold;
     color: #FF0000;
+}
+
+#wiIndexContent{
+    font-family: "Georgia", "Garamond","Courier New";
+    /*background-color: #FFE33C;*/
+	background-color: #FFEDB5;
+	
+    -moz-border-radius: 10px;
+    -moz-box-shadow: 3px 3px 5px #888888;
+    width: 70%;
+    
+    margin-top: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5em;
+
+}
+
+#wiIndexImg{
+    float:left;
+    position: relative;
+    margin-right: 5px;
+	min-height: 150px;
+}
+
+
+#wiIndexHeader{
+    border-bottom: 2px solid #999999;
+    margin-bottom: 1em;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+#wiIndexDescription{
+    font-size: 0.8em;
+    display: inline;
 }
