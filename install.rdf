@@ -16,9 +16,9 @@
 		
 		<!-- Front End MetaData -->
 		<em:name>WMS Inspector</em:name>
-		<em:description>OGC Web Map Service (WMS) Inspector</em:description>
+		<em:description>Adds tools for working with Web Map Services (WMS)</em:description>
 		<em:creator>Adrià Mercader</em:creator>
-     
+                <em:iconURL>chrome://wmsinspector/skin/wmsinspector_logo_32.png</em:iconURL>
 		<em:optionsURL>chrome://wmsinspector/content/optionsDialog.xul</em:optionsURL>
 		<!--<em:homepageURL>http://www.wmsinspector.org/</em:homepageURL>-->
 	</Description>

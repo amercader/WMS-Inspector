@@ -26,7 +26,7 @@
 
 
 #wiStatusBarImage{
-    list-style-image: url("chrome://wmsinspector/skin/wmsinspector.png") !important;
+    list-style-image: url("chrome://wmsinspector/skin/wmsinspector_logo_bar.png") !important;
 
 }
 
@@ -66,13 +66,12 @@
 
 #wiIndexContent{
     font-family: "Georgia", "Garamond","Courier New";
-    /*background-color: #FFE33C;*/
-	background-color: #FFEDB5;
-	
+    background-color: #FFEDB5;
+
     -moz-border-radius: 10px;
     -moz-box-shadow: 3px 3px 5px #888888;
     width: 70%;
-    
+
     margin-top: 2em;
     margin-left: auto;
     margin-right: auto;
@@ -84,7 +83,7 @@
     float:left;
     position: relative;
     margin-right: 5px;
-	min-height: 150px;
+    min-height: 150px;
 }
 
 
