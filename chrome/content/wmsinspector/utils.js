@@ -49,6 +49,12 @@ WI.Utils = {
         var i = Components.interfaces[interfaceName];
         if (!c || !i) return null;
         return c.createInstance(i);
+    },
+    showAlert: function(text,title){
+        var prompts = this.getService("@mozilla.org/embedcomp/prompt-service;1",Components.interfaces.nsIPromptService);
+        title = title || this.getString("wi_extension_name")
+        prompts.alert(null, title, text);
+
     }
 
 

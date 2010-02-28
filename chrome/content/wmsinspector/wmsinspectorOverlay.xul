@@ -11,7 +11,6 @@
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
 
-<script type="application/x-javascript" src="chrome://wmsinspector/content/test/test.js"/>
 
     <stringbundleset id="stringbundleset">
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
@@ -46,16 +45,7 @@
                                 </menulist>
                             </toolbaritem>
                             <toolbarseparator />
-                            <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WI.Overlay.openGetCapabilitiesDialog();" />
-                            <!--
-                            <toolbarbutton id="witestButton" label="test" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="testFile();" />
-                            <toolbarbutton id="witestButton" label="test22" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="test1();" />
-                            
-                            <toolbarbutton id="witestButton" label="test55" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WI.Overlay.selectEditor();" />
-
-<toolbarbutton id="witestButton" label="test44" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="showGetCapabilitiesReportVersionTest();" />
-<toolbarbutton id="witestButton" label="test66" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="test66();" />
--->
+                            <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WI.Overlay.openGetCapabilitiesDialog();" />   
                         </toolbar>
                     </toolbox>
                 </hbox>

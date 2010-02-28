@@ -38,7 +38,7 @@ WI.GetCapabilitiesDialog = {
 
 
         if(!outputHTML && !outputXML){
-            alert(WI.Utils.getString("wi_getcapabilities_selectoutputformat"));
+            WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_selectoutputformat"));
             return false;
         }
 
@@ -47,8 +47,7 @@ WI.GetCapabilitiesDialog = {
         var version = document.getElementById("wiVersionMenu").selectedItem.getAttribute("label");
         
         if (!server.length || (server.indexOf("http://") == -1 && server.indexOf("HTTP://") == -1)){
-            var msg = WI.Utils.getString("wi_getcapabilities_nourl");
-            alert(msg);
+            WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_nourl"));
             return false;
 
         } else {

@@ -199,7 +199,6 @@ WI.Overlay = {
         if (t.view == null) return;
 
         var treeSel = this.getTreeSelectionAt(event.clientX, event.clientY, "wiTree");
-        //alert(t.currentIndex);
         if (treeSel.row.value != -1 && treeSel.part.value != "twisty"){
             var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column).split("_");
             if (event.button == 0){
@@ -410,6 +409,7 @@ WI.Overlay = {
 
         var version;
         if (xhr.responseXML){
+            //Check if this is a GetCapabilities response
             version = WI.Overlay.getWMSVersion(xhr.responseXML);
         } else if (xhr.responseText) {
             var file = WI.IO.createTmpFile(WI.IO.getTmpFileName("tmp"));
@@ -417,7 +417,7 @@ WI.Overlay = {
             WI.Overlay.showFileInBrowser(file);
             return false;
         } else {
-            alert("Error: No s'ha rebut cap resposta del servidor");
+            WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + WI.Utils.getString("wi_request_servernotfound"));
             return false;
         }
 		
@@ -434,21 +434,12 @@ WI.Overlay = {
         if (!version || !supported){
             version = WI.Overlay.prefs.getCharPref("wmsversion");
         }
-		
-		
-        /*
-		alert(version);
-return;
-         */
-        //TODO: FILTER errrors
-        //alert(xhr.getResponseHeader("Content-Type"));
+
         var processor = new XSLTProcessor();
 
         var xsl = document.implementation.createDocument("", "test", null);
         xsl.addEventListener("load", onXSLLoaded, false);
         xsl.load("chrome://wmsinspector/content/xsl/wms_" + version +".xsl");
-        //xsl.load("chrome://wmsinspector/content/xsl/wms_1.3.0.xsl");
-        //xsl.load("chrome://wmsinspector/content/xsl/wms_common.xsl");
 
         function onXSLLoaded() {
             xsl.removeEventListener("load", onXSLLoaded, false);
@@ -459,7 +450,7 @@ return;
             var serializer = new XMLSerializer();
             var data = serializer.serializeToString(newDoc);
 
-            var file = WI.IO.createTmpFile("report2.html");
+            var file = WI.IO.createTmpFile(WI.IO.getTmpFileName("html"));
             WI.IO.write(file,data,"c",true);
 
             WI.Overlay.showFileInBrowser(file);
@@ -491,7 +482,7 @@ return;
     requestGetCapabilities: function(url){
         var request = new wiGET(url,
             this.showGetCapabilitiesReportVersion,
-            this.requestError);
+            this.onRequestError);
         request.send();
     },
 
@@ -506,7 +497,7 @@ return;
 
                 }
             },
-            this.requestError);
+            this.onRequestError);
         request.send();
     },
     //TODO: check encoding
@@ -581,11 +572,26 @@ return;
         return extension;
     },
 
-    requestError: function(xhr){
-        //TODO
-        alert(xhr);
-        alert(xhr.status);
-        alert(xhr.responseText);
+    onRequestError: function(xhr){
+        
+        if (xhr.status == 0){
+            //No connection or Server not found
+            WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + WI.Utils.getString("wi_request_servernotfound"));
+        } else if (xhr.status > 0){
+            //Server returned an error code
+            if ((xhr.responseText)){
+                //Server returned an error page
+                var file = WI.Overlay.saveResponseToFile(xhr);
+                WI.Overlay.showFileInBrowser(file);
+            } else {
+                //Server didnt return an error page, output the error message
+                WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + xhr.statusText);
+            }
+        } else {
+            //Unknown error
+            WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + WI.Utils.getString("wi_request_unknownerror"));
+        }
+
     },
 
     showFileInBrowser: function(file,focus){
@@ -617,8 +623,7 @@ return;
         }
 
         if (!server.length || (server.indexOf("http://") == -1 && server.indexOf("HTTP://") == -1)){
-            var msg = WI.Utils.getString("wi_getcapabilities_nourl");
-            alert(msg);
+            WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_nourl"));
             return false;
 
         } else {
@@ -634,18 +639,9 @@ return;
             + "&SERVICE=WMS"
             + "&VERSION=1.1.1";
 
-        
-
-            /*
-            if (outputXML){
-                window.opener.WI.Overlay.requestDocument(url);
-            }
-             */
             
             WI.Overlay.requestGetCapabilities(url);
-            
 
-            //window.close();
             return true;
         }
     },
