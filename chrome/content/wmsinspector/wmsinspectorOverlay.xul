@@ -20,7 +20,7 @@
         <menuseparator/>
         <menu label="&wmsinspector.common.name;" id="wiContext" >
             <menupopup id="wiContextPopUp" onpopupshowing="WI.Overlay.checkSelection()">
-                <menuitem id="wiContextGetCapabilitesReport" label="GetCapabilities Report"
+                <menuitem id="wiContextGetCapabilitesReport" label="&wmsinspector.context.capabilitiesreport;"
                           oncommand="WI.Overlay.checkGetCapabilities()"/>
             </menupopup>
         </menu>

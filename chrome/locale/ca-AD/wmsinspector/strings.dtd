@@ -19,6 +19,9 @@
 <!ENTITY wmsinspector.index.welcome "Benvinguts al WMS Inspector">
 <!ENTITY wmsinspector.index.description "Feu clic en &quot;Actualitzar crides&quot; per comprovar si el document actual cont&#233; crides a serveis WMS.">
 
+<!-- Context menu -->
+<!ENTITY wmsinspector.context.capabilitiesreport "Informe de capacitats">
+
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Actualitzar crides">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar per">
