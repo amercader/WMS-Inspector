@@ -23,6 +23,17 @@ WI.Utils = {
         getBranch(wiPrefBranch);
     },
 
+    setPreferenceObserver: function(observer){
+        var prefs = this.getPrefs()
+
+        //This will allow us to use the methods of the nsIPrefBranch2
+        prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
+        
+        //First parameter is preference domain, but we don't need to set it
+        //because it has already been set in the getPrefs method
+        prefs.addObserver("",observer,false);
+    },    
+
     getSelectedBrowser: function(){
         return window.top.getBrowser().selectedBrowser;
     },

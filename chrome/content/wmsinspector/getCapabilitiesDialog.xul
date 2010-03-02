@@ -64,7 +64,7 @@
               <radio id="wiGetcapabilitiesOutputBrowser" label="&wmsinspector.common.browser;" selected="true" persist="selected" />
               <radio id="wiGetcapabilitiesOutputEditor" label="&wmsinspector.common.editor;" persist="selected" />
             </radiogroup>
-            <button id="wiConfigButton" class="wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="window.opener.WI.Overlay.openOptionsDialog();" style="width: 25px" />
+            <image id="wiConfigButton" class="wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" onclick="window.opener.WI.Overlay.openOptionsDialog('editor');" />
            
         </hbox>
     </groupbox>

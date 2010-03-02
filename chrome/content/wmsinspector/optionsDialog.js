@@ -27,10 +27,8 @@ WI.OptionsDialog = {
     onAccept: function(){
 
         //Default editor
-        var path = document.getElementById("wiEditorPath").value;
-        if (path){
-            this.prefs.setCharPref("editor",path);
-        }
+        this.prefs.setCharPref("editor",document.getElementById("wiEditorPath").value);
+        
     }
 
 }

@@ -4,13 +4,16 @@ WI.GetCapabilitiesDialog = {
 	
     init: function(){
         this.prefs = WI.Utils.getPrefs();
+        WI.Utils.setPreferenceObserver(WI.GetCapabilitiesDialog);
         
         var button = document.documentElement.getButton("extra2");
         button.setAttribute("label", WI.Utils.getString("wi_getcapabilities_request"));
         button.addEventListener("command", WI.GetCapabilitiesDialog.onAccept, false);
   
-        var server = window.arguments[0];
-        var version = window.arguments[1];
+        if (window.arguments){
+            var server = window.arguments[0];
+            var version = window.arguments[1];
+        }
 
         if (server) document.getElementById("wiTextServer").value = server;
 
@@ -84,9 +87,27 @@ WI.GetCapabilitiesDialog = {
         
     },
 
-    getBrowser: function(){
-        return window.opener.getBrowser();
+    //Unfortunately, there is bug that sometimes prevents the preference
+    //observer from being called. See
+    //  https://bugzilla.mozilla.org/show_bug.cgi?id=488587
+    observe: function(subject,topic,data){
+
+        if (topic == "nsPref:changed" && data == "editor"){
+            var radio = document.getElementById("wiGetcapabilitiesOutputEditor");
+            var editor = this.prefs.getCharPref("editor");
+            
+            if (radio.getAttribute("selected") && editor == "") {
+                radio.setAttribute("selected",false);
+                document.getElementById("wiGetcapabilitiesOutputBrowser").setAttribute("selected",true);
+            }
+            radio.setAttribute("disabled", editor == "");
+        }
+    },
+    
+    shutdown: function(){
+        this.prefs.removeObserver("", this);
     }
+
 
 	
 }
