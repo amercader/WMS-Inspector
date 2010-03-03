@@ -10,6 +10,7 @@
 				id="wiGetCapabilitiesDialog"
 				title="&wmsinspector.getcapabilities.title;"
                                 onload="WI.GetCapabilitiesDialog.init();"
+                                onunload="WI.GetCapabilitiesDialog.shutdown();"
                                 buttons="cancel,extra2"
                                 defaultButton="extra2"
                                 width="380"

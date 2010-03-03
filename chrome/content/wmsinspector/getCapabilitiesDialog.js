@@ -4,7 +4,7 @@ WI.GetCapabilitiesDialog = {
 	
     init: function(){
         this.prefs = WI.Utils.getPrefs();
-        WI.Utils.setPreferenceObserver(WI.GetCapabilitiesDialog);
+        WI.Utils.setPreferenceObserver(this.prefs,this);
         
         var button = document.documentElement.getButton("extra2");
         button.setAttribute("label", WI.Utils.getString("wi_getcapabilities_request"));
