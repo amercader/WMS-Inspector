@@ -21,13 +21,14 @@
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
     </stringbundleset>
 
-    <tabbox>
-        <tabs>
-            <tab label="&wmsinspector.common.editor;"/>
-        </tabs>
-
-        <tabpanels>
-            <tabpanel>
+<groupbox>
+  <caption label="&wmsinspector.options.appearance;"/>
+                <vbox pack="center" flex="1">
+            <checkbox id="wiHideContextMenu" label="&wmsinspector.options.hidecontextmenu;"/>
+            </vbox>
+</groupbox>
+<groupbox>
+  <caption label="&wmsinspector.common.editor;"/>
                 <vbox pack="center" flex="1">
                     <label value="&wmsinspector.options.chooseaneditor;" />
                     <hbox>
@@ -36,9 +37,9 @@
                     </hbox>
 
                 </vbox>
-            </tabpanel>
-        </tabpanels>
-    </tabbox>
+</groupbox>
+
+
 
 
 </dialog>

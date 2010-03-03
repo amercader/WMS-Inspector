@@ -24,7 +24,6 @@ WI.Utils = {
     },
 
     setPreferenceObserver: function(prefs,observer){
-        //var prefs = this.getPrefs()
 
         //This will allow us to use the methods of the nsIPrefBranch2
         prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);

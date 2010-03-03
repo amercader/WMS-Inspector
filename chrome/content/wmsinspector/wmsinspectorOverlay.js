@@ -12,8 +12,6 @@ function wiUnload(){
     WI.Overlay.unloadWI();
 }
 
-
-
 WI.Overlay = {
 	
     currentServiceImages: false,
@@ -27,25 +25,29 @@ WI.Overlay = {
     currentNameColumnValues: false,
 	
     initWI: function(){
-		
+	//Set preferences object
         this.prefs = WI.Utils.getPrefs();
 
+        //Set preferences observer
+        WI.Utils.setPreferenceObserver(this.prefs,this);
+        
+        //Check if tmp dir exists
         WI.IO.checkWITmpDir();
 
-    /*
-		var browser = document.getElementById("wiBrowser");
-		browser.addProgressListener(wiProgressListener,Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
-         */
+        //Show/Hide Context menu
+        document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
     },
 	
     unloadWI: function(){
-    /*
-		var browser = document.getElementById("wiBrowser");
-		browser.removeProgressListener(wiProgressListener);		
-         */
+        this.prefs.removeObserver("", this);
     },
 
 
+    observe: function(subject,topic,data){
+        if (topic == "nsPref:changed" && data == "hidecontextmenu"){
+            document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
+        }
+    },
 
     togglePanel: function(){
         var panel = document.getElementById("wiContent");
@@ -646,8 +648,8 @@ WI.Overlay = {
         }
     },
 
-    openOptionsDialog: function(tab) {
-        var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen", tab);
+    openOptionsDialog: function() {
+        var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");
         dialog.focus();
     }
 

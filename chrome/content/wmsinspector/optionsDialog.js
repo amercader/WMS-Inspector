@@ -4,10 +4,10 @@ WI.OptionsDialog = {
     
     init: function(){
 
-        //TODO: select tab if recevied window.arguments[0]
-
         this.prefs = WI.Utils.getPrefs();
-
+        
+        //Set values from current preferences values
+        document.getElementById("wiHideContextMenu").checked = this.prefs.getBoolPref("hidecontextmenu");
         document.getElementById("wiEditorPath").value = this.prefs.getCharPref("editor");
     },
 
@@ -25,6 +25,9 @@ WI.OptionsDialog = {
     },
 
     onAccept: function(){
+
+        //Hide context menu
+        this.prefs.setBoolPref("hidecontextmenu",(document.getElementById("wiHideContextMenu").checked === true));
 
         //Default editor
         this.prefs.setCharPref("editor",document.getElementById("wiEditorPath").value);

@@ -46,6 +46,8 @@
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Opciones">
 <!ENTITY wmsinspector.options.chooseaneditor "Escoje un editor">
+<!ENTITY wmsinspector.options.appearance "Apariencia">
+<!ENTITY wmsinspector.options.hidecontextmenu "Esconde el men&#250; contextual">
 
 <!-- Default XSL templates for GetCapabilities reports -->
 

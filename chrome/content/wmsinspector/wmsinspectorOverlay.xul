@@ -17,8 +17,7 @@
     </stringbundleset>
 
     <popup id="contentAreaContextMenu">
-        <menuseparator/>
-        <menu label="&wmsinspector.common.name;" id="wiContext" >
+        <menu label="&wmsinspector.common.name;" id="wiContextMenu" insertafter="devToolsSeparator">
             <menupopup id="wiContextPopUp" onpopupshowing="WI.Overlay.checkSelection()">
                 <menuitem id="wiContextGetCapabilitesReport" label="&wmsinspector.context.capabilitiesreport;"
                           oncommand="WI.Overlay.checkGetCapabilities()"/>
@@ -45,16 +44,16 @@
                                 </menulist>
                             </toolbaritem>
                             <toolbarseparator />
-                            <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WI.Overlay.openGetCapabilitiesDialog();" />   
+                            <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WI.Overlay.openGetCapabilitiesDialog();" />
                         </toolbar>
                     </toolbox>
                 </hbox>
                 <hbox id="wiMenuBarRight" flex="1" align="right">
                     <toolbox id="wiMenuRightToolbox" flex="1">
                         <toolbar id="wiMenuRightToolbar" align="right" class="wiToolbar"  style="display: -moz-box;">
-<toolbarbutton id="wiConfigButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="WI.Overlay.openOptionsDialog();"/>
-<toolbarseparator />
-<toolbarbutton id="wiCloseButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.common.close;" oncommand="WI.Overlay.togglePanel()" />
+                            <toolbarbutton id="wiConfigButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="WI.Overlay.openOptionsDialog();"/>
+                            <toolbarseparator />
+                            <toolbarbutton id="wiCloseButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.common.close;" oncommand="WI.Overlay.togglePanel()" />
                         </toolbar>
                     </toolbox>
                 </hbox>
@@ -68,9 +67,8 @@
                           onclick="WI.Overlay.onTreeClicked(event);"
                           ondblclick="WI.Overlay.onTreeDoubleClicked(event);"
                           oncontextmenu="WI.Overlay.onContextMenu(event);"
-                          
                           >
-<!--onselect="WI.Overlay.onTreeClicked(event);"-->
+                        <!--onselect="WI.Overlay.onTreeClicked(event);"-->
 
                         <treecols>
                             <treecol id="wiTreeNameColumn" label="&wmsinspector.tree.servicecol;" flex="1" primary="true" persist="width"/>
@@ -102,7 +100,7 @@
                 <splitter id="wiTreeSplitter" collapsed="false"/>
 
                 <vbox id="wiImageContainer" flex="1">
-                        <browser type="content" id="wiBrowser" flex="1" src="chrome://wmsinspector/content/index.xhtml" />
+                    <browser type="content" id="wiBrowser" flex="1" src="chrome://wmsinspector/content/index.xhtml" />
                 </vbox>
             </hbox>
 
