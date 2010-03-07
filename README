@@ -24,7 +24,7 @@ If you want to install a development version follow this steps:
 1.	Clone a git repository from the GitHub repository:
 	git://github.com/amercader/WMS-Inspector.git
 	or
-	Download the source code
+	Download and extract the source code from
 	http://github.com/amercader/WMS-Inspector/archives/master
 
 2.	Locate your Firefox profile folder and open the "extensions" folder
