@@ -13,20 +13,50 @@ online mapping application. It also focuses on provide a user-friendly output of
 the different services' capabilities.
 
 To get more information about the WMS standard visit
-<http://www.opengeospatial.org/standards/wms>
+http://www.opengeospatial.org/standards/wms
 
 Install
 ----------
-Coming soon
+WMS Inspector can be downloaded from addons.mozilla.org (AMO)
+https://addons.mozilla.org/firefox/addon/91406
+
+If you want to install a development version follow this steps:
+1.	Clone a git repository from the GitHub repository:
+	git://github.com/amercader/WMS-Inspector.git
+	or
+	Download the source code
+	http://github.com/amercader/WMS-Inspector/archives/master
+
+2.	Locate your Firefox profile folder and open the "extensions" folder
+	See http://support.mozilla.com/en-us/kb/Profiles for platform specific
+	details.
+
+3.	Create a file named "wmsinspector@flentic.net" and edit it to contain the
+	path to the source code you downloaded in the first step.
+
+4.	Restart Firefox.
+
+For further details on setting up a development environment for a Firefox
+extension, see 
+https://developer.mozilla.org/en/Setting_up_extension_development_environment
 
 Support
 ----------
-Coming soon
+The discussion list is the place to request support, propose enhancements and 
+report bugs.
+
+To subscribe to the discussion list send an email with the subject "subscribe"
+to wmsinspector-request@freelists.org
+or visit
+http://www.freelists.org/list/wmsinspector
+
+To just post a message on the discussion list, send an email to
+wmsinspector@freelists.org
 
 License
 ----------
 WMS Inspector is released under the GNU GENERAL PUBLIC LICENSE version 3 (GPLv3)
 Please check the file LICENSE or the following URL for the full details of this
 license
-<http://www.gnu.org/licenses/gpl.html>
+http://www.gnu.org/licenses/gpl.html
 
