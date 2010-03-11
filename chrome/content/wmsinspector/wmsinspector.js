@@ -45,7 +45,6 @@ var WIImages = {
     //TODO: parametrize
     isServiceImage: function(imgsrc){
         return (imgsrc.indexOf("SERVICE=WMS") != -1);
-        //return (imgsrc.indexOf(".google.com") != -1);
     }
 
 }
@@ -58,7 +57,7 @@ function wiServiceImage(img,parent){
     this.heigth = img.height;
     this.server = this.src.substring(0,this.src.indexOf("?"));
     this.params = new wiServiceImageParams(this.src);
-	
+
     this.getParamByIndex = function(index){
         return (this.params.params[index]) ? this.params.params[index] : false;
     }
@@ -91,13 +90,12 @@ function wiServiceImage(img,parent){
     this.getParamIndex = function(name){
         for (var i=0;i < this.params.count;i++){
             var param = this.getParamByIndex(i);
-            if (param.name == name) return i;
+            if (param.name.toLowerCase() == name.toLowerCase()) return i;
         }
         return false;
     }
 	
     this.updateSrc = function(){
-        var server = this.server;
         var params = "";
 		
         for (var i=0;i < this.params.count;i++){
@@ -106,7 +104,7 @@ function wiServiceImage(img,parent){
             if (i < (this.params.count - 1)) params += "&";
         }
 		
-        this.src = server + "?" + params;
+        this.src = (this.server.indexOf("?") != -1) ? this.server + "&" + params : this.server + "?" + params;
 		
         return this.src;
 		
@@ -114,6 +112,12 @@ function wiServiceImage(img,parent){
 	
     this.request = this.getParamByName("REQUEST").value;
 	
+	//If found, add the MapServer map parameter to the server URL
+	var mapParam = this.getParamByName("map");
+	if (mapParam){
+		this.server += "?" + mapParam.name + "=" + mapParam.value;
+	}
+
 }
 
 function wiServiceImageParams(imgsrc){
