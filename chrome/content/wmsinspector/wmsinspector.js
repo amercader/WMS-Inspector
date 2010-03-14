@@ -29,19 +29,51 @@ var WIImages = {
     },
     getFrameImages: function(document){
         var out = [];
-        var imgs = document.images;
+
+        // <img> tags
+        var imgs = document.getElementsByTagName("img");
+
         for (var i=0;i< imgs.length;i++){
             if (this.isServiceImage(imgs[i].src)) {
-                var serviceImage = new wiServiceImage(imgs[i],this);
+                var serviceImage = new wiServiceImage(imgs[i].src,this);
                 serviceImage.id = this.lastSeqId;
                 this.lastSeqId++;
                 out.push(serviceImage);
 
             }
         }
+		
+        //<div> tags background image
+        var divs = document.getElementsByTagName("div");
+
+        for (var i=0;i< divs.length;i++){
+            var bgImg = this.checkDivBackgroundImage(divs[i]);
+            if (bgImg){
+                if (this.isServiceImage(bgImg)) {
+                    var serviceImage = new wiServiceImage(bgImg,this);
+                    serviceImage.id = this.lastSeqId;
+                    this.lastSeqId++;
+                    out.push(serviceImage);
+
+                }
+            }
+        }
+
         return out;
     },
-
+	
+    checkDivBackgroundImage: function(div){
+        var out = false;
+        if (div.style){
+            if (div.style.backgroundImage){
+                var src = div.style.backgroundImage;
+                // Extract url(...)
+                out = src.substring(4,src.length - 1);
+            }
+        }
+        return out;
+    },
+	
     //TODO: parametrize
     isServiceImage: function(imgsrc){
         return (imgsrc.indexOf("SERVICE=WMS") != -1);
@@ -49,12 +81,10 @@ var WIImages = {
 
 }
 
-function wiServiceImage(img,parent){
+function wiServiceImage(src,parent){
     this.id = "";
     this.parent = parent;
-    this.src = img.src;
-    this.width = img.width;
-    this.heigth = img.height;
+    this.src = src;
     this.server = this.src.substring(0,this.src.indexOf("?"));
     this.params = new wiServiceImageParams(this.src);
 
@@ -112,11 +142,11 @@ function wiServiceImage(img,parent){
 	
     this.request = this.getParamByName("REQUEST").value;
 	
-	//If found, add the MapServer map parameter to the server URL
-	var mapParam = this.getParamByName("map");
-	if (mapParam){
-		this.server += "?" + mapParam.name + "=" + mapParam.value;
-	}
+    //If found, add the MapServer map parameter to the server URL
+    var mapParam = this.getParamByName("map");
+    if (mapParam){
+        this.server += "?" + mapParam.name + "=" + mapParam.value;
+    }
 
 }
 
