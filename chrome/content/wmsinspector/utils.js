@@ -65,6 +65,10 @@ WI.Utils = {
         title = title || this.getString("wi_extension_name")
         prompts.alert(null, title, text);
 
+    },
+    checkURL: function(URL){
+        if (URL.length == 0) return false;
+        return (URL.toLowerCase().substr(0,5) === "http:" || URL.toLowerCase().substr(0,6) === "https:");
     }
 
 

@@ -45,17 +45,15 @@ WI.GetCapabilitiesDialog = {
             return false;
         }
 
-        var server = document.getElementById("wiTextServer").value;
+        var url = document.getElementById("wiTextServer").value;
         var service = document.getElementById("wiServiceTypeMenu").selectedItem.getAttribute("label");
         var version = document.getElementById("wiVersionMenu").selectedItem.getAttribute("label");
         
-        if (!server.length || (server.indexOf("http://") == -1 && server.indexOf("HTTP://") == -1)){
+        if (!WI.Utils.checkURL(url)){
             WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_nourl"));
             return false;
 
         } else {
-        
-            var url = server;
             if (url.substring(url.length-1) != "?" && url.indexOf("?") == -1 ) {
                 url += "?";
             } else if (url.substring(url.length-1) != "?" && url.indexOf("?") !== -1 ) { 

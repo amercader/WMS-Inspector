@@ -618,19 +618,18 @@ WI.Overlay = {
         document.getElementById("wiContextGetCapabilitesReport").setAttribute("disabled", !enabled );
     },
 
-    checkGetCapabilities: function(server){
+    checkGetCapabilities: function(url){
 
-        if (server == null){
-            server = getBrowserSelection();
+        if (url == null){
+            url = getBrowserSelection();
         }
 
-        if (!server.length || (server.indexOf("http://") == -1 && server.indexOf("HTTP://") == -1)){
+        if (!WI.Utils.checkURL(url)){
             WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_nourl"));
             return false;
 
         } else {
 
-            var url = server;
             if (url.substring(url.length-1) != "?" && url.indexOf("?") == -1 ) {
                 url += "?";
             } else if (url.substring(url.length-1) != "?" && url.indexOf("?") !== -1 ) {
