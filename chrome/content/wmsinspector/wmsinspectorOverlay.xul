@@ -80,20 +80,36 @@
 
 
                     <menupopup id="gtTreeContextMenuURL1" >
-                        <menuitem allowevents="true" label="&wmsinspector.common.copy;" oncommand="WI.Overlay.doContextMenuAction(1,event);"/>
+                        <menuitem allowevents="true"
+                                  label="&wmsinspector.common.copy;"
+                                  oncommand="WI.Overlay.doContextMenuAction(1,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/copy.png" />
 
                     </menupopup>
 
                     <menupopup id="gtTreeContextMenuURL2" >
-                        <menuitem label="&wmsinspector.common.copy;" oncommand="WI.Overlay.doContextMenuAction(1,event);"/>
+                        <menuitem label="&wmsinspector.common.copy;"
+                                  oncommand="WI.Overlay.doContextMenuAction(1,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/copy.png" />
                         <menuseparator/>
-                        <menuitem label="&wmsinspector.common.openinanewtab;" oncommand="WI.Overlay.doContextMenuAction(2,event);"/>
+                        <menuitem label="&wmsinspector.common.openinanewtab;"
+                                  oncommand="WI.Overlay.doContextMenuAction(2,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/newtab.png" />
                     </menupopup>
 
                     <menupopup id="gtTreeContextMenuURL3">
-                        <menuitem label="&wmsinspector.common.copy;" oncommand="WI.Overlay.doContextMenuAction(1,event);"/>
+                        <menuitem label="&wmsinspector.common.copy;"
+                                  oncommand="WI.Overlay.doContextMenuAction(1,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/copy.png" />
                         <menuseparator/>
-                        <menuitem label="&wmsinspector.common.edit;" oncommand="WI.Overlay.doContextMenuAction(3,event);"/>
+                        <menuitem label="&wmsinspector.common.edit;"
+                                  oncommand="WI.Overlay.doContextMenuAction(3,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/edit.png" />
                     </menupopup>
                 </vbox>
 
