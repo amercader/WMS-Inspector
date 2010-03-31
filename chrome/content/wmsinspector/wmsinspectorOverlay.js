@@ -308,11 +308,11 @@ WMSInspector.Overlay = {
                 window.openDialog("chrome://wmsinspector/content/editParameterDialog.xul",
                     "wiEditParameterDialog",
                     "chrome,centerscreen",
-                    cellValues[2],cellValues[3],cellValues[4],paramName,paramValue);
+                    cellValues[2],cellValues[3],paramName,paramValue);
                 break;
         }
     },
-	
+    
     copyTreeItem: function(cellValues,cellText,tree){
         var out = false;
         switch (cellValues[1]){
