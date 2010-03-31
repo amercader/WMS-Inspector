@@ -1,16 +1,7 @@
-const wiCellNoServicesFound = "wiCellNoServicesFound";
 
-window.addEventListener("load", wiLoad, false);
-window.addEventListener("unload", wiUnload, false);
+window.addEventListener("load",  function(){ WMSInspector.Overlay.init() }, false);
+window.addEventListener("unload", function(){ WMSInspector.Overlay.unload() }, false);
 
-
-function wiLoad(){
-    WMSInspector.Overlay.initWI();
-}
-
-function wiUnload(){
-    WMSInspector.Overlay.unloadWI();
-}
 
 WMSInspector.Overlay = {
 	
@@ -23,9 +14,11 @@ WMSInspector.Overlay = {
     currentNameColumnText: false,
 
     currentNameColumnValues: false,
-	
-    initWI: function(){
-	//Set preferences object
+
+    noServicesFoundCellId: "wiCellNoServicesFound",
+
+    init: function(){
+        //Set preferences object
         this.prefs = WMSInspector.Utils.getPrefs();
 
         //Set preferences observer
@@ -38,7 +31,7 @@ WMSInspector.Overlay = {
         document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
     },
 	
-    unloadWI: function(){
+    unload: function(){
         this.prefs.removeObserver("", this);
     },
 
@@ -60,8 +53,8 @@ WMSInspector.Overlay = {
 	
     refreshServiceImages: function(){
         this.currentServiceImages = [];
-        WIImages.refreshImages();
-        this.currentServiceImages = WIImages.currentServiceImages;
+        WMSInspector.ServiceImages.refreshImages();
+        this.currentServiceImages = WMSInspector.ServiceImages.currentServiceImages;
         
         this.buildServiceImagesTree();
     },
@@ -107,7 +100,7 @@ WMSInspector.Overlay = {
             this.clearServiceImagesTree(tChMain);
         }
         if (this.currentServiceImages.length){
-            windowServiceImages = sortServiceImages(this.currentServiceImages,this.currentGroupMode);
+            windowServiceImages = this.sortServiceImages(this.currentServiceImages,this.currentGroupMode);
             for (var i=0; i < windowServiceImages.length; i++){
                 tIItem = document.createElement("treeitem");
                 tIItem.setAttribute("container",true);
@@ -162,10 +155,10 @@ WMSInspector.Overlay = {
                 tChMain.appendChild(tIItem);
             }
         } else {
-            tI = document.createElement("treeitem");
-            tR = document.createElement("treerow");
-            tCe = document.createElement("treecell");
-            tCe.setAttribute("value",wiCellNoServicesFound);
+            var tI = document.createElement("treeitem");
+            var tR = document.createElement("treerow");
+            var tCe = document.createElement("treecell");
+            tCe.setAttribute("value",this.noServicesFoundCellId);
             tCe.setAttribute("label",WMSInspector.Utils.getString("wi_tree_noserviceimagesfound"));
             tR.appendChild(tCe);
             tI.appendChild(tR);
@@ -173,7 +166,37 @@ WMSInspector.Overlay = {
         }
         t.appendChild(tChMain);
     },
-	
+
+    sortServiceImages: function(windowServiceImages,mode){
+        var criteria;
+        var out = Array();
+        var exists;
+        var cnt = 0;
+        var serviceImage;
+
+        for (var i=0; i < windowServiceImages.length; i++){
+            serviceImage = windowServiceImages[i];
+            criteria = (mode == 0) ? serviceImage.server : serviceImage.request;
+            exists = false;
+            for (var k=0; k < out.length; k++){
+                if (out[k].item == criteria) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists){
+                out[k].elements[out[k].elements.length] = serviceImage;
+            } else {
+                cnt = out.length;
+                out[cnt] = Object();
+                out[cnt].item = criteria;
+                out[cnt].elements = Array();
+                out[cnt].elements[0] = serviceImage;
+            }
+        }
+        return out;
+    },
+
     getTreeCellId: function(mode,image,parameter){
         var out;
         switch (mode){
@@ -302,7 +325,7 @@ WMSInspector.Overlay = {
             case "3":
                 out = cellText;
                 if (tree){
-                    col = tree.columns.getNamedColumn("wiTreeValueColumn");
+                    var col = tree.columns.getNamedColumn("wiTreeValueColumn");
                     cellText = tree.view.getCellText(tree.currentIndex,col);
                     out = out + "=" + cellText;
                 }
@@ -482,14 +505,14 @@ WMSInspector.Overlay = {
     },
 
     requestGetCapabilities: function(url){
-        var request = new wiGET(url,
+        var request = new WMSInspector.GET(url,
             this.showGetCapabilitiesReportVersion,
             this.onRequestError);
         request.send();
     },
 
     requestDocument: function(url,outputEditor){
-        var request = new wiGET(url,
+        var request = new WMSInspector.GET(url,
             function(xhr){
                 var file = WMSInspector.Overlay.saveResponseToFile(xhr);
                 if (outputEditor){

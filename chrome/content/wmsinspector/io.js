@@ -1,17 +1,15 @@
-//Folder name for WMSInspector stuff in Temporary dir
-const wiTempDirName = "wmsinspector";
-
-//Naming template for temporary files
-const wiTempFileName = "wi_";
-
-//Default permissions for new temporary files
-const wiTempFilesPermissions = 0666;
-
-//Permissions for new temporary directory
-const wiTempDirPermissions = 0700;
-
-
 WMSInspector.IO = {
+    //Folder name for WMSInspector stuff in Temporary dir
+    tempDirName: "wmsinspector",
+
+    //Naming template for temporary files
+    tempFileName: "wi_",
+
+    //Default permissions for new temporary files
+    tempFilesPermissions: 0666,
+
+    //Permissions for new temporary directory
+    tempDirPermissions: 0700,
     fileCounter:0,
     externalAppService: WMSInspector.Utils.getService("@mozilla.org/uriloader/external-helper-app-service;1", "nsPIExternalAppLauncher"),
     directoryService: WMSInspector.Utils.getService("@mozilla.org/file/directory_service;1", "nsIProperties"),
@@ -19,11 +17,11 @@ WMSInspector.IO = {
     checkWITmpDir: function(){
         var dir = this.getTmpDir();
         if (dir){
-            dir.append(wiTempDirName);
+            dir.append(this.tempDirName);
 
             // If dir doesn't exist, create it
             if( !dir.exists() || !dir.isDirectory() ) {
-                dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, wiTempDirPermissions);
+                dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, this.tempDirPermissions);
             }
 
             return dir;
@@ -47,13 +45,13 @@ WMSInspector.IO = {
     getTmpFileName: function(extension){
         extension = (extension || "tmp");
         this.fileCounter++;
-        return wiTempFileName + this.fileCounter + "." + extension;
+        return this.tempFileName + this.fileCounter + "." + extension;
     },
     createTmpFile: function(name, deleteOnExit){
         var file = this.checkWITmpDir();
         if (file){
             file.append(name);
-            file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, wiTempFilesPermissions);
+            file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, this.tempFilesPermissions);
             if(deleteOnExit !== false){
                 this.deleteTemporaryFileOnExit(file)
             }
@@ -67,9 +65,9 @@ WMSInspector.IO = {
         var foStream = WMSInspector.Utils.getInstance("@mozilla.org/network/file-output-stream;1", "nsIFileOutputStream");
 
         if (mode == "a"){   //Append
-            foStream.init(file, 0x02 | 0x10, wiTempFilesPermissions, 0);
+            foStream.init(file, 0x02 | 0x10, this.tempFilesPermissions, 0);
         } else {    //Create
-            foStream.init(file, 0x02 | 0x08 | 0x20, wiTempFilesPermissions, 0);
+            foStream.init(file, 0x02 | 0x08 | 0x20, this.tempFilesPermissions, 0);
         }
 
         if (encode){

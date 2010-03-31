@@ -1,11 +1,13 @@
-//Preferences branch for WMSInspector stuff
-const wiPrefBranch = "extensions.wmsinspector.";
+
 
 //WMSInspector namespace
 var WMSInspector = {};
 
 
 WMSInspector.Utils = {
+    
+    //Preferences branch for WMSInspector stuff
+    prefBranch: "extensions.wmsinspector.",
 
     //String properties
     getString: function(id){
@@ -20,7 +22,7 @@ WMSInspector.Utils = {
     getPrefs: function() {
         return Components.classes["@mozilla.org/preferences-service;1"].
         getService(Components.interfaces.nsIPrefService).
-        getBranch(wiPrefBranch);
+        getBranch(this.prefBranch);
     },
 
     setPreferenceObserver: function(prefs,observer){

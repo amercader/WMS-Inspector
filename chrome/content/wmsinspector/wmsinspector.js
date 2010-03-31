@@ -1,4 +1,4 @@
-var WIImages = {
+WMSInspector.ServiceImages = {
     currentServiceImages: [],
 
     lastSeqId: 0,
@@ -35,7 +35,7 @@ var WIImages = {
 
         for (var i=0;i< imgs.length;i++){
             if (this.isServiceImage(imgs[i].src)) {
-                var serviceImage = new wiServiceImage(imgs[i].src,this);
+                var serviceImage = new WMSInspector.ServiceImage(imgs[i].src,this);
                 serviceImage.id = this.lastSeqId;
                 this.lastSeqId++;
                 out.push(serviceImage);
@@ -50,7 +50,7 @@ var WIImages = {
             var bgImg = this.checkDivBackgroundImage(divs[i]);
             if (bgImg){
                 if (this.isServiceImage(bgImg)) {
-                    var serviceImage = new wiServiceImage(bgImg,this);
+                    var serviceImage = new WMSInspector.ServiceImage(bgImg,this);
                     serviceImage.id = this.lastSeqId;
                     this.lastSeqId++;
                     out.push(serviceImage);
@@ -81,12 +81,13 @@ var WIImages = {
 
 }
 
-function wiServiceImage(src,parent){
+//function ServiceImage(src,parent){
+WMSInspector.ServiceImage = function(src,parent){
     this.id = "";
     this.parent = parent;
     this.src = src;
     this.server = this.src.substring(0,this.src.indexOf("?"));
-    this.params = new wiServiceImageParams(this.src);
+    this.params = new WMSInspector.ServiceImageParams(this.src);
 
     this.getParamByIndex = function(index){
         return (this.params.params[index]) ? this.params.params[index] : false;
@@ -150,7 +151,7 @@ function wiServiceImage(src,parent){
 
 }
 
-function wiServiceImageParams(imgsrc){
+WMSInspector.ServiceImageParams = function(imgsrc){
     var cnt = 0;
     var paramstmp = imgsrc.substring(imgsrc.indexOf("?")+1).split("&");
     this.params = Array();
@@ -168,32 +169,4 @@ function wiServiceImageParams(imgsrc){
     this.count = cnt || 0;
 }
 
-function sortServiceImages(windowServiceImages,mode){
-    var criteria;
-    var out = Array();
-    var exists;
-    var cnt = 0;
-    var serviceImage;
-    
-    for (var i=0; i < windowServiceImages.length; i++){
-        serviceImage = windowServiceImages[i];
-        criteria = (mode == 0) ? serviceImage.server : serviceImage.request;
-        exists = false;
-        for (var k=0; k < out.length; k++){
-            if (out[k].item == criteria) {
-                exists = true;
-                break;
-            }
-        }
-        if (exists){
-            out[k].elements[out[k].elements.length] = serviceImage;
-        } else {
-            cnt = out.length;
-            out[cnt] = Object();
-            out[cnt].item = criteria;
-            out[cnt].elements = Array();
-            out[cnt].elements[0] = serviceImage;
-        }
-    }
-    return out;
-}
+

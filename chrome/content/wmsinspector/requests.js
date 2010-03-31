@@ -1,5 +1,6 @@
 //TODO: multiple requests
-function wiRequest(type,url,data,onSuccess,onError){
+WMSInspector.Request = function(type,url,data,onSuccess,onError){
+//function wiRequest(type,url,data,onSuccess,onError){
     this.type = type;
     this.url = url;
     this.data = data;
@@ -41,16 +42,16 @@ function wiRequest(type,url,data,onSuccess,onError){
 
 }
 
-function wiGET(url,onSuccess,onError){
-    return new wiRequest("GET",
+WMSInspector.GET = function(url,onSuccess,onError){
+    return new WMSInspector.Request("GET",
         url,
         false,
         onSuccess,
         onError);
 }
 
-function wiPOST(url,data,onSuccess,onError){
-    return new wiRequest("POST",
+WMSInspector.POST = function(url,data,onSuccess,onError){
+    return new WMSInspector.Request("POST",
         url,
         data,
         onSuccess,
