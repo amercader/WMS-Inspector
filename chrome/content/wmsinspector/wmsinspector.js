@@ -5,7 +5,7 @@ var WIImages = {
 
     refreshImages: function(){
         this.currentServiceImages = [];
-        var currentWindow = WI.Utils.getContentWindow();
+        var currentWindow = WMSInspector.Utils.getContentWindow();
         this.getImages(currentWindow);
         
     },

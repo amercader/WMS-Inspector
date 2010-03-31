@@ -10,8 +10,8 @@
 				id="wiEditParameterDialog"
 				style="width: 300px; height: 100px;"
 				title="&wmsinspector.editparameter.title;"
-                                onload="WI.EditParameterDialog.init();"
-                                ondialogaccept="WI.EditParameterDialog.onAccept();"
+                                onload="WMSInspector.EditParameterDialog.init();"
+                                ondialogaccept="WMSInspector.EditParameterDialog.onAccept();"
 				buttons="accept,cancel">
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>

@@ -9,8 +9,8 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 				id="wiGetCapabilitiesDialog"
 				title="&wmsinspector.getcapabilities.title;"
-                                onload="WI.GetCapabilitiesDialog.init();"
-                                onunload="WI.GetCapabilitiesDialog.shutdown();"
+                                onload="WMSInspector.GetCapabilitiesDialog.init();"
+                                onunload="WMSInspector.GetCapabilitiesDialog.shutdown();"
                                 buttons="cancel,extra2"
                                 defaultButton="extra2"
                                 width="380"
@@ -56,7 +56,7 @@
         <caption label="&wmsinspector.common.output;"/>
         <vbox flex="1">
             <checkbox id="wiGetcapabilitiesOutputHTML" label="&wmsinspector.getcapabilities.outputHTML;" persist="checked"/>
-            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" persist="checked" onclick="WI.GetCapabilitiesDialog.updateOutputRadios();"/>
+            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" persist="checked" onclick="WMSInspector.GetCapabilitiesDialog.updateOutputRadios();"/>
         </vbox>
             
         <hbox id="wiGetcapabilitiesOutputOptionsBox" style="margin-left: 22px" align="center" >
@@ -65,7 +65,7 @@
               <radio id="wiGetcapabilitiesOutputBrowser" label="&wmsinspector.common.browser;" selected="true" persist="selected" />
               <radio id="wiGetcapabilitiesOutputEditor" label="&wmsinspector.common.editor;" persist="selected" />
             </radiogroup>
-            <image id="wiConfigButton" class="wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" onclick="window.opener.WI.Overlay.openOptionsDialog();" />
+            <image id="wiConfigButton" class="wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" onclick="window.opener.WMSInspector.Overlay.openOptionsDialog();" />
            
         </hbox>
     </groupbox>

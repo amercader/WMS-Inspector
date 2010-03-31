@@ -1,5 +1,5 @@
 
-WI.EditParameterDialog = {
+WMSInspector.EditParameterDialog = {
     frameId: null,
     imageId: null,
     paramId: null,
@@ -18,7 +18,7 @@ WI.EditParameterDialog = {
 	
     onAccept: function(){
         this.paramValue = document.getElementById("wiParamValue").value;
-        window.opener.WI.Overlay.onParamUpdated(this.imageId,this.paramId,this.paramName,this.paramValue);
+        window.opener.WMSInspector.Overlay.onParamUpdated(this.imageId,this.paramId,this.paramName,this.paramValue);
 
         window.close();
 

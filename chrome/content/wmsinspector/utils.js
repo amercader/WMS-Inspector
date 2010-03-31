@@ -2,10 +2,10 @@
 const wiPrefBranch = "extensions.wmsinspector.";
 
 //WMSInspector namespace
-var WI = {};
+var WMSInspector = {};
 
 
-WI.Utils = {
+WMSInspector.Utils = {
 
     //String properties
     getString: function(id){

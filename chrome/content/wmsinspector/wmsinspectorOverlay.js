@@ -5,14 +5,14 @@ window.addEventListener("unload", wiUnload, false);
 
 
 function wiLoad(){
-    WI.Overlay.initWI();
+    WMSInspector.Overlay.initWI();
 }
 
 function wiUnload(){
-    WI.Overlay.unloadWI();
+    WMSInspector.Overlay.unloadWI();
 }
 
-WI.Overlay = {
+WMSInspector.Overlay = {
 	
     currentServiceImages: false,
 
@@ -26,13 +26,13 @@ WI.Overlay = {
 	
     initWI: function(){
 	//Set preferences object
-        this.prefs = WI.Utils.getPrefs();
+        this.prefs = WMSInspector.Utils.getPrefs();
 
         //Set preferences observer
-        WI.Utils.setPreferenceObserver(this.prefs,this);
+        WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
         
         //Check if tmp dir exists
-        WI.IO.checkWITmpDir();
+        WMSInspector.IO.checkWITmpDir();
 
         //Show/Hide Context menu
         document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
@@ -166,7 +166,7 @@ WI.Overlay = {
             tR = document.createElement("treerow");
             tCe = document.createElement("treecell");
             tCe.setAttribute("value",wiCellNoServicesFound);
-            tCe.setAttribute("label",WI.Utils.getString("wi_tree_noserviceimagesfound"));
+            tCe.setAttribute("label",WMSInspector.Utils.getString("wi_tree_noserviceimagesfound"));
             tR.appendChild(tCe);
             tI.appendChild(tR);
             tChMain.appendChild(tI);
@@ -210,7 +210,7 @@ WI.Overlay = {
 
                     //TODO: reuse, errors, default page, loading, cache?
 
-                    var file = WI.Overlay.saveURLtoFile(newSrc);
+                    var file = WMSInspector.Overlay.saveURLtoFile(newSrc);
                     var browser = document.getElementById("wiBrowser");
                     browser.loadURI(file.path);
                    
@@ -308,7 +308,7 @@ WI.Overlay = {
                 }
                 break;
         }
-        var clipboardService = WI.Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
+        var clipboardService = WMSInspector.Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
         if (out && clipboardService) clipboardService.copyString(out);
         
     },
@@ -334,7 +334,7 @@ WI.Overlay = {
             cell = document.getElementById(id);
             if (cell) cell.setAttribute("label",newUrl);
 
-            var file = WI.Overlay.saveURLtoFile(newUrl);
+            var file = WMSInspector.Overlay.saveURLtoFile(newUrl);
             var browser = document.getElementById("wiBrowser");
             browser.loadURI(file.path);
         }
@@ -412,18 +412,18 @@ WI.Overlay = {
         var version;
         if (xhr.responseXML){
             //Check if this is a GetCapabilities response
-            version = WI.Overlay.getWMSVersion(xhr.responseXML);
+            version = WMSInspector.Overlay.getWMSVersion(xhr.responseXML);
         } else if (xhr.responseText) {
-            var file = WI.IO.createTmpFile(WI.IO.getTmpFileName("tmp"));
-            WI.IO.write(file,xhr.responseText);
-            WI.Overlay.showFileInBrowser(file);
+            var file = WMSInspector.IO.createTmpFile(WMSInspector.IO.getTmpFileName("tmp"));
+            WMSInspector.IO.write(file,xhr.responseText);
+            WMSInspector.Overlay.showFileInBrowser(file);
             return false;
         } else {
-            WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + WI.Utils.getString("wi_request_servernotfound"));
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + WMSInspector.Utils.getString("wi_request_servernotfound"));
             return false;
         }
 		
-        var supportedVersions = WI.Overlay.prefs.getCharPref("reportwmsversions").split("|");
+        var supportedVersions = WMSInspector.Overlay.prefs.getCharPref("reportwmsversions").split("|");
         //inArray?
         var supported = false;
         for (var i = 0; i < supportedVersions.length; i++){
@@ -434,7 +434,7 @@ WI.Overlay = {
         }
         //If no version or unsupported, try with default version
         if (!version || !supported){
-            version = WI.Overlay.prefs.getCharPref("wmsversion");
+            version = WMSInspector.Overlay.prefs.getCharPref("wmsversion");
         }
 
         var processor = new XSLTProcessor();
@@ -452,10 +452,10 @@ WI.Overlay = {
             var serializer = new XMLSerializer();
             var data = serializer.serializeToString(newDoc);
 
-            var file = WI.IO.createTmpFile(WI.IO.getTmpFileName("html"));
-            WI.IO.write(file,data,"c",true);
+            var file = WMSInspector.IO.createTmpFile(WMSInspector.IO.getTmpFileName("html"));
+            WMSInspector.IO.write(file,data,"c",true);
 
-            WI.Overlay.showFileInBrowser(file);
+            WMSInspector.Overlay.showFileInBrowser(file);
 
 
 
@@ -491,11 +491,11 @@ WI.Overlay = {
     requestDocument: function(url,outputEditor){
         var request = new wiGET(url,
             function(xhr){
-                var file = WI.Overlay.saveResponseToFile(xhr);
+                var file = WMSInspector.Overlay.saveResponseToFile(xhr);
                 if (outputEditor){
-                    WI.Overlay.showFileInEditor(file);
+                    WMSInspector.Overlay.showFileInEditor(file);
                 } else {
-                    WI.Overlay.showFileInBrowser(file);
+                    WMSInspector.Overlay.showFileInBrowser(file);
 
                 }
             },
@@ -505,9 +505,9 @@ WI.Overlay = {
     //TODO: check encoding
     saveResponseToFile: function(xhr){
         if (xhr instanceof XMLHttpRequest){
-            var extension = WI.Overlay.getExtensionFromMimeType(xhr.getResponseHeader("Content-type"))
-            var file = WI.IO.createTmpFile(WI.IO.getTmpFileName(extension));
-            WI.IO.write(file,xhr.responseText);
+            var extension = WMSInspector.Overlay.getExtensionFromMimeType(xhr.getResponseHeader("Content-type"))
+            var file = WMSInspector.IO.createTmpFile(WMSInspector.IO.getTmpFileName(extension));
+            WMSInspector.IO.write(file,xhr.responseText);
             return file;
         }
 
@@ -518,7 +518,7 @@ WI.Overlay = {
     saveURLtoFile: function(url) {
         if (!url) return false;
 
-        var IOService = WI.Utils.getService("@mozilla.org/network/io-service;1",Components.interfaces.nsIIOService);
+        var IOService = WMSInspector.Utils.getService("@mozilla.org/network/io-service;1",Components.interfaces.nsIIOService);
         
         var channel = IOService.newChannel(url, null, null);
         if (!(channel instanceof Components.interfaces.nsIHttpChannel))
@@ -526,7 +526,7 @@ WI.Overlay = {
 
         var stream = channel.open();
 
-        var binaryStream = WI.Utils.getInstance("@mozilla.org/binaryinputstream;1",Components.interfaces.nsIBinaryInputStream);
+        var binaryStream = WMSInspector.Utils.getInstance("@mozilla.org/binaryinputstream;1",Components.interfaces.nsIBinaryInputStream);
         binaryStream.setInputStream(stream);
 
         var size = 0;
@@ -539,8 +539,8 @@ WI.Overlay = {
 
         var extension = this.getExtensionFromMimeType(channel.getResponseHeader("Content-type"))
 
-        var file = WI.IO.createTmpFile(WI.IO.getTmpFileName(extension));
-        WI.IO.write(file,data);
+        var file = WMSInspector.IO.createTmpFile(WMSInspector.IO.getTmpFileName(extension));
+        WMSInspector.IO.write(file,data);
 
         return file;
     },
@@ -578,20 +578,20 @@ WI.Overlay = {
         
         if (xhr.status == 0){
             //No connection or Server not found
-            WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + WI.Utils.getString("wi_request_servernotfound"));
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + WMSInspector.Utils.getString("wi_request_servernotfound"));
         } else if (xhr.status > 0){
             //Server returned an error code
             if ((xhr.responseText)){
                 //Server returned an error page
-                var file = WI.Overlay.saveResponseToFile(xhr);
-                WI.Overlay.showFileInBrowser(file);
+                var file = WMSInspector.Overlay.saveResponseToFile(xhr);
+                WMSInspector.Overlay.showFileInBrowser(file);
             } else {
                 //Server didnt return an error page, output the error message
-                WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + xhr.statusText);
+                WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + xhr.statusText);
             }
         } else {
             //Unknown error
-            WI.Utils.showAlert(WI.Utils.getString("wi_request_connectionerror") + ": " + WI.Utils.getString("wi_request_unknownerror"));
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + WMSInspector.Utils.getString("wi_request_unknownerror"));
         }
 
     },
@@ -602,12 +602,12 @@ WI.Overlay = {
     },
 
     showFileInEditor: function(file){
-        var prefPath = WI.Overlay.prefs.getCharPref("editor");
+        var prefPath = WMSInspector.Overlay.prefs.getCharPref("editor");
 
-        var viewSourceAppPath = WI.Utils.getInstance("@mozilla.org/file/local;1",Components.interfaces.nsILocalFile);
+        var viewSourceAppPath = WMSInspector.Utils.getInstance("@mozilla.org/file/local;1",Components.interfaces.nsILocalFile);
         viewSourceAppPath.initWithPath(prefPath);
 
-        var editor = WI.Utils.getInstance('@mozilla.org/process/util;1',Components.interfaces.nsIProcess);
+        var editor = WMSInspector.Utils.getInstance('@mozilla.org/process/util;1',Components.interfaces.nsIProcess);
 
         editor.init(viewSourceAppPath);
         editor.run(false, [file.path], 1);
@@ -624,8 +624,8 @@ WI.Overlay = {
             url = getBrowserSelection();
         }
 
-        if (!WI.Utils.checkURL(url)){
-            WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_nourl"));
+        if (!WMSInspector.Utils.checkURL(url)){
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
             return false;
 
         } else {
@@ -641,7 +641,7 @@ WI.Overlay = {
             + "&VERSION=1.1.1";
 
             
-            WI.Overlay.requestGetCapabilities(url);
+            WMSInspector.Overlay.requestGetCapabilities(url);
 
             return true;
         }

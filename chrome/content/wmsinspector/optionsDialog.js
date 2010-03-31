@@ -1,10 +1,10 @@
-WI.OptionsDialog = {
+WMSInspector.OptionsDialog = {
     
     prefs: null,
     
     init: function(){
 
-        this.prefs = WI.Utils.getPrefs();
+        this.prefs = WMSInspector.Utils.getPrefs();
         
         //Set values from current preferences values
         document.getElementById("wiHideContextMenu").checked = this.prefs.getBoolPref("hidecontextmenu");
@@ -13,9 +13,9 @@ WI.OptionsDialog = {
 
     selectEditor: function() {
         var nsIFilePicker = Components.interfaces.nsIFilePicker;
-        var filePicker = WI.Utils.getInstance("@mozilla.org/filepicker;1",nsIFilePicker)
+        var filePicker = WMSInspector.Utils.getInstance("@mozilla.org/filepicker;1",nsIFilePicker)
 
-        filePicker.init(window, WI.Utils.getString("wi_options_chooseaneditor"), nsIFilePicker.modeOpen);
+        filePicker.init(window, WMSInspector.Utils.getString("wi_options_chooseaneditor"), nsIFilePicker.modeOpen);
         filePicker.appendFilters(nsIFilePicker.filterApps);
 
         var res = filePicker.show();

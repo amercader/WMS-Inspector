@@ -1,14 +1,14 @@
 
-WI.GetCapabilitiesDialog = {
+WMSInspector.GetCapabilitiesDialog = {
     prefs: null,
 	
     init: function(){
-        this.prefs = WI.Utils.getPrefs();
-        WI.Utils.setPreferenceObserver(this.prefs,this);
+        this.prefs = WMSInspector.Utils.getPrefs();
+        WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
         
         var button = document.documentElement.getButton("extra2");
-        button.setAttribute("label", WI.Utils.getString("wi_getcapabilities_request"));
-        button.addEventListener("command", WI.GetCapabilitiesDialog.onAccept, false);
+        button.setAttribute("label", WMSInspector.Utils.getString("wi_getcapabilities_request"));
+        button.addEventListener("command", WMSInspector.GetCapabilitiesDialog.onAccept, false);
   
         if (window.arguments){
             var server = window.arguments[0];
@@ -41,7 +41,7 @@ WI.GetCapabilitiesDialog = {
 
 
         if(!outputHTML && !outputXML){
-            WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_selectoutputformat"));
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_selectoutputformat"));
             return false;
         }
 
@@ -49,8 +49,8 @@ WI.GetCapabilitiesDialog = {
         var service = document.getElementById("wiServiceTypeMenu").selectedItem.getAttribute("label");
         var version = document.getElementById("wiVersionMenu").selectedItem.getAttribute("label");
         
-        if (!WI.Utils.checkURL(url)){
-            WI.Utils.showAlert(WI.Utils.getString("wi_getcapabilities_nourl"));
+        if (!WMSInspector.Utils.checkURL(url)){
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
             return false;
 
         } else {
@@ -66,10 +66,10 @@ WI.GetCapabilitiesDialog = {
             
             if (outputXML){
                 var outputEditor = (document.getElementById("wiGetcapabilitiesOutputEditor").selected);
-                window.opener.WI.Overlay.requestDocument(url,outputEditor);
+                window.opener.WMSInspector.Overlay.requestDocument(url,outputEditor);
             }
             if (outputHTML){
-                window.opener.WI.Overlay.requestGetCapabilities(url);
+                window.opener.WMSInspector.Overlay.requestGetCapabilities(url);
             }
             
             window.close();

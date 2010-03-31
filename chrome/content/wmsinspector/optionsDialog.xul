@@ -10,8 +10,8 @@
         id="wiOptionsDialog"
         title="&wmsinspector.options.title;"
         buttons="accept,cancel"
-        onload="WI.OptionsDialog.init();"
-        ondialogaccept="WI.OptionsDialog.onAccept();">
+        onload="WMSInspector.OptionsDialog.init();"
+        ondialogaccept="WMSInspector.OptionsDialog.onAccept();">
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/optionsDialog.js"/>
@@ -33,7 +33,7 @@
                     <label value="&wmsinspector.options.chooseaneditor;" />
                     <hbox>
                         <textbox id="wiEditorPath" value="" style="width:200px;"/>
-                        <button label="&wmsinspector.common.change;" oncommand="WI.OptionsDialog.selectEditor();"/>
+                        <button label="&wmsinspector.common.change;" oncommand="WMSInspector.OptionsDialog.selectEditor();"/>
                     </hbox>
 
                 </vbox>

@@ -11,10 +11,10 @@ const wiTempFilesPermissions = 0666;
 const wiTempDirPermissions = 0700;
 
 
-WI.IO = {
+WMSInspector.IO = {
     fileCounter:0,
-    externalAppService: WI.Utils.getService("@mozilla.org/uriloader/external-helper-app-service;1", "nsPIExternalAppLauncher"),
-    directoryService: WI.Utils.getService("@mozilla.org/file/directory_service;1", "nsIProperties"),
+    externalAppService: WMSInspector.Utils.getService("@mozilla.org/uriloader/external-helper-app-service;1", "nsPIExternalAppLauncher"),
+    directoryService: WMSInspector.Utils.getService("@mozilla.org/file/directory_service;1", "nsIProperties"),
 
     checkWITmpDir: function(){
         var dir = this.getTmpDir();
@@ -64,7 +64,7 @@ WI.IO = {
 
     write: function(file,data,mode,encode){
 
-        var foStream = WI.Utils.getInstance("@mozilla.org/network/file-output-stream;1", "nsIFileOutputStream");
+        var foStream = WMSInspector.Utils.getInstance("@mozilla.org/network/file-output-stream;1", "nsIFileOutputStream");
 
         if (mode == "a"){   //Append
             foStream.init(file, 0x02 | 0x10, wiTempFilesPermissions, 0);
@@ -75,7 +75,7 @@ WI.IO = {
         if (encode){
             //Convert data to UTF-8
             //TODO: parametrize?
-            var converter = WI.Utils.getInstance("@mozilla.org/intl/converter-output-stream;1","nsIConverterOutputStream");
+            var converter = WMSInspector.Utils.getInstance("@mozilla.org/intl/converter-output-stream;1","nsIConverterOutputStream");
             converter.init(foStream, "UTF-8", 0, 0);
             converter.writeString(data);
             converter.close(); // this closes foStream
