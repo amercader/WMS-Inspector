@@ -1,6 +1,5 @@
 
 WMSInspector.EditParameterDialog = {
-    frameId: null,
     imageId: null,
     paramId: null,
     paramName: null,

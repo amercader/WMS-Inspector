@@ -8,6 +8,8 @@
 <!ENTITY wmsinspector.common.service "Servicio">
 <!ENTITY wmsinspector.common.version "Versi&#243;n">
 <!ENTITY wmsinspector.common.copy "Copiar">
+<!ENTITY wmsinspector.common.add "A&#241;adir">
+<!ENTITY wmsinspector.common.delete "Eliminar">
 <!ENTITY wmsinspector.common.edit "Editar">
 <!ENTITY wmsinspector.common.change "Cambiar">
 <!ENTITY wmsinspector.common.output "Salida">
@@ -42,6 +44,9 @@
 
 <!-- EditParameter dialog -->
 <!ENTITY wmsinspector.editparameter.title "Editar par&#225;metro">
+
+<!-- AddParameter dialog -->
+<!ENTITY wmsinspector.addparameter.title "A&#241;adir par&#225;metro">
 
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Opciones">

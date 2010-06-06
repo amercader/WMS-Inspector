@@ -110,6 +110,17 @@
                                   oncommand="WMSInspector.Overlay.doContextMenuAction(3,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/edit.png" />
+                        <menuitem label="&wmsinspector.common.delete;"
+                                  oncommand="WMSInspector.Overlay.doContextMenuAction(5,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/delete.png" />
+                        <menuseparator/>
+                        <menuitem label="&wmsinspector.common.add;"
+                                  oncommand="WMSInspector.Overlay.doContextMenuAction(4,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/add.png" />
+
+
                     </menupopup>
                 </vbox>
 

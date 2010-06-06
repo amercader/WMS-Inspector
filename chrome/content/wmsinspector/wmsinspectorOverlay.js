@@ -1,6 +1,10 @@
 
-window.addEventListener("load",  function(){ WMSInspector.Overlay.init() }, false);
-window.addEventListener("unload", function(){ WMSInspector.Overlay.unload() }, false);
+window.addEventListener("load",  function(){
+    WMSInspector.Overlay.init()
+    }, false);
+window.addEventListener("unload", function(){
+    WMSInspector.Overlay.unload()
+    }, false);
 
 
 WMSInspector.Overlay = {
@@ -75,13 +79,10 @@ WMSInspector.Overlay = {
         var tChParams;
         var tIItem;
         var tIImage;
-        var tIParams;
         var tRItem;
         var tRImage;
-        var tRParams;
         var tCeItem;
         var tCeImage;
-        var tCeParams;
         var label;
         var value;
 		
@@ -129,24 +130,11 @@ WMSInspector.Overlay = {
                     tRImage.appendChild(tCeImage);
                     tIImage.appendChild(tRImage);
                     tChParams = document.createElement("treechildren");
-                    for (var k=0; k < serviceImage.params.count; k++){
+                    for (var k=0; k < serviceImage.params.length; k++){
                         serviceImageParam = serviceImage.getParamByIndex(k);
-                        tIParams = document.createElement("treeitem");
-                        tRParams = document.createElement("treerow");
-                        tCeParams = document.createElement("treecell");
-                        value = this.getTreeCellId(3,serviceImage.id,k);
-                        tCeParams.setAttribute("id",value);
-                        tCeParams.setAttribute("value",value);
-                        tCeParams.setAttribute("label",serviceImageParam.name);
-                        tRParams.appendChild(tCeParams);
-                        tCeParams = document.createElement("treecell");
-                        value = this.getTreeCellId(4,serviceImage.id,k);
-                        tCeParams.setAttribute("id",value);
-                        tCeParams.setAttribute("value",value);
-                        tCeParams.setAttribute("label",serviceImageParam.value);
-                        tRParams.appendChild(tCeParams);
-                        tIParams.appendChild(tRParams);
-                        tChParams.appendChild(tIParams);
+
+                        this.addParamRow(tChParams,serviceImage.id,serviceImageParam.name,serviceImageParam.value,k);
+
                     }
                     tIImage.appendChild(tChParams);
                     tChImage.appendChild(tIImage);
@@ -165,6 +153,33 @@ WMSInspector.Overlay = {
             tChMain.appendChild(tI);
         }
         t.appendChild(tChMain);
+    },
+
+
+    addParamRow: function(tChParams,imageId,paramName,paramValue,index){
+
+        var tCeParams;
+        var value;
+
+        var tIParams = document.createElement("treeitem");
+        var tRParams = document.createElement("treerow");
+        tCeParams = document.createElement("treecell");
+        value = this.getTreeCellId(3,imageId,index);
+        tCeParams.setAttribute("id",value);
+        tCeParams.setAttribute("value",value);
+        tCeParams.setAttribute("label",paramName);
+        tRParams.appendChild(tCeParams);
+
+        tCeParams = document.createElement("treecell");
+        value = this.getTreeCellId(4,imageId,index);
+        tCeParams.setAttribute("id",value);
+        tCeParams.setAttribute("value",value);
+        tCeParams.setAttribute("label",paramValue);
+        tRParams.appendChild(tCeParams);
+        tIParams.appendChild(tRParams);
+        tChParams.appendChild(tIParams);
+
+        return tChParams.childNodes.length;
     },
 
     sortServiceImages: function(windowServiceImages,mode){
@@ -232,10 +247,7 @@ WMSInspector.Overlay = {
                     var newSrc = serviceImage.updateSrc();
 
                     //TODO: reuse, errors, default page, loading, cache?
-
-                    var file = WMSInspector.Overlay.saveURLtoFile(newSrc);
-                    var browser = document.getElementById("wiBrowser");
-                    browser.loadURI(file.path);
+                    WMSInspector.Overlay.showURLInPreviewBrowser(newSrc);
                    
                 }
             }
@@ -296,19 +308,46 @@ WMSInspector.Overlay = {
         if (!cellText) return;
         switch (mode){
             case 1:
+                //Copy to clipboard
                 this.copyTreeItem(cellValues,cellText,t);
                 break;
             case 2:
+                //Open in a new tab
                 this.openServiceImageInNewTab(cellText);
                 break;
             case 3:
-                var paramName = cellText;
+                //Edit parameter
                 var col = t.columns.getNamedColumn("wiTreeValueColumn");
                 var paramValue = t.view.getCellText(t.currentIndex,col);
                 window.openDialog("chrome://wmsinspector/content/editParameterDialog.xul",
                     "wiEditParameterDialog",
                     "chrome,centerscreen",
-                    cellValues[2],cellValues[3],paramName,paramValue);
+                    cellValues[2],cellValues[3],cellText,paramValue);
+                break;
+            case 4:
+                //Add parameter
+                window.openDialog("chrome://wmsinspector/content/addParameterDialog.xul",
+                    "wiAddParameterDialog",
+                    "chrome,centerscreen",
+                    cellValues[2]);
+                break;
+            case 5:
+                //Delete parameter
+                var serviceImage = this.getServiceImage(cellValues[2]);
+                if(serviceImage.removeParam(cellText) !== false){
+
+                    var newURL = serviceImage.updateSrc();
+                    var cell;
+
+                    cell = document.getElementById(this.getTreeCellId(4,cellValues[2],cellValues[3]));
+                    if (cell) cell.parentNode.parentNode.parentNode.removeChild(cell.parentNode.parentNode);
+
+                    cell = document.getElementById(this.getTreeCellId(2,cellValues[2]));
+                    if (cell) cell.setAttribute("label",newURL);
+
+                    this.showURLInPreviewBrowser(newURL);
+
+                }
                 break;
         }
     },
@@ -344,25 +383,41 @@ WMSInspector.Overlay = {
 	
     onParamUpdated: function(imageId,paramId,paramName,paramValue){
 
-        if (imageId && paramId && paramValue) {
+        if (imageId && paramId && (paramValue || paramValue === "")) {
             var serviceImage = this.getServiceImage(imageId);
-            var newParam = serviceImage.setParam(paramName,paramValue);
-            var newUrl = serviceImage.updateSrc();
-            var id;
+            serviceImage.setParam(paramName,paramValue);
+            var newURL = serviceImage.updateSrc();
             var cell;
-            id = this.getTreeCellId(4,imageId,paramId);
-            cell = document.getElementById(id);
+            cell = document.getElementById(this.getTreeCellId(4,imageId,paramId));
             if (cell) cell.setAttribute("label",paramValue);
-            id = this.getTreeCellId(2,imageId);
-            cell = document.getElementById(id);
-            if (cell) cell.setAttribute("label",newUrl);
+            cell = document.getElementById(this.getTreeCellId(2,imageId));
+            if (cell) cell.setAttribute("label",newURL);
+            
+            this.showURLInPreviewBrowser(newURL);
 
-            var file = WMSInspector.Overlay.saveURLtoFile(newUrl);
-            var browser = document.getElementById("wiBrowser");
-            browser.loadURI(file.path);
         }
     },
-	
+
+    onParamAdded: function(imageId,paramName,paramValue){
+
+        if (imageId && paramName && (paramValue || paramValue === "")) {
+            var serviceImage = this.getServiceImage(imageId);
+            serviceImage.addParam(paramName,paramValue);
+            var newURL = serviceImage.updateSrc();
+
+            var cell = document.getElementById(this.getTreeCellId(2,imageId));
+
+            if (cell) cell.setAttribute("label",newURL);
+            
+            var tChParams = cell.parentNode.parentNode.lastChild;
+            var index = tChParams.childNodes.length;
+            this.addParamRow(tChParams,imageId,paramName,paramValue,index);
+
+            this.showURLInPreviewBrowser(newURL);
+
+        }
+    },
+
     getServiceImage: function(imageIndex){
         if (!this.currentServiceImages) return false;
         for (var i=0;i<this.currentServiceImages.length;i++){
@@ -617,6 +672,12 @@ WMSInspector.Overlay = {
             WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + WMSInspector.Utils.getString("wi_request_unknownerror"));
         }
 
+    },
+
+    showURLInPreviewBrowser: function(URL){
+        var file = WMSInspector.Overlay.saveURLtoFile(URL);
+        var browser = document.getElementById("wiBrowser");
+        browser.loadURI(file.path);
     },
 
     showFileInBrowser: function(file,focus){

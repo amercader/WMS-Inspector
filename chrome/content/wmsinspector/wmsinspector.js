@@ -81,16 +81,28 @@ WMSInspector.ServiceImages = {
 
 }
 
-//function ServiceImage(src,parent){
 WMSInspector.ServiceImage = function(src,parent){
     this.id = "";
     this.parent = parent;
     this.src = src;
     this.server = this.src.substring(0,this.src.indexOf("?"));
-    this.params = new WMSInspector.ServiceImageParams(this.src);
+    this.params = [];
+    
+
+    this.extractParams = function(src){
+        src = src || this.src;
+        var srcParams = src.substring(src.indexOf("?")+1).split("&");
+        this.params = [];
+
+        var tmp;
+        for (var i=0;i<srcParams.length;i++){
+            tmp = srcParams[i].split("=");
+            if (tmp[0]) this.addParam(tmp[0],(tmp[1]) ? tmp[1] : "");
+        }
+    }
 
     this.getParamByIndex = function(index){
-        return (this.params.params[index]) ? this.params.params[index] : false;
+        return (this.params[index]) ? this.params[index] : false;
     }
 
     this.getParamByName = function(name){
@@ -109,17 +121,26 @@ WMSInspector.ServiceImage = function(src,parent){
     }
 		
     this.addParam = function(name,value){
-        var params = this.params.params;
-        var cnt = this.params.count;
-        params[cnt] = Object();
-        params[cnt].name = name;
-        params[cnt].value = value;
-        this.params.count++;
-        return params[cnt];
+        this.params.push({"name":name,"value":value});
+
+        return this.params.length;
+
+    }
+
+    this.removeParam = function(name){
+        var i = this.getParamIndex(name);
+        if (i !== false){
+            this.params.splice(i,1);
+
+            return this.params.length;
+        }
+
+        return false;
+
     }
 
     this.getParamIndex = function(name){
-        for (var i=0;i < this.params.count;i++){
+        for (var i=0;i < this.params.length;i++){
             var param = this.getParamByIndex(i);
             if (param.name.toLowerCase() == name.toLowerCase()) return i;
         }
@@ -129,10 +150,10 @@ WMSInspector.ServiceImage = function(src,parent){
     this.updateSrc = function(){
         var params = "";
 		
-        for (var i=0;i < this.params.count;i++){
+        for (var i=0;i < this.params.length;i++){
             var param = this.getParamByIndex(i);
             params += param.name + "=" + param.value;
-            if (i < (this.params.count - 1)) params += "&";
+            if (i < (this.params.length - 1)) params += "&";
         }
 		
         this.src = (this.server.indexOf("?") != -1) ? this.server + "&" + params : this.server + "?" + params;
@@ -140,6 +161,8 @@ WMSInspector.ServiceImage = function(src,parent){
         return this.src;
 		
     }
+
+    this.extractParams();
 	
     this.request = this.getParamByName("REQUEST").value;
 	
@@ -150,23 +173,3 @@ WMSInspector.ServiceImage = function(src,parent){
     }
 
 }
-
-WMSInspector.ServiceImageParams = function(imgsrc){
-    var cnt = 0;
-    var paramstmp = imgsrc.substring(imgsrc.indexOf("?")+1).split("&");
-    this.params = Array();
-	
-    var tmp;
-    for (var i=0;i<paramstmp.length;i++){
-        tmp = paramstmp[i].split("=");
-        if (tmp[0]){
-            this.params[cnt] = Object();
-            this.params[cnt].name = tmp[0];
-            this.params[cnt].value = (tmp[1]) ? tmp[1] : "";
-            cnt = this.params.length;
-        }
-    }
-    this.count = cnt || 0;
-}
-
-
