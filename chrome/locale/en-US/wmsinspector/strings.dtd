@@ -50,6 +50,8 @@
 
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Options">
+<!ENTITY wmsinspector.options.general "General">
+<!ENTITY wmsinspector.options.defaultwmsversion "Default WMS version">
 <!ENTITY wmsinspector.options.chooseaneditor "Choose an editor">
 <!ENTITY wmsinspector.options.appearance "Appearance">
 <!ENTITY wmsinspector.options.hidecontextmenu "Hide the context menu">

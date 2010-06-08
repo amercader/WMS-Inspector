@@ -20,24 +20,33 @@
     <stringbundleset id="stringbundleset">
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
     </stringbundleset>
-
-<groupbox>
-  <caption label="&wmsinspector.options.appearance;"/>
-                <vbox pack="center" flex="1">
+    <groupbox>
+        <caption label="&wmsinspector.options.general;"/>
+        <hbox flex="1" align="center">
+            <label value="&wmsinspector.options.defaultwmsversion;"/>
+            <menulist id="wiVersionMenu">
+                <menupopup>
+                </menupopup>
+            </menulist>
+        </hbox>
+    </groupbox>
+    <groupbox>
+        <caption label="&wmsinspector.options.appearance;"/>
+        <vbox pack="center" flex="1">
             <checkbox id="wiHideContextMenu" label="&wmsinspector.options.hidecontextmenu;"/>
-            </vbox>
-</groupbox>
-<groupbox>
-  <caption label="&wmsinspector.common.editor;"/>
-                <vbox pack="center" flex="1">
-                    <label value="&wmsinspector.options.chooseaneditor;" />
-                    <hbox>
-                        <textbox id="wiEditorPath" value="" style="width:200px;"/>
-                        <button label="&wmsinspector.common.change;" oncommand="WMSInspector.OptionsDialog.selectEditor();"/>
-                    </hbox>
+        </vbox>
+    </groupbox>
+    <groupbox>
+        <caption label="&wmsinspector.common.editor;"/>
+        <vbox pack="center" flex="1">
+            <label value="&wmsinspector.options.chooseaneditor;" />
+            <hbox>
+                <textbox id="wiEditorPath" value="" style="width:200px;"/>
+                <button label="&wmsinspector.common.change;" oncommand="WMSInspector.OptionsDialog.selectEditor();"/>
+            </hbox>
 
-                </vbox>
-</groupbox>
+        </vbox>
+    </groupbox>
 
 
 
