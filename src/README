@@ -32,7 +32,8 @@ If you want to install a development version follow this steps:
 	details.
 
 3.	Create a file named "wmsinspector@flentic.net" and edit it to contain the
-	path to the source code you downloaded in the first step.
+	path to the source code you downloaded in the first step, plus the "src"
+	folder.
 
 4.	Restart Firefox.
 

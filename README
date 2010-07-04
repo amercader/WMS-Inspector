@@ -1,0 +1,15 @@
+WMS Inspector
+======
+
+A Firefox add-on with tools for working with Web Map Services (WMS)
+
+This document describes the repository structure. For details regarding the 
+project, how to install a development version or support options please refer to
+the file src/README or to the following wiki page:
+
+http://wiki.github.com/amercader/WMS-Inspector/
+
+Here is a description of the repository folders contents:
+* build: scripts to build the XPI file from the sources
+* db: SQL scritps used to create or update the SQLite database
+* src: application sources
