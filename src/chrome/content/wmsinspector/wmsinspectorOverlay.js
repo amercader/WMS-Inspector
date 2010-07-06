@@ -81,7 +81,6 @@ WMSInspector.Overlay = {
                 //Check if the database schema needs to be updated
                 WMSInspector.DB.checkDB();
 
-                Components.utils.reportError("updated!!!!!!!!!");
             } else {
                // No first run nor upgrade
             }
