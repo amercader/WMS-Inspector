@@ -34,11 +34,12 @@ WMSInspector.Overlay = {
         //Check if profile dir exists
         //WMSInspector.IO.checkWIProfileDir();
 
-        //Check database
-        WMSInspector.DB.checkDB();
+        //Check if first run or upgrade actions must be performed
+        this.checkForUpgrades();
         
         //Show/Hide Context menu
         document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
+
 
 
     },
@@ -47,6 +48,44 @@ WMSInspector.Overlay = {
         this.prefs.removeObserver("", this);
         if (WMSInspector.DB.conn){
             WMSInspector.DB.conn.close();
+        }
+    },
+
+    checkForUpgrades: function(){
+        var installedVersion = -1;
+        var firstRun = true;
+        
+        var extensionManager = WMSInspector.Utils.getService("@mozilla.org/extensions/manager;1", "nsIExtensionManager");
+        var currentVersion = extensionManager.getItemForID(WMSInspector.Utils.extensionId).version;
+        
+        try {
+            installedVersion = this.prefs.getCharPref("version");
+            firstRun = this.prefs.getBoolPref("firstrun");
+        } catch(e){
+
+        } finally {
+            if (firstRun){
+                this.prefs.setBoolPref("firstrun",false);
+                this.prefs.setCharPref("version",currentVersion);
+
+                //Code to be executed only when the extension is first installed
+
+                //Copy an empty database to the profile directory
+                WMSInspector.DB.restoreDB();
+
+            } else if (installedVersion != currentVersion && !firstRun) {
+                this.prefs.setCharPref("version",currentVersion);
+
+                //Code to be executed when the extension is upgraded
+
+                //Check if the database schema needs to be updated
+                WMSInspector.DB.checkDB();
+
+                Components.utils.reportError("updated!!!!!!!!!");
+            } else {
+               // No first run nor upgrade
+            }
+
         }
     },
 
