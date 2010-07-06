@@ -5,6 +5,9 @@ var WMSInspector = {};
 
 
 WMSInspector.Utils = {
+
+    //Extension id for WMSInspector
+    extensionId: "wmsinspector@flentic.net",
     
     //Preferences branch for WMSInspector stuff
     prefBranch: "extensions.wmsinspector.",

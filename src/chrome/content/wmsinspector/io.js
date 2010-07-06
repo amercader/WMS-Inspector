@@ -2,6 +2,9 @@ WMSInspector.IO = {
     //Folder name for WMSInspector stuff in Temporary dir
     tempDirName: "wmsinspector",
 
+    //Folder name for WMSInspector stuff in Profile dir
+    profileDirName: "wmsinspector",
+
     //Naming template for temporary files
     tempFileName: "wi_",
 
@@ -16,9 +19,16 @@ WMSInspector.IO = {
 
     checkWITmpDir: function(){
         var dir = this.getTmpDir();
-        if (dir){
-            dir.append(this.tempDirName);
+        return this.checkDir(dir);
+    },
 
+    checkWIProfileDir: function(){
+        var dir = this.getProfileDir();
+        return this.checkDir(dir);
+    },
+
+    checkDir: function(dir){
+        if (dir){
             // If dir doesn't exist, create it
             if( !dir.exists() || !dir.isDirectory() ) {
                 dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, this.tempDirPermissions);
@@ -30,8 +40,29 @@ WMSInspector.IO = {
     },
 
     getTmpDir: function(){
+        var dir = this.getDir("TmpD");
+        if (dir) dir.append(this.tempDirName);
+        return dir;
+    },
+
+    getProfileDir: function(){
+        var dir = this.getDir("ProfD");
+        if (dir) dir.append(this.profileDirName);
+        return dir;
+    },
+
+    getDefaultsDir: function(){
+        var dir = this.getDir("ProfD");
+        if (dir) dir.append("extensions");
+        if (dir) dir.append(WMSInspector.Utils.extensionId);
+        if (dir) dir.append("defaults");
+        return dir;
+    },
+
+    getDir: function(dirCode){
+        dirCode = dirCode || "TmpD";
         if (this.directoryService)
-            return this.directoryService.get("TmpD", Components.interfaces.nsIFile);
+            return this.directoryService.get(dirCode, Components.interfaces.nsIFile);
         return false;
     },
 
@@ -42,11 +73,13 @@ WMSInspector.IO = {
         return false;
 
     },
+
     getTmpFileName: function(extension){
         extension = (extension || "tmp");
         this.fileCounter++;
         return this.tempFileName + this.fileCounter + "." + extension;
     },
+
     createTmpFile: function(name, deleteOnExit){
         var file = this.checkWITmpDir();
         if (file){

@@ -31,12 +31,23 @@ WMSInspector.Overlay = {
         //Check if tmp dir exists
         WMSInspector.IO.checkWITmpDir();
 
+        //Check if profile dir exists
+        //WMSInspector.IO.checkWIProfileDir();
+
+        //Check database
+        WMSInspector.DB.checkDB();
+        
         //Show/Hide Context menu
         document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
+
+
     },
 	
     unload: function(){
         this.prefs.removeObserver("", this);
+        if (WMSInspector.DB.conn){
+            WMSInspector.DB.conn.close();
+        }
     },
 
 
