@@ -30,6 +30,7 @@
 <!ENTITY wmsinspector.toolbar.requesttype "Tipo de solicitud">
 <!ENTITY wmsinspector.toolbar.service "Servicio">
 <!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
+<!ENTITY wmsinspector.toolbar.library "Biblioteca">
 <!ENTITY wmsinspector.toolbar.options "Abrir las opciones de configuraci&#243;n">
 
 <!-- Tree -->

@@ -30,6 +30,7 @@
 <!ENTITY wmsinspector.toolbar.requesttype "Tipus de crida">
 <!ENTITY wmsinspector.toolbar.service "Servei">
 <!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
+<!ENTITY wmsinspector.toolbar.library "Biblioteca">
 <!ENTITY wmsinspector.toolbar.options "Obrir les opcions de configuraci&#243;">
 
 <!-- Tree -->

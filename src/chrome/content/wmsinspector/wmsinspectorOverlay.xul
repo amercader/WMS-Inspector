@@ -45,7 +45,9 @@
                                 </menulist>
                             </toolbaritem>
                             <toolbarseparator />
+                            
                             <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WMSInspector.Overlay.openGetCapabilitiesDialog();" />
+                            <toolbarbutton id="wiLibraryButton" label="&wmsinspector.toolbar.library;" tooltiptext="&wmsinspector.toolbar.library;" oncommand="WMSInspector.Overlay.openLibrary();" />
                         </toolbar>
                     </toolbox>
                 </hbox>

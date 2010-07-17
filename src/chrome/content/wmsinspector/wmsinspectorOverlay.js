@@ -21,6 +21,8 @@ WMSInspector.Overlay = {
 
     noServicesFoundCellId: "wiCellNoServicesFound",
 
+    libraryWindow: null,
+
     init: function(){
         //Set preferences object
         this.prefs = WMSInspector.Utils.getPrefs();
@@ -783,7 +785,14 @@ WMSInspector.Overlay = {
     openOptionsDialog: function() {
         var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");
         dialog.focus();
-    }
+    },
 
+    openLibrary: function(){
+        if (this.libraryWindow == null || this.libraryWindow.closed){
+            this.libraryWindow = window.open("chrome://wmsinspector/content/library.xul", "wiLibrary", "chrome,centerscreen");
+        } else {
+            this.libraryWindow.focus();
+        }
+    }
 
 }
