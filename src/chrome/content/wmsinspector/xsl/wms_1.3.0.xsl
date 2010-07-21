@@ -537,12 +537,12 @@
         <xsl:choose>
             <xsl:when test="normalize-space($element)">
                 <xsl:choose>
-                    <xsl:when test="$outputLink = 'mailto'">
+                    <xsl:when test="normalize-space($outputLink) = 'mailto'">
                         <a href="mailto:{$element}">
                             <xsl:value-of select="$element" />
                         </a>
                     </xsl:when>
-                    <xsl:when test="$outputLink = true()">
+                    <xsl:when test="normalize-space($outputLink) = true()">
                         <a href="{$element}">
                             <xsl:value-of select="$element" />
                         </a>
