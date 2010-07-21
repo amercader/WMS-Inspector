@@ -27,7 +27,7 @@
             <div class="divSubSection" id="divGeneralInfo">
                 <table>
                     <xsl:call-template name="checkElementOutputT">
-                        <xsl:with-param name="element" select="/w:WMT_MS_Capabilities/@version" />
+                        <xsl:with-param name="element" select="/w:WMS_Capabilities/@version" />
                         <xsl:with-param name="elementLabel">&wmsinspector.xsl.version;:</xsl:with-param>
                         <xsl:with-param name="mandatory" select="true()"/>
                         <xsl:with-param name="outputRow" select="true()"/>
