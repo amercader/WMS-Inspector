@@ -103,6 +103,9 @@
     display: inline;
 }
 
+#wiLibraryDBError{
+    margin: 30px;
+}
 
 richlistboxitem {
     padding: 10px;
@@ -129,4 +132,9 @@ richlistboxitem:hover {
 
 .wiLibraryServiceTypeLabel{
     font-style: italic
+}
+
+.wiLibraryNoServicesFound{
+   font-style: italic;
+   margin-top: 30px;
 }

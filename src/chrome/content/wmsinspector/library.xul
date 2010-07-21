@@ -7,164 +7,48 @@
 
 <window id="wiLibrary"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        title="Library"
+        title="&wmsinspector.toolbar.library;"
         width="500"
         height="400"
-        onload="WMSInspector.Library.init()">
+        onload="WMSInspector.Library.init()"
+        persist="width height screenX screenY sizemode">
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
 
     <stringbundleset id="stringbundleset">
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
     </stringbundleset>
-    
-    <label value="Test library"/>
+
+    <label value="TODO: Search / Filters go here"/>
+
+    <hbox id="wiLibraryDBError" style="visibility:collapse">
+        <image src="chrome://wmsinspector/skin/icons/warning.png" />
+        <label value="Error connecting to the database" />
+    </hbox>
+
     <richlistbox id="wiServicesListbox" flex="1" context="wiLibraryContextMenu">
-        <!--<richlistboxitem class="libraryItem" />-
-        
-        <richlistboxitem >
-            <hbox flex="1">
-                <vbox >
-                    <image src="chrome://wmsinspector/skin/icons/favorite.png" />
-                </vbox>
-
-                <vbox>
-                    <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                    <label flex="1" value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-                    <hbox >
-                        <label flex="0" class="wiLibraryTag" value="ref" />
-                        <label flex="0" class="wiLibraryTag" value="INSPIRE" />
-                    </hbox>
-                </vbox>
-                <spacer flex="1" />
-                <vbox>
-                    <label value="WMS" style="font-style:italic"/>
-                </vbox>
-            </hbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem >
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-
-        </richlistboxitem>
-        <richlistboxitem >
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem >
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem >
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem >
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        <richlistboxitem>
-            <vbox>
-                <label value="ICC - Servidor ràster" style="font-weight:bold"/>
-                <label value="http://shagrat.icc.es/lizardtech/iserv/ows?"/>
-            </vbox>
-        </richlistboxitem>
-        -->
     </richlistbox>
+
     <menupopup id="wiLibraryContextMenu">
         <menuitem label="&wmsinspector.common.copy;"
-                                  oncommand="WMSInspector.Overlay.doContextMenuAction(1,event);"
+                                  oncommand=""
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/copy.png" />
         <menuseparator/>
         <menuitem label="&wmsinspector.common.edit;"
-                                  oncommand="WMSInspector.Overlay.doContextMenuAction(3,event);"
+                                  oncommand=""
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/edit.png" />
         <menuitem label="&wmsinspector.common.delete;"
-                                  oncommand="WMSInspector.Overlay.doContextMenuAction(5,event);"
+                                  oncommand=""
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/delete.png" />
         <menuseparator/>
         <menuitem label="&wmsinspector.common.add;"
-                                  oncommand="WMSInspector.Overlay.doContextMenuAction(4,event);"
+                                  oncommand=""
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/add.png" />
 

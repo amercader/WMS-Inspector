@@ -74,6 +74,10 @@ WMSInspector.Utils = {
     checkURL: function(URL){
         if (URL.length == 0) return false;
         return (URL.toLowerCase().substr(0,5) === "http:" || URL.toLowerCase().substr(0,6) === "https:");
+    },
+    compareFirefoxVersions:function(a,b){
+        var comparator = this.getService("@mozilla.org/xpcom/version-comparator;1","nsIVersionComparator");
+        return comparator.compare(a,b);
     }
 
 

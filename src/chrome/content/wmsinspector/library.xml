@@ -11,45 +11,51 @@
     <binding id="libraryItem">
         <content>
             <xul:hbox flex="1">
-                <xul:vbox >
-                    <xul:image src="chrome://wmsinspector/skin/icons/favorite.png" />
+                <xul:vbox style="width:15px">
+                    <xul:image class="wiLibraryFavImg" src="chrome://wmsinspector/skin/icons/favorite.png" />
                 </xul:vbox>
 
                 <xul:vbox>
-                    <xul:label xbl:inherits="value=title" style="font-weight:bold"/>
+                    <xul:label xbl:inherits="value=title" class="wiLibraryServiceTitle" />
                     <xul:label flex="1" xbl:inherits="value=URL" />
-                    <xul:hbox class="wiLibraryTagsBox">
-                        <!--
-                        <xul:label flex="0" class="wiLibraryTag" value="ref" />
-                        <xul:label flex="0" class="wiLibraryTag" value="INSPIRE" />
-                        -->
-                    </xul:hbox>
+                    <xul:hbox class="wiLibraryTagsBox" />
+                                       
                 </xul:vbox>
                 <xul:spacer flex="1" />
                 <xul:vbox>
-                    <xul:label xbl:inherits="value=type" style="font-style:italic"/>
+                    <xul:label xbl:inherits="value=type" class="wiLibraryServiceTypeLabel"/>
                 </xul:vbox>
             </xul:hbox>
         </content>
+        
         <implementation>
             <field name="serviceId"/>
+
+            <method name="setFavorite">
+                <parameter name="value" />
+                <body><![CDATA[
+                    var image = document.getAnonymousElementByAttribute(this,"class","wiLibraryFavImg");
+                    var show = (value) ? "visible" : "collapse";
+                    image.setAttribute("style","visibility: " + show);
+                  ]]>
+                </body>
+            </method>
+            
             <method name="addTags">
                 <parameter name="tags" />
                 <body><![CDATA[
-                var box = document.getAnonymousElementByAttribute(this,"class","wiLibraryTagsBox");
-                var label;
-                for (var i = 0; i < tags.length; i++){
-                    label = document.createElement("label");
-                    label.setAttribute("value",tags[i]);
-                    label.setAttribute("class","wiLibraryTag");
-                    label.setAttribute("flex",0);
-                    label.setAttribute("tooltiptext", WMSInspector.Utils.getString("wi_library_searchservicestagged") + " '" + tags[i] + "'");
-                   
-                    box.appendChild(label);
+                    var box = document.getAnonymousElementByAttribute(this,"class","wiLibraryTagsBox");
+                    var label;
+                    for (var i = 0; i < tags.length; i++){
+                        label = document.createElement("label");
+                        label.setAttribute("value",tags[i]);
+                        label.setAttribute("class","wiLibraryTag");
+                        label.setAttribute("flex",0);
+                        label.setAttribute("tooltiptext", WMSInspector.Utils.getString("wi_library_searchservicestagged") + " '" + tags[i] + "'");
 
-                }
+                        box.appendChild(label);
 
-              
+                    }
                   ]]>
                 </body>
             </method>
