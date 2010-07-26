@@ -26,60 +26,144 @@ WMSInspector.Library = {
             return;
         }
 
+        //Fetch lists with values from DB
+        //When the last list is fetched, call the default query (all services)
+        this.fetchList("tags");
+        this.fetchList("types",this.search);
 
-        //Build list
-        //this.findServices("Australia server");
-        //this.findServices("Birds");
-        //this.findServices("woqqqqqqqqqqqqqqqqqq");
-        //this.findServices("ma");
-        //this.findServices();
-        //var query = new WMSInspector.libraryQuery("ma",{tag: "World",kk:232, type: "WMS"});
-        
-        var params = new WMSInspector.libraryQueryParams("",{
-            tags: [ "world","Check later"],
-            kk:232,
-            types: [ "WCS","WMS"]
-        });
-         var testQuery = new WMSInspector.libraryQuery(params,this.build)
-        testQuery.query();
-        
-        /*
-        var testQuery = new WMSInspector.libraryQuery(null,this.build);
-        testQuery.query();
-        */
-    //this.build(testQuery.results);
-        
-    /*
-        Components.utils.reportError(query.buildSQL());
-        var query = new WMSInspector.libraryQuery("",{
-            tags: [ "World"],
-            kk:232,
-            types: [ "WCS"]
-        });
-        Components.utils.reportError(query.buildSQL());
-        var query = new WMSInspector.libraryQuery("",{
-            
-            kk:232,
-            types: [ "WCS"]
-        });
-        Components.utils.reportError(query.buildSQL());
-        var query = new WMSInspector.libraryQuery();
-        Components.utils.reportError(query.buildSQL());
-        */
-    //TEST
-    /*
-        for (var i=0; i < 10; i++){
-            favorite = ((Math.random().toFixed(2)*100) % 2 == 0);
-            tags = ((Math.random().toFixed(2)*100) % 2 == 0) ? ["reference","INSPIRE","to order"] : false;
-            this.addServiceRow(i,"Test service "+i,"http://test.com/OWS/"+i,"WMS",favorite,tags);
-            
-        }
-        */
+
 
     },
 
-    build: function(results){
+    fetchList: function(list,callback){
+        var sql;
+        var listElement;
+        if (list == "tags"){
+            sql = "SELECT title AS name FROM tags";
+            listElement = document.getElementById("wiLibraryTagsList");
+        } else if (list == "types"){
+            sql = "SELECT name FROM service_type";
+            listElement = document.getElementById("wiLibraryServiceTypeList");
+        } else {
+            return false;
+        }
+        var statement = WMSInspector.DB.conn.createStatement(sql);
+        statement.executeAsync({
+            handleResult: function(resultSet) {
+                if (list == "types")
+                    listElement.appendItem(WMSInspector.Utils.getString("wi_all"),0);
 
+
+                for (let row = resultSet.getNextRow();
+                    row;
+                    row = resultSet.getNextRow()) {
+                            
+                    let name = row.getResultByName("name");
+                    let element = listElement.appendItem(name,name);
+                    if (list == "tags")
+                        element.setAttribute("type", "checkbox");
+
+                }
+         
+            },
+
+            handleError: function(error) {
+                Components.utils.reportError("WMSInspector - Error querying table (" + list + "): " + error.message);
+            },
+
+            handleCompletion: function(reason) {
+                if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                    Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                if (list == "types")
+                    listElement.selectedIndex = 0;
+
+                if (callback)
+                    callback();
+            }
+        });
+        return true;
+    },
+
+    searchText: function(text){
+        //Get query parameters
+        //Tags
+        var list = document.getElementById("wiLibraryTagsList");
+        var tags = [];
+
+        for (let i = 0; i < list.getRowCount(); i++) {
+            let item = list.getItemAtIndex(i);
+            if (item.getAttribute("checked") == "true") tags.push(item.getAttribute("value"));
+        }
+
+        //Service type
+        list = document.getElementById("wiLibraryServiceTypeList");
+        var type = (list.selectedIndex != 0) ? [list.selectedItem.getAttribute("value")] : false;
+
+        //Favorites first?
+        var favsFirst = (document.getElementById("wiLibraryFavoritesFirst").getAttribute("checked"));
+        var orderBy = (favsFirst) ? ["favorite"] : [];
+        var direction = (favsFirst) ? ["DESC"] : [];
+
+        //Order by
+        orderBy.push(document.getElementById("wiLibraryOrderBy").selectedItem.getAttribute("value"));
+
+        //Direction
+        direction.push( (document.getElementById("wiLibraryDirectionAsc").selected === true) ? "ASC" : "DESC");
+
+        var params = new WMSInspector.libraryQueryParams(
+            text,
+            {tags:(tags.length) ? tags : false,
+            types:type},
+            orderBy,
+            direction);
+
+        this.search(params)
+    },
+
+    searchTag: function(tag){
+        var params = new WMSInspector.libraryQueryParams(false,{tags:[tag]});
+        this.search(params)
+    },
+
+    search: function(params){
+
+        var libraryQuery = new WMSInspector.libraryQuery(params,WMSInspector.Library.build)
+        libraryQuery.query();
+        
+    },
+
+    refresh: function(){
+        this.searchText(document.getElementById("wiLibrarySearchFilter").getAttribute("value"));
+    },
+
+    restore: function(){
+        //Clear filter text
+        document.getElementById("wiLibrarySearchFilter").value = "";
+        
+        //Tags
+        var list = document.getElementById("wiLibraryTagsList");
+        for (let i = 0; i < list.getRowCount(); i++)
+            list.getItemAtIndex(i).setAttribute("checked",false);
+
+        //Service type
+        document.getElementById("wiLibraryServiceTypeList").selectedIndex = 0;
+
+        //Favorites first?
+        document.getElementById("wiLibraryFavoritesFirst").setAttribute("checked",true);
+
+        //Order by
+        document.getElementById("wiLibraryOrderBy").selectedIndex = 0;
+
+        //Direction
+        document.getElementById("wiLibraryDirectionAsc").setAttribute("selected",false);
+        document.getElementById("wiLibraryDirectionDesc").setAttribute("selected",true);
+
+        //Show all services
+        this.search()
+    },
+
+    build: function(results){
+       
         results = results || [];
         
         WMSInspector.Library.clearList();
@@ -120,6 +204,17 @@ WMSInspector.Library = {
 
     clearList: function(){
         while(this.list.firstChild) this.list.removeChild(this.list.firstChild);
+    },
+
+    toggleAdvancedSearch: function(){
+
+        var box = document.getElementById("wiLibraryAdvancedSearch");
+        var value = (box.getAttribute("collapsed") == "true");
+        box.setAttribute("collapsed",!value);
+        if (value && window.outerWidth < box.getBoundingClientRect().width){
+            window.sizeToContent();
+        }
+        document.getElementById("wiLibraryAdvancedSearchLink").setAttribute("value",(value) ? WMSInspector.Utils.getString("wi_library_simplesearch") : WMSInspector.Utils.getString("wi_library_advancedsearch"));
     }
 }
 
@@ -132,11 +227,11 @@ WMSInspector.libraryService = function(){
     this.tags = [];
 }
 
-WMSInspector.libraryQueryParams = function(text,filters,sort,direction){
+WMSInspector.libraryQueryParams = function(text,filters,sorts,directions){
     this.text = text || "";
     this.filters = filters || {};
-    this.sort = sort || ["creation_date"];
-    this.direction = direction || "ASC";
+    this.sorts = sorts || ["favorite","creation_date"];
+    this.directions = directions || ["DESC","DESC"];
 }
 
 WMSInspector.libraryQuery = function(params,callback){
@@ -148,11 +243,15 @@ WMSInspector.libraryQuery = function(params,callback){
 
     this.sql = "";
 
+    //Private properties
+    var allowedSorts = ["favorite","creation_date","title"];
+    var allowedDirections = ["ASC","DESC"];
+
     this.buildSQL = function(){
         var text = this.params.text;
         var filters = this.params.filters;
-        var sort = this.params.sort;
-        var direction = this.params.direction;
+        var sorts = this.params.sorts;
+        var directions = this.params.directions;
 
         this.sql = "";
         
@@ -166,9 +265,9 @@ WMSInspector.libraryQuery = function(params,callback){
         }
         
         var sqlWhere = "";
-        if (text){
+        if (text)
             sqlWhere = "s.title LIKE :text OR s.url LIKE :text OR s.tags LIKE :text";
-        }
+        
 
         if (filters){
             var sqlFilters = [];
@@ -201,24 +300,29 @@ WMSInspector.libraryQuery = function(params,callback){
         
         if (filters.tags) this.sql += " GROUP BY s.id";
 
-        if (sort.length){
+        if (sorts.length){
             var sqlSort = "";
             
-            for (let i = 0; i < sort.length; i++){
-                if (sort[i].toLowerCase() == "creation_date" ||
-                    sort[i].toLowerCase() == "title"){
+            for (let i = 0; i < sorts.length; i++){
+                if (this.allowedValue(allowedSorts,sorts[i])){
                     sqlSort += (sqlSort.length) ? "," : " ";
-                    sqlSort += "s." + sort[i];
+                    sqlSort += "s." + sorts[i];
+                    if (directions && directions[i] && this.allowedValue(allowedDirections,directions[i])) sqlSort += " " + directions[i];
+
                 }
             }
-            if (sqlSort.length) {
-                this.sql += " ORDER BY" + sqlSort;
-                if (direction) this.sql += " " + direction;
-            }
 
+            if (sqlSort.length) this.sql += " ORDER BY" + sqlSort;
         }
 
         return this.sql;
+    }
+
+    this.allowedValue = function(collection,value){
+        for (let i = 0; i < collection.length; i++){
+            if (collection[i].toLowerCase() == value.toLowerCase()) return true;
+        }
+        return false;
     }
 
     this.query = function(){
@@ -228,7 +332,7 @@ WMSInspector.libraryQuery = function(params,callback){
             var filters = this.params.filters;
 
             //Components.utils.reportError(this.sql);
-            
+
             var statement = WMSInspector.DB.conn.createStatement(this.sql);
 
             if (WMSInspector.Library.legacyCode){
@@ -242,23 +346,23 @@ WMSInspector.libraryQuery = function(params,callback){
                     statement.params["tag"+i] = filters.tags[i];
 
                 if (filters.types)
-                    for (let i = 0; i < filters.tags.length; i++)
+                    for (let i = 0; i < filters.types.length; i++)
                     statement.params["type"+i] = filters.types[i];
   
             } else {
                 var params = statement.newBindingParamsArray();
                 var bp = params.newBindingParams();
 
-                if (text) bp.bindByName("text", text);
+                if (text) bp.bindByName("text", "%" + text + "%");
 
                 if (filters.tags)
                     for (let i = 0; i < filters.tags.length; i++)
                     bp.bindByName("tag"+i, filters.tags[i]);
 
                 if (filters.types)
-                    for (let i = 0; i < filters.tags.length; i++)
-                    bp.bindByName("type"+i, filters.types[i]);
-            
+                    for (let i = 0; i < filters.types.length; i++)
+                    bp.bindByName("type"+i, filters.types[i]);           
+
                 params.addParams(bp);
 
                 statement.bindParameters(params);

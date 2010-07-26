@@ -7,9 +7,8 @@
 
 <window id="wiLibrary"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        title="&wmsinspector.toolbar.library;"
-        width="500"
-        height="400"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        title="&wmsinspector.library.title;"
         onload="WMSInspector.Library.init()"
         persist="width height screenX screenY sizemode">
 
@@ -22,11 +21,74 @@
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
     </stringbundleset>
 
-    <label value="TODO: Search / Filters go here"/>
+    <hbox id="wiLibraryToolbox">
+                            
+        <spacer flex="1"/>
+        <textbox id="wiLibrarySearchFilter"
+               clickSelectsAll="true"
+               type="search"
+               oncommand="WMSInspector.Library.searchText(this.value);"
+               style="width: 300px;">
+        </textbox>
+
+    </hbox>
+    <hbox>
+        <spacer flex="1"/>
+        <label id= "wiLibraryAdvancedSearchLink" class="text-link" onclick="WMSInspector.Library.toggleAdvancedSearch();" value="&wmsinspector.library.advancedsearch;" />
+    </hbox>
+
+    <hbox id="wiLibraryAdvancedSearch" collapsed="true">
+        <groupbox flex="1" >
+            <caption label="&wmsinspector.library.searchoptions;"/>
+            <hbox flex="1">
+                <hbox>
+                    <label value="&wmsinspector.library.tags;" />
+                    <listbox id="wiLibraryTagsList" rows="2" style="height: 50px;">
+
+                    </listbox>
+                </hbox>
+
+               <hbox align="start">
+
+                    <label value="&wmsinspector.library.servicetype;" />
+                    <menulist id="wiLibraryServiceTypeList" style="width:7em">
+                        <menupopup>
+
+                        </menupopup>
+                    </menulist>
+
+                </hbox>
+
+                <vbox>
+                    <hbox>
+                        <label value="&wmsinspector.library.orderby;" />
+                        <menulist id="wiLibraryOrderBy" style="min-width:10em;max-width:15em">
+                            <menupopup>
+                                <menuitem value="creation_date" label="&wmsinspector.library.creationdate;"/>
+                                <menuitem value="title" label="&wmsinspector.library.title;"/>
+                            </menupopup>
+                        </menulist>
+                    </hbox>
+                    <radiogroup id="wiLibraryDirection" orient="horizontal">
+                        <radio id="wiLibraryDirectionDesc" label="&wmsinspector.library.ascending;" selected="true" />
+                        <radio id="wiLibraryDirectionAsc" label="&wmsinspector.library.descending;" selected="false" />
+                        
+                    </radiogroup>
+
+                    <checkbox id="wiLibraryFavoritesFirst" label="&wmsinspector.library.favoritesfirst;" persist="checked" checked="true"/>
+                </vbox>
+                <spacer flex="1" />
+                <vbox>
+                    <button label="&wmsinspector.common.refresh;" icon="refresh" oncommand="WMSInspector.Library.refresh()" />
+                    <button label="&wmsinspector.common.restore;" icon="clear" oncommand="WMSInspector.Library.restore()" />
+                </vbox>
+            </hbox>
+        </groupbox>
+    </hbox>
 
     <hbox id="wiLibraryDBError" style="visibility:collapse">
         <image src="chrome://wmsinspector/skin/icons/warning.png" />
-        <label value="Error connecting to the database" />
+        <label value="&wmsinspector.library.dberror;" />
     </hbox>
 
     <richlistbox id="wiServicesListbox" flex="1" context="wiLibraryContextMenu">

@@ -675,6 +675,7 @@ WMSInspector.Overlay = {
     },
 
     getExtensionFromMimeType: function(mimeType){
+        Components.utils.reportError(mimeType);
         if (mimeType.indexOf(";") != -1){
             mimeType = mimeType.substring(0,mimeType.indexOf(";"))
         }
@@ -789,7 +790,7 @@ WMSInspector.Overlay = {
 
     openLibrary: function(){
         if (this.libraryWindow == null || this.libraryWindow.closed){
-            this.libraryWindow = window.open("chrome://wmsinspector/content/library.xul", "wiLibrary", "chrome,centerscreen");
+            this.libraryWindow = window.open("chrome://wmsinspector/content/library.xul", "wiLibrary", "chrome,centerscreen,resizable=yes");
         } else {
             this.libraryWindow.focus();
         }

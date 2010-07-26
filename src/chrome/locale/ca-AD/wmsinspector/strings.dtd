@@ -16,6 +16,8 @@
 <!ENTITY wmsinspector.common.openinanewtab "Obrir en una nova pestanya">
 <!ENTITY wmsinspector.common.editor "Editor">
 <!ENTITY wmsinspector.common.browser "Navegador">
+<!ENTITY wmsinspector.common.refresh "Actualitza">
+<!ENTITY wmsinspector.common.restore "Restaura">
 
 <!-- Index page -->
 <!ENTITY wmsinspector.index.welcome "Benvinguts al WMS Inspector">
@@ -56,6 +58,20 @@
 <!ENTITY wmsinspector.options.chooseaneditor "Escolliu un editor">
 <!ENTITY wmsinspector.options.appearance "Aparen&#231;a">
 <!ENTITY wmsinspector.options.hidecontextmenu "Amaga el men&#250; contextual">
+
+<!-- Library window -->
+<!ENTITY wmsinspector.library.title "Biblioteca">
+<!ENTITY wmsinspector.library.advancedsearch "Cerca avan&#231;ada">
+<!ENTITY wmsinspector.library.searchoptions "Opcions de cerca">
+<!ENTITY wmsinspector.library.tags "Etiquetes">
+<!ENTITY wmsinspector.library.servicetype "Tipus de servei">
+<!ENTITY wmsinspector.library.orderby "Ordenar per">
+<!ENTITY wmsinspector.library.creationdate "Data de creaci&#243;">
+<!ENTITY wmsinspector.library.title "T&#237;tol">
+<!ENTITY wmsinspector.library.ascending "Ascendent">
+<!ENTITY wmsinspector.library.descending "Descendent">
+<!ENTITY wmsinspector.library.favoritesfirst "Favorits primer">
+<!ENTITY wmsinspector.library.dberror "Error connectant a la base de dades">
 
 <!-- Default XSL templates for GetCapabilities reports -->
 

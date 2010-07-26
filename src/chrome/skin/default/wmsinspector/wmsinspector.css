@@ -107,6 +107,10 @@
     margin: 30px;
 }
 
+#wiLibrarySearchFilter{
+    width: 15em;
+}
+
 richlistboxitem {
     padding: 10px;
     border-bottom: 1px dotted #C0C0C0
