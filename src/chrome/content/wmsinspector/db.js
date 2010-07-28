@@ -6,7 +6,11 @@ WMSInspector.DB = {
     // default database (PRAGMA user_version). It must be updated at any schema
     // change and a corresponding upgradeToVXX method must be added.
     schemaVersion: 1,
-    
+
+    // Some classes used are not supported in Firefox 3.5.
+    // Code executed under this condition should be removed when support for Firefox 3.5 is dropped
+    legacyCode: (WMSInspector.Utils.compareFirefoxVersions(Application.version,"3.6") < 0),
+
     storageService: WMSInspector.Utils.getService("@mozilla.org/storage/service;1", "mozIStorageService"),
 
     conn: null,
@@ -45,14 +49,14 @@ WMSInspector.DB = {
                 
                 //Set new schemaVersion
                 this.conn.schemaVersion = this.schemaVersion;
-                //TODO: message
+            //TODO: message
 
             }
 
         }
     },
 
-/*
+    /*
  *
  * Dummy method to test DB upgrades
     upgradeToV2: function(){
@@ -89,7 +93,7 @@ WMSInspector.DB = {
 */
     upgradeCallback: {
         handleResult: function(resultSet) {
-            //No results should be returned during an upgrade transaction
+        //No results should be returned during an upgrade transaction
         },
 
         handleError: function(error) {
@@ -126,6 +130,38 @@ WMSInspector.DB = {
 
         }
         return false;
+    },
+
+    bindParameter: function(statement,name,value){
+        var params = {}
+        params[name] = value;
+        return this.bindParameters(statement, params);
+    },
+    
+    /*
+     * params - object with key: value pairs of parameters to bind
+     */
+    bindParameters: function(statement,params){
+        if (this.legacyCode){
+            // Asyncronous parameters binding is not supported in Firefox 3.5
+            // This code should be removed when support for Firefox 3.5 is dropped
+
+            for (let name in params)
+                statement.params[name] = params[name];
+            
+        } else {
+            var bpArray = statement.newBindingParamsArray();
+            var bp = bpArray.newBindingParams();
+
+            for (let name in params)
+                bp.bindByName(name, params[name]);
+                        
+            bpArray.addParams(bp);
+
+            statement.bindParameters(bpArray);
+        }
+
+        return statement;
     }
 
 }

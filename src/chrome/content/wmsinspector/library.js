@@ -3,11 +3,8 @@ WMSInspector.Library = {
     //prefs: null,
 
     list: null,
+    
     services: [],
-
-    // Some classes used are not supported in Firefox 3.5.
-    // Code executed under this condition should be removed when support for Firefox 3.5 is dropped
-    legacyCode: (WMSInspector.Utils.compareFirefoxVersions(Application.version,"3.6") < 0),
 
     init: function(){
 
@@ -243,32 +240,15 @@ WMSInspector.Library = {
                         (:title,:url,:version,:favorite,strftime('%s','now'),(SELECT id FROM service_type WHERE name = :type))";
 
             var statement = WMSInspector.DB.conn.createStatement(sql);
+            
+            WMSInspector.DB.bindParameters(statement,{
+                "title": service.title,
+                "url": service.URL,
+                "version": service.version,
+                "favorite": (service.favorite) ? "1" : "0",
+                "type": service.type
+            });
 
-            if (this.legacyCode){
-                // Asyncronous parameters binding is not supported in Firefox 3.5
-                // This code should be removed when support for Firefox 3.5 is dropped
-
-                statement.params.title = service.title;
-                statement.params.url = service.URL;
-                statement.params.version = service.version;
-                statement.params.favorite = (service.favorite) ? "1" : "0";
-                statement.params.type = service.type;
-
-            } else {
-                var params = statement.newBindingParamsArray();
-                var bp = params.newBindingParams();
-
-                bp.bindByName("title", service.title);
-                bp.bindByName("url", service.URL);
-                bp.bindByName("version", service.version);
-                bp.bindByName("favorite", (service.favorite) ? "1" : "0");
-                bp.bindByName("type", service.type);
-
-
-                params.addParams(bp);
-
-                statement.bindParameters(params);
-            }
             statement.executeAsync({
                 handleResult: function(resultSet) {
 
@@ -317,16 +297,8 @@ WMSInspector.Library = {
             //Delete previous tags from service
             var sql = "DELETE FROM rel_services_tags WHERE services_id = :id";
             var statement = WMSInspector.DB.conn.createStatement(sql);
-            if (WMSInspector.Library.legacyCode){
-                statement.params.id = serviceId;
-            } else {
-                var params = statement.newBindingParamsArray();
-                var bp = params.newBindingParams();
 
-                bp.bindByName("id", serviceId);
-                params.addParams(bp);
-                statement.bindParameters(params);
-            }
+            WMSInspector.DB.bindParameter(statement, "id", serviceId);
 
             statement.executeAsync({
                 handleError: function(error) {
@@ -346,16 +318,9 @@ WMSInspector.Library = {
                         let tagExists = false;
                         let selectSql = "SELECT id FROM tags WHERE title = :tag" + i;
                         let selectStatement = WMSInspector.DB.conn.createStatement(selectSql);
-                        if (WMSInspector.Library.legacyCode){
-                            selectStatement.params["tag"+i] = tags[i];
-                        } else {
-                            let params = selectStatement.newBindingParamsArray();
-                            let bp = params.newBindingParams();
 
-                            bp.bindByName("tag"+i, tags[i]);
-                            params.addParams(bp);
-                            selectStatement.bindParameters(params);
-                        }
+                        WMSInspector.DB.bindParameter(selectStatement, "tag"+i, tags[i]);
+
                         try {
                             
                             while (selectStatement.step()) {
@@ -370,17 +335,11 @@ WMSInspector.Library = {
                                 //Tag does not exist
                                 let insertSql = "INSERT INTO tags (title) VALUES (:tag" + i+")";
                                 let insertStatement = WMSInspector.DB.conn.createStatement(insertSql);
-                                if (WMSInspector.Library.legacyCode){
-                                    insertStatement.params["tag"+i] = tags[i];
-                                } else {
-                                    var params = insertStatement.newBindingParamsArray();
-                                    var bp = params.newBindingParams();
 
-                                    bp.bindByName("tag"+i, tags[i]);
-                                    params.addParams(bp);
-                                    insertStatement.bindParameters(params);
-                                }
+                                WMSInspector.DB.bindParameter(insertStatement, "tag"+i, tags[i]);
+
                                 insertStatement.execute();
+                                
                                 //Get the id of the last inserted tag
                                 tagIds.push(WMSInspector.DB.conn.lastInsertRowID);
                             }
@@ -391,12 +350,14 @@ WMSInspector.Library = {
                         //Insert records in the services-tags relationship table
                         var statements = [];
 
-                        if (WMSInspector.Library.legacyCode){
+                        if (WMSInspector.DB.legacyCode){
                             for (let i = 0; i < tagIds.length; i ++){
                                 let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";
                                 let statement = WMSInspector.DB.conn.createStatement(sql);
-                                statement.params["serviceid"] = serviceId;
-                                statement.params["tagid" + i] = tagIds[i];
+                                let params = {};
+                                params.serviceid = serviceId;
+                                params["tag"+i] = tags[i];
+                                WMSInspector.DB.bindParameters(statement,params);
 
                                 statements.push(statement);
                             }
@@ -566,40 +527,21 @@ WMSInspector.libraryQuery = function(params,callback){
             //Components.utils.reportError(this.sql);
 
             var statement = WMSInspector.DB.conn.createStatement(this.sql);
-
-            if (WMSInspector.Library.legacyCode){
-                // Asyncronous parameters binding is not supported in Firefox 3.5
-                // This code should be removed when support for Firefox 3.5 is dropped
-
-                if (text) statement.params.text = "%" + text + "%";
-
+            
+            if (text || filters.tags || filters.types){
+                var params = {};
+                if (text) params.text = "%" + text + "%";
                 if (filters.tags)
                     for (let i = 0; i < filters.tags.length; i++)
-                    statement.params["tag"+i] = filters.tags[i];
+                    params["tag"+i] = filters.tags[i];
 
                 if (filters.types)
                     for (let i = 0; i < filters.types.length; i++)
-                    statement.params["type"+i] = filters.types[i];
-  
-            } else {
-                var params = statement.newBindingParamsArray();
-                var bp = params.newBindingParams();
+                    params["type"+i] = filters.types[i];
 
-                if (text) bp.bindByName("text", "%" + text + "%");
-
-                if (filters.tags)
-                    for (let i = 0; i < filters.tags.length; i++)
-                    bp.bindByName("tag"+i, filters.tags[i]);
-
-                if (filters.types)
-                    for (let i = 0; i < filters.types.length; i++)
-                    bp.bindByName("type"+i, filters.types[i]);           
-
-                params.addParams(bp);
-
-                statement.bindParameters(params);
+                WMSInspector.DB.bindParameters(statement,params);
             }
-
+            
             this.results = [];
                
             var self = this;
