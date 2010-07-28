@@ -103,6 +103,10 @@
     display: inline;
 }
 
+#wiLibraryAddButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/library_add.png");
+}
+
 #wiLibraryDBError{
     margin: 30px;
 }
@@ -141,4 +145,8 @@ richlistboxitem:hover {
 .wiLibraryNoServicesFound{
    font-style: italic;
    margin-top: 30px;
+}
+
+#wiAddServiceTagsLabel{
+    font-style: italic
 }

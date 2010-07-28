@@ -22,7 +22,10 @@
     </stringbundleset>
 
     <hbox id="wiLibraryToolbox">
-                            
+        <toolbar id="wiLibraryToolbar" >
+            <toolbarbutton id="wiLibraryAddButton" label="&wmsinspector.library.addservice;" tooltiptext="&wmsinspector.library.addservice;" oncommand="WMSInspector.Library.openAddServiceDialog()" />
+        </toolbar>
+        
         <spacer flex="1"/>
         <textbox id="wiLibrarySearchFilter"
                clickSelectsAll="true"
@@ -43,12 +46,12 @@
             <hbox flex="1">
                 <hbox>
                     <label value="&wmsinspector.library.tags;" />
-                    <listbox id="wiLibraryTagsList" rows="2" style="height: 50px;">
+                    <listbox id="wiLibraryTagsList" rows="4">
 
                     </listbox>
                 </hbox>
 
-               <hbox align="start">
+                <hbox align="start">
 
                     <label value="&wmsinspector.library.servicetype;" />
                     <menulist id="wiLibraryServiceTypeList" style="width:7em">
@@ -65,7 +68,7 @@
                         <menulist id="wiLibraryOrderBy" style="min-width:10em;max-width:15em">
                             <menupopup>
                                 <menuitem value="creation_date" label="&wmsinspector.library.creationdate;"/>
-                                <menuitem value="title" label="&wmsinspector.library.title;"/>
+                                <menuitem value="title" label="&wmsinspector.library.servicetitle;"/>
                             </menupopup>
                         </menulist>
                     </hbox>

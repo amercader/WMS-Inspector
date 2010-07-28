@@ -28,57 +28,59 @@ WMSInspector.Library = {
 
         //Fetch lists with values from DB
         //When the last list is fetched, call the default query (all services)
-        this.fetchList("tags");
-        this.fetchList("types",this.search);
+        this.fetchList("tags",document.getElementById("wiLibraryTagsList"));
+        
+        //Add <All> option to service types list
+        var typesList = document.getElementById("wiLibraryServiceTypeList");
+        typesList.appendItem(WMSInspector.Utils.getString("wi_all"),0);
+        this.fetchList("types",typesList,this.search);
 
 
 
     },
 
-    fetchList: function(list,callback){
+    fetchList: function(type,list,callback){
+        if (!type || !list) return false;
+
         var sql;
-        var listElement;
-        if (list == "tags"){
-            sql = "SELECT title AS name FROM tags";
-            listElement = document.getElementById("wiLibraryTagsList");
-        } else if (list == "types"){
+        if (type == "tags"){
+            sql = "SELECT title AS name FROM tags ORDER BY title";
+        } else if (type == "types"){
             sql = "SELECT name FROM service_type";
-            listElement = document.getElementById("wiLibraryServiceTypeList");
         } else {
             return false;
         }
         var statement = WMSInspector.DB.conn.createStatement(sql);
         statement.executeAsync({
             handleResult: function(resultSet) {
-                if (list == "types")
-                    listElement.appendItem(WMSInspector.Utils.getString("wi_all"),0);
-
-
                 for (let row = resultSet.getNextRow();
                     row;
                     row = resultSet.getNextRow()) {
                             
                     let name = row.getResultByName("name");
-                    let element = listElement.appendItem(name,name);
-                    if (list == "tags")
+                    let element = list.appendItem(name,name);
+                    if (type == "tags")
                         element.setAttribute("type", "checkbox");
-
                 }
-         
             },
 
             handleError: function(error) {
-                Components.utils.reportError("WMSInspector - Error querying table (" + list + "): " + error.message);
+                Components.utils.reportError("WMSInspector - Error querying table (" + type + "): " + error.message);
             },
 
             handleCompletion: function(reason) {
-                if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
                     Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                if (list == "types")
-                    listElement.selectedIndex = 0;
+                    return false;
+                }
+                    
+                if (type == "types")
+                    list.selectedIndex = 0;
 
                 if (callback)
                     callback();
+
+                return true;
             }
         });
         return true;
@@ -112,8 +114,10 @@ WMSInspector.Library = {
 
         var params = new WMSInspector.libraryQueryParams(
             text,
-            {tags:(tags.length) ? tags : false,
-            types:type},
+            {
+                tags:(tags.length) ? tags : false,
+                types:type
+            },
             orderBy,
             direction);
 
@@ -121,7 +125,9 @@ WMSInspector.Library = {
     },
 
     searchTag: function(tag){
-        var params = new WMSInspector.libraryQueryParams(false,{tags:[tag]});
+        var params = new WMSInspector.libraryQueryParams(false,{
+            tags:[tag]
+        });
         this.search(params)
     },
 
@@ -143,7 +149,7 @@ WMSInspector.Library = {
         //Tags
         var list = document.getElementById("wiLibraryTagsList");
         for (let i = 0; i < list.getRowCount(); i++)
-            list.getItemAtIndex(i).setAttribute("checked",false);
+        list.getItemAtIndex(i).setAttribute("checked",false);
 
         //Service type
         document.getElementById("wiLibraryServiceTypeList").selectedIndex = 0;
@@ -215,6 +221,231 @@ WMSInspector.Library = {
             window.sizeToContent();
         }
         document.getElementById("wiLibraryAdvancedSearchLink").setAttribute("value",(value) ? WMSInspector.Utils.getString("wi_library_simplesearch") : WMSInspector.Utils.getString("wi_library_advancedsearch"));
+    },
+
+    openAddServiceDialog: function(id) {
+
+        var dialog = window.openDialog(
+            "chrome://wmsinspector/content/addServiceDialog.xul",
+            "wiAddServiceDialog",
+            "chrome,centerscreen",
+            id // If a service id provided, dialog will show in edit mode
+            );
+        dialog.focus();
+    },
+
+    //Service should be a WMSInspector.libraryService object
+    addService: function(service,callback){
+        try{
+            var sql = "INSERT INTO services \n\
+                        (title,url,version,favorite,creation_date,service_type_id) \n\
+                   VALUES \n\
+                        (:title,:url,:version,:favorite,strftime('%s','now'),(SELECT id FROM service_type WHERE name = :type))";
+
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+
+            if (this.legacyCode){
+                // Asyncronous parameters binding is not supported in Firefox 3.5
+                // This code should be removed when support for Firefox 3.5 is dropped
+
+                statement.params.title = service.title;
+                statement.params.url = service.URL;
+                statement.params.version = service.version;
+                statement.params.favorite = (service.favorite) ? "1" : "0";
+                statement.params.type = service.type;
+
+            } else {
+                var params = statement.newBindingParamsArray();
+                var bp = params.newBindingParams();
+
+                bp.bindByName("title", service.title);
+                bp.bindByName("url", service.URL);
+                bp.bindByName("version", service.version);
+                bp.bindByName("favorite", (service.favorite) ? "1" : "0");
+                bp.bindByName("type", service.type);
+
+
+                params.addParams(bp);
+
+                statement.bindParameters(params);
+            }
+            statement.executeAsync({
+                handleResult: function(resultSet) {
+
+                },
+
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error inserting a new service: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+
+                    var serviceId = WMSInspector.DB.conn.lastInsertRowID;
+                    if (service.tags) {
+                        WMSInspector.Library.setTags(serviceId,service.tags,callback);
+                    } else {
+                        if (callback) callback();
+                    }
+
+                    return true;
+                }
+            });
+
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
+    },
+    
+    /*
+     * 1 - Delete previous tags from service
+     * 2 - For each tag, check if exists
+     *      - If exists, save the id
+     *      - If not, insert tag and get new id
+     * 3 - Insert records in rel_services_tag table
+     */
+    setTags: function(serviceId,tags,callback){
+
+        try {
+            if (typeof(serviceId) != "number" || tags.length < 0) return false;
+
+            //Delete previous tags from service
+            var sql = "DELETE FROM rel_services_tags WHERE services_id = :id";
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+            if (WMSInspector.Library.legacyCode){
+                statement.params.id = serviceId;
+            } else {
+                var params = statement.newBindingParamsArray();
+                var bp = params.newBindingParams();
+
+                bp.bindByName("id", serviceId);
+                params.addParams(bp);
+                statement.bindParameters(params);
+            }
+
+            statement.executeAsync({
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error deleting records from the rel_services_tags table: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+
+                    //Check if tags exist and insert new ones if not
+                    var tagIds = [];
+
+                    for (let i = 0; i < tags.length; i ++){
+                        let tagExists = false;
+                        let selectSql = "SELECT id FROM tags WHERE title = :tag" + i;
+                        let selectStatement = WMSInspector.DB.conn.createStatement(selectSql);
+                        if (WMSInspector.Library.legacyCode){
+                            selectStatement.params["tag"+i] = tags[i];
+                        } else {
+                            let params = selectStatement.newBindingParamsArray();
+                            let bp = params.newBindingParams();
+
+                            bp.bindByName("tag"+i, tags[i]);
+                            params.addParams(bp);
+                            selectStatement.bindParameters(params);
+                        }
+                        try {
+                            
+                            while (selectStatement.step()) {
+                                //Tag already exists
+                                tagExists = true;
+                                tagIds.push(selectStatement.row.id)
+                            }
+                        }
+                        finally {
+                            selectStatement.reset();
+                            if (!tagExists){
+                                //Tag does not exist
+                                let insertSql = "INSERT INTO tags (title) VALUES (:tag" + i+")";
+                                let insertStatement = WMSInspector.DB.conn.createStatement(insertSql);
+                                if (WMSInspector.Library.legacyCode){
+                                    insertStatement.params["tag"+i] = tags[i];
+                                } else {
+                                    var params = insertStatement.newBindingParamsArray();
+                                    var bp = params.newBindingParams();
+
+                                    bp.bindByName("tag"+i, tags[i]);
+                                    params.addParams(bp);
+                                    insertStatement.bindParameters(params);
+                                }
+                                insertStatement.execute();
+                                //Get the id of the last inserted tag
+                                tagIds.push(WMSInspector.DB.conn.lastInsertRowID);
+                            }
+                        }
+                    }
+
+                    if (tagIds.length){
+                        //Insert records in the services-tags relationship table
+                        var statements = [];
+
+                        if (WMSInspector.Library.legacyCode){
+                            for (let i = 0; i < tagIds.length; i ++){
+                                let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";
+                                let statement = WMSInspector.DB.conn.createStatement(sql);
+                                statement.params["serviceid"] = serviceId;
+                                statement.params["tagid" + i] = tagIds[i];
+
+                                statements.push(statement);
+                            }
+                        } else {
+                            let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid)";
+                            let statement = WMSInspector.DB.conn.createStatement(sql);
+                            let params = statement.newBindingParamsArray();
+                            for (let i = 0; i < tagIds.length; i ++){
+                                bp = params.newBindingParams();
+                                bp.bindByName("serviceid", serviceId);
+                                bp.bindByName("tagid", tagIds[i]);
+                                params.addParams(bp);
+                            }
+                            statement.bindParameters(params);
+
+                            statements.push(statement);
+
+                        }
+
+
+                        WMSInspector.DB.conn.executeAsync(
+                            statements,
+                            statements.length,
+                            {
+                                handleError: function(error) {
+                                    Components.utils.reportError("WMSInspector - Error inserting records in the rel_services_tags table: " + error.message);
+                                },
+
+                                handleCompletion: function(reason) {
+                                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                                        return false;
+                                    }
+
+                                    if (callback) callback();
+
+                                    return true;
+                                }
+                            });
+                    }
+                    return true;
+                }
+            });
+            return true;
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
     }
 }
 
@@ -222,6 +453,7 @@ WMSInspector.libraryService = function(){
     this.id = "";
     this.title = "";
     this.URL = "";
+    this.version = "";
     this.favorite = false;
     this.type = "";
     this.tags = [];

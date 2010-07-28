@@ -67,11 +67,18 @@
 <!ENTITY wmsinspector.library.servicetype "Tipo de servicio">
 <!ENTITY wmsinspector.library.orderby "Ordenar por">
 <!ENTITY wmsinspector.library.creationdate "Fecha de creaci&#243;n">
-<!ENTITY wmsinspector.library.title "T&#237;tulo">
+<!ENTITY wmsinspector.library.servicetitle "T&#237;tulo">
 <!ENTITY wmsinspector.library.ascending "Ascendente">
 <!ENTITY wmsinspector.library.descending "Descendente">
 <!ENTITY wmsinspector.library.favoritesfirst "Favoritos primero">
 <!ENTITY wmsinspector.library.dberror "Error conectando a la base de datos">
+<!ENTITY wmsinspector.library.addservice "A&#241;adir servicio">
+
+<!-- AddService dialog -->
+<!ENTITY wmsinspector.addservice.title "A&#241;adir servicio a la Biblioteca">
+<!ENTITY wmsinspector.addservice.url "URL del servicio">
+<!ENTITY wmsinspector.addservice.tagsinstructions "Introduza nuevas etiquetas separadas por comas o seleccione entre las existentes en la lista inferior.">
+<!ENTITY wmsinspector.addservice.favorite "Favorito">
 
 <!-- Default XSL templates for GetCapabilities reports -->
 

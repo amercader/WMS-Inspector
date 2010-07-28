@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<dialog xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="wiAddServiceDialog"
+        title="&wmsinspector.addservice.title;"
+        onload="WMSInspector.AddServiceDialog.init();"
+        buttons="accept,cancel"
+        defaultButton="accept"
+        width="380"
+        height="380"
+>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/addServiceDialog.js"/>
+	
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
+    </stringbundleset>
+
+    <groupbox>
+        <label value="&wmsinspector.addservice.url;" />
+        <textbox id="wiAddServiceURL" flex="1" />
+        <label value="&wmsinspector.library.servicetitle;" />
+        <textbox id="wiAddServiceTitle" flex="1" />
+        <hbox align="center">
+            <label value="&wmsinspector.library.servicetype;"/>
+            <menulist id="wiAddServiceTypeMenu">
+                <menupopup>
+                </menupopup>
+            </menulist>
+            <label value="&wmsinspector.common.version;" />
+            <menulist id="wiAddServiceVersionMenu">
+                <menupopup>
+                </menupopup>
+            </menulist>
+        </hbox>
+    </groupbox>
+
+
+    <groupbox>
+        <caption label="&wmsinspector.library.tags;"/>
+        <label id="wiAddServiceTagsLabel">&wmsinspector.addservice.tagsinstructions;</label>
+        <textbox id="wiAddServiceTags" />
+        <listbox id="wiAddServiceTagsList" rows="3" onclick="WMSInspector.AddServiceDialog.redrawTagTextBox()" >
+
+        </listbox>
+        <checkbox id="wiAddServiceFavorite" label="&wmsinspector.addservice.favorite;" />
+    </groupbox>
+</dialog>

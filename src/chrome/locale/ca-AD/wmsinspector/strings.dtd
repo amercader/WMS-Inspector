@@ -67,11 +67,18 @@
 <!ENTITY wmsinspector.library.servicetype "Tipus de servei">
 <!ENTITY wmsinspector.library.orderby "Ordenar per">
 <!ENTITY wmsinspector.library.creationdate "Data de creaci&#243;">
-<!ENTITY wmsinspector.library.title "T&#237;tol">
+<!ENTITY wmsinspector.library.servicetitle "T&#237;tol">
 <!ENTITY wmsinspector.library.ascending "Ascendent">
 <!ENTITY wmsinspector.library.descending "Descendent">
 <!ENTITY wmsinspector.library.favoritesfirst "Favorits primer">
 <!ENTITY wmsinspector.library.dberror "Error connectant a la base de dades">
+<!ENTITY wmsinspector.library.addservice "Afegir servei">
+
+<!-- AddService dialog -->
+<!ENTITY wmsinspector.addservice.title "Afegir servei a la Biblioteca">
+<!ENTITY wmsinspector.addservice.url "URL del servei">
+<!ENTITY wmsinspector.addservice.tagsinstructions "Introdu&#239;u noves etiquetes separades per comes o seleccioneu-ne de les existents a la llista inferior.">
+<!ENTITY wmsinspector.addservice.favorite "Favorit">
 
 <!-- Default XSL templates for GetCapabilities reports -->
 
