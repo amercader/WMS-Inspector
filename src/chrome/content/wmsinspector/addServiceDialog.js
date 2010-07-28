@@ -9,6 +9,8 @@ WMSInspector.AddServiceDialog = {
     init: function(){
         this.prefs = WMSInspector.Utils.getPrefs();
 
+        window.opener.WMSInspector.DB.checkDB();
+
         document.documentElement.getButton("accept").addEventListener(
             "command",
             WMSInspector.AddServiceDialog.onAccept, false);
@@ -18,13 +20,10 @@ WMSInspector.AddServiceDialog = {
         if (!this.serviceId){
             //If no id provided, open dialog in add mode
 
-            /*  TODO:existing url, version, type
-                if (window.arguments){
-                    var server = window.arguments[0];
-                    var version = window.arguments[1];
-                }
-            */
-            version = false;
+            var version = false;
+
+            if (window.arguments[1]) document.getElementById("wiAddServiceURL").value = window.arguments[1];
+            if (window.arguments[2]) version = window.arguments[2];
 
             this.Library.fetchList("tags",document.getElementById("wiAddServiceTagsList"));
             this.Library.fetchList("types",document.getElementById("wiAddServiceTypeMenu"));

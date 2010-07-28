@@ -1,10 +1,10 @@
 
 window.addEventListener("load",  function(){
     WMSInspector.Overlay.init()
-    }, false);
+}, false);
 window.addEventListener("unload", function(){
     WMSInspector.Overlay.unload()
-    }, false);
+}, false);
 
 
 WMSInspector.Overlay = {
@@ -84,8 +84,8 @@ WMSInspector.Overlay = {
                 WMSInspector.DB.checkDB();
 
             } else {
-               // No first run nor upgrade
-            }
+        // No first run nor upgrade
+        }
 
         }
     },
@@ -357,6 +357,8 @@ WMSInspector.Overlay = {
         var cellText = this.currentNameColumnText;
         var cellValues = this.currentNameColumnValues;
         if (!cellText) return;
+
+        var serviceImage;
         switch (mode){
             case 1:
                 //Copy to clipboard
@@ -384,7 +386,7 @@ WMSInspector.Overlay = {
                 break;
             case 5:
                 //Delete parameter
-                var serviceImage = this.getServiceImage(cellValues[2]);
+                serviceImage = this.getServiceImage(cellValues[2]);
                 if(serviceImage.removeParam(cellText) !== false){
 
                     var newURL = serviceImage.updateSrc();
@@ -399,6 +401,17 @@ WMSInspector.Overlay = {
                     this.showURLInPreviewBrowser(newURL);
 
                 }
+                break;
+            case 6:
+                //Add service to Library
+                serviceImage = this.getServiceImage(cellValues[2]);
+                let version = false;
+                if (cellValues[1] == "2"){
+                    let param = serviceImage.getParamByName("VERSION");
+                    if (param) version = param.value;
+                }
+                WMSInspector.Overlay.openAddServiceDialog(false,serviceImage.server,version);
+
                 break;
         }
     },
@@ -675,7 +688,7 @@ WMSInspector.Overlay = {
     },
 
     getExtensionFromMimeType: function(mimeType){
-        Components.utils.reportError(mimeType);
+        
         if (mimeType.indexOf(";") != -1){
             mimeType = mimeType.substring(0,mimeType.indexOf(";"))
         }
@@ -752,35 +765,43 @@ WMSInspector.Overlay = {
     checkSelection: function(){
         var enabled = (getBrowserSelection() != "");
         document.getElementById("wiContextGetCapabilitesReport").setAttribute("disabled", !enabled );
+        document.getElementById("wiContextAddToLibrary").setAttribute("disabled", !enabled );
     },
 
-    checkGetCapabilities: function(url){
+    doBrowserContextMenuAction: function(mode){
+        if (mode == 1 || mode == 2){
+            var url = getBrowserSelection();
 
-        if (url == null){
-            url = getBrowserSelection();
-        }
-
-        if (!WMSInspector.Utils.checkURL(url)){
-            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
-            return false;
-
-        } else {
-
-            if (url.substring(url.length-1) != "?" && url.indexOf("?") == -1 ) {
-                url += "?";
-            } else if (url.substring(url.length-1) != "?" && url.indexOf("?") !== -1 ) {
-                url += "&";
+            if (!WMSInspector.Utils.checkURL(url)){
+                WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
+                return false;
             }
-
-            url += "REQUEST=GetCapabilities"
-            + "&SERVICE=WMS"
-            + "&VERSION=1.1.1";
-
-            
-            WMSInspector.Overlay.requestGetCapabilities(url);
-
-            return true;
         }
+
+        switch (mode){
+            case 1:
+                //Request getCapabilities report
+                if (url.substring(url.length-1) != "?" && url.indexOf("?") == -1 ) {
+                    url += "?";
+                } else if (url.substring(url.length-1) != "?" && url.indexOf("?") !== -1 ) {
+                    url += "&";
+                }
+
+                url += "REQUEST=GetCapabilities"
+                + "&SERVICE=WMS"
+                + "&VERSION=1.1.1";
+
+
+                WMSInspector.Overlay.requestGetCapabilities(url);
+                break;
+            case 2:
+                //Open Add service to Library dialog
+                WMSInspector.Overlay.openAddServiceDialog(false,url);
+                break;
+        }
+
+        return true;
+        
     },
 
     openOptionsDialog: function() {
@@ -794,6 +815,18 @@ WMSInspector.Overlay = {
         } else {
             this.libraryWindow.focus();
         }
+    },
+
+    openAddServiceDialog: function(id,url,version){
+        var dialog = window.openDialog(
+            "chrome://wmsinspector/content/addServiceDialog.xul",
+            "wiAddServiceDialog",
+            "chrome,centerscreen",
+            id, // If a service id provided, dialog will show in edit mode
+            url,
+            version
+            );
+        dialog.focus();
     }
 
 }

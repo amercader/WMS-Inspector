@@ -9,6 +9,7 @@
     <script type="application/x-javascript" src="chrome://wmsinspector/content/requests.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
 
@@ -20,8 +21,14 @@
     <popup id="contentAreaContextMenu">
         <menu label="&wmsinspector.common.name;" id="wiContextMenu" insertafter="devToolsSeparator">
             <menupopup id="wiContextPopUp" onpopupshowing="WMSInspector.Overlay.checkSelection()">
-                <menuitem id="wiContextGetCapabilitesReport" label="&wmsinspector.context.capabilitiesreport;"
-                          oncommand="WMSInspector.Overlay.checkGetCapabilities()"/>
+                <menuitem id="wiContextGetCapabilitesReport"
+                          label="&wmsinspector.context.capabilitiesreport;"
+                          oncommand="WMSInspector.Overlay.doBrowserContextMenuAction(1)"/>
+                <menuitem id="wiContextAddToLibrary"
+                          label="&wmsinspector.addservice.title;"
+                          oncommand="WMSInspector.Overlay.doBrowserContextMenuAction(2);"
+                          class="menuitem-iconic"
+                          image="chrome://wmsinspector/skin/icons/library_add.png" />
             </menupopup>
         </menu>
     </popup>
@@ -88,7 +95,12 @@
                                   oncommand="WMSInspector.Overlay.doContextMenuAction(1,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/copy.png" />
-
+                        <menuseparator/>
+                        <menuitem allowevents="true"
+                                  label="&wmsinspector.addservice.title;"
+                                  oncommand="WMSInspector.Overlay.doContextMenuAction(6,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/library_add.png" />
                     </menupopup>
 
                     <menupopup id="gtTreeContextMenuURL2" >
@@ -101,6 +113,12 @@
                                   oncommand="WMSInspector.Overlay.doContextMenuAction(2,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/newtab.png" />
+                        <menuseparator/>
+                        <menuitem allowevents="true"
+                                  label="&wmsinspector.addservice.title;"
+                                  oncommand="WMSInspector.Overlay.doContextMenuAction(6,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/library_add.png" />
                     </menupopup>
 
                     <menupopup id="gtTreeContextMenuURL3">
