@@ -6,6 +6,8 @@ WMSInspector.Library = {
     
     services: [],
 
+    selectedServiceId: false,
+
     init: function(){
 
         //this.prefs = WMSInspector.Utils.getPrefs();
@@ -34,6 +36,26 @@ WMSInspector.Library = {
 
 
 
+    },
+
+    onContextMenu: function(event){
+        WMSInspector.Library.selectedServiceId = event.target.serviceId;
+    },
+
+    doContextMenuAction: function(mode,event){
+        if (WMSInspector.Library.selectedServiceId === false) return false;
+        switch (mode){
+            case 1:
+                //Copy URL
+            case 2:
+                //Edit service
+                WMSInspector.Library.openAddServiceDialog(WMSInspector.Library.selectedServiceId);
+                break
+            case 3:
+                //Delete service
+                break
+        }
+        return true;
     },
 
     fetchList: function(type,list,callback){
@@ -195,6 +217,9 @@ WMSInspector.Library = {
         item.setAttribute("title", service.title);
         item.setAttribute("type", service.type);
         item.setAttribute("URL", service.URL);
+        item.setAttribute("context", "wiLibraryContextMenu");
+
+        item.addEventListener("contextmenu",WMSInspector.Library.onContextMenu,true);
         
         //Without the timeout, the created item methods are not found
         setTimeout(function(){
@@ -226,7 +251,7 @@ WMSInspector.Library = {
             "chrome://wmsinspector/content/addServiceDialog.xul",
             "wiAddServiceDialog",
             "chrome,centerscreen",
-            id // If a service id provided, dialog will show in edit mode
+            id // If a service id provided, dialog will be shown in edit mode
             );
         dialog.focus();
     },
@@ -250,10 +275,7 @@ WMSInspector.Library = {
             });
 
             statement.executeAsync({
-                handleResult: function(resultSet) {
-
-                },
-
+                
                 handleError: function(error) {
                     Components.utils.reportError("WMSInspector - Error inserting a new service: " + error.message);
                 },
@@ -281,7 +303,76 @@ WMSInspector.Library = {
             return false;
         }
     },
-    
+
+    //Service should be a WMSInspector.libraryService object
+    updateService: function(service,callback){
+        try{
+
+            //We will only update properties defined in the service object provided
+            var sql = "UPDATE services";
+            var sqlUpdate = [];
+            var params = {};
+            if (service.title) {
+                sqlUpdate.push(" title = :title");
+                params.title = service.title
+            }
+            if (service.URL) {
+                sqlUpdate.push(" url = :url");
+                params.url = service.URL
+            }
+            if (service.version) {
+                sqlUpdate.push(" version = :version");
+                params.version = service.version
+            }
+            if (service.type) {
+                sqlUpdate.push(" service_type_id = (SELECT id FROM service_type WHERE name = :type)");
+                params.type = service.type
+            }
+            if (typeof(service.favorite) == "boolean") {
+                sqlUpdate.push(" favorite = :favorite");
+                params.favorite = (service.favorite) ? "1" :"0";
+            }
+
+            if (sqlUpdate.length == 0) return false;
+
+            sqlUpdate.push(" update_date = strftime('%s','now')");
+
+            sql += " SET " + sqlUpdate.join(",") + " WHERE id = :id";
+            params.id = service.id;
+
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+
+            WMSInspector.DB.bindParameters(statement,params);
+
+            statement.executeAsync({
+
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error inserting a new service: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+                    if (service.tags.length) {
+                        WMSInspector.Library.setTags(service.id,service.tags,callback);
+                    } else {
+                        if (callback) callback();
+                    }
+
+                    return true;
+                }
+            });
+            
+            return true;
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
+    },
+
     /*
      * 1 - Delete previous tags from service
      * 2 - For each tag, check if exists
@@ -408,6 +499,8 @@ WMSInspector.Library = {
             return false;
         }
     }
+
+
 }
 
 WMSInspector.libraryService = function(){
@@ -448,7 +541,7 @@ WMSInspector.libraryQuery = function(params,callback){
 
         this.sql = "";
         
-        this.sql += "SELECT s.id AS id,s.title AS title,s.url AS url,s.favorite AS favorite,s.type AS type,s.tags AS tags";
+        this.sql += "SELECT s.id AS id,s.title AS title,s.url AS url,s.favorite AS favorite,s.type AS type,s.version AS version,s.tags AS tags";
 
         if (filters.tags){
             //Are we filtering by tags? If so, things are not so easy.
@@ -483,6 +576,16 @@ WMSInspector.libraryQuery = function(params,callback){
                 }
                 if (filters.types.length > 1) sqlTypes = "(" + sqlTypes + ")";
                 sqlFilters.push(sqlTypes);
+            }
+
+            if (filters.ids){
+                var sqlIds = "";
+                for (let i = 0; i < filters.ids.length; i++){
+                    if (i > 0) sqlIds += " OR";
+                    sqlIds += " s.id = :id" + i;
+                }
+                if (filters.ids.length > 1) sqlIds = "(" + sqlIds + ")";
+                sqlFilters.push(sqlIds);
             }
 
             if (sqlFilters.length) sqlWhere += (sqlWhere.length) ? " AND " + sqlFilters.join(" AND ") : sqlFilters.join(" AND ");
@@ -528,7 +631,7 @@ WMSInspector.libraryQuery = function(params,callback){
 
             var statement = WMSInspector.DB.conn.createStatement(this.sql);
             
-            if (text || filters.tags || filters.types){
+            if (text || filters.tags || filters.types || filters.ids){
                 var params = {};
                 if (text) params.text = "%" + text + "%";
                 if (filters.tags)
@@ -538,6 +641,10 @@ WMSInspector.libraryQuery = function(params,callback){
                 if (filters.types)
                     for (let i = 0; i < filters.types.length; i++)
                     params["type"+i] = filters.types[i];
+
+                if (filters.ids)
+                    for (let i = 0; i < filters.ids.length; i++)
+                    params["id"+i] = filters.ids[i];
 
                 WMSInspector.DB.bindParameters(statement,params);
             }
@@ -559,8 +666,10 @@ WMSInspector.libraryQuery = function(params,callback){
                         service.URL = row.getResultByName("url");
                         service.favorite = (row.getResultByName("favorite") == 1);
                         service.type = row.getResultByName("type");
+                        service.version = row.getResultByName("version");
                         let tags = row.getResultByName("tags");
-                        if (tags) service.tags = tags.split(",");
+                        if (tags) service.tags = tags.split(",").sort();
+                        
 
                         self.results.push(service);
                     }

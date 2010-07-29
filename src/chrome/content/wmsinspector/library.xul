@@ -94,7 +94,7 @@
         <label value="&wmsinspector.library.dberror;" />
     </hbox>
 
-    <richlistbox id="wiServicesListbox" flex="1" context="wiLibraryContextMenu">
+    <richlistbox id="wiServicesListbox" flex="1">
     </richlistbox>
 
     <menupopup id="wiLibraryContextMenu">
@@ -104,7 +104,7 @@
                                   image="chrome://wmsinspector/skin/icons/copy.png" />
         <menuseparator/>
         <menuitem label="&wmsinspector.common.edit;"
-                                  oncommand=""
+                                  oncommand="WMSInspector.Library.doContextMenuAction(2,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/edit.png" />
         <menuitem label="&wmsinspector.common.delete;"
