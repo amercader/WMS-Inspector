@@ -51,7 +51,8 @@ CREATE VIEW v_services
 		s.favorite,
 		group_concat(t.title) AS tags,
 		s.creation_date,
-		st.name AS type
+		st.name AS type,
+                s.version
 	FROM services s JOIN service_type st 
 			ON s.service_type_id = st.id 
 		LEFT JOIN rel_services_tags r 
