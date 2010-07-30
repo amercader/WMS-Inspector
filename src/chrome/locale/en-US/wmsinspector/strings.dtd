@@ -58,6 +58,7 @@
 <!ENTITY wmsinspector.options.chooseaneditor "Choose an editor">
 <!ENTITY wmsinspector.options.appearance "Appearance">
 <!ENTITY wmsinspector.options.hidecontextmenu "Hide the context menu">
+<!ENTITY wmsinspector.options.libraryconfirmdelete "Ask before deleting services">
 
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Library">

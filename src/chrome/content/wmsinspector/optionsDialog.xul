@@ -47,7 +47,12 @@
 
         </vbox>
     </groupbox>
-
+    <groupbox>
+        <caption label="&wmsinspector.library.title;"/>
+        <vbox pack="center" flex="1">
+            <checkbox id="wiLibraryConfirmBeforeDelete" label="&wmsinspector.options.libraryconfirmdelete;"/>
+        </vbox>
+    </groupbox>
 
 
 

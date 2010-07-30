@@ -108,15 +108,9 @@
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/edit.png" />
         <menuitem label="&wmsinspector.common.delete;"
-                                  oncommand=""
+                                  oncommand="WMSInspector.Library.doContextMenuAction(3,event)"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/delete.png" />
-        <menuseparator/>
-        <menuitem label="&wmsinspector.common.add;"
-                                  oncommand=""
-                                  class="menuitem-iconic"
-                                  image="chrome://wmsinspector/skin/icons/add.png" />
-
 
     </menupopup>
 </window>

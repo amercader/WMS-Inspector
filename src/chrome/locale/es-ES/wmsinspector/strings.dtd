@@ -58,6 +58,7 @@
 <!ENTITY wmsinspector.options.chooseaneditor "Escoje un editor">
 <!ENTITY wmsinspector.options.appearance "Apariencia">
 <!ENTITY wmsinspector.options.hidecontextmenu "Esconde el men&#250; contextual">
+<!ENTITY wmsinspector.options.libraryconfirmdelete "Confirma antes de eliminar servicios">
 
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Biblioteca">
@@ -77,7 +78,7 @@
 <!-- AddService dialog -->
 <!ENTITY wmsinspector.addservice.title "A&#241;adir servicio a la Biblioteca">
 <!ENTITY wmsinspector.addservice.url "URL del servicio">
-<!ENTITY wmsinspector.addservice.tagsinstructions "Introduza nuevas etiquetas separadas por comas o seleccione entre las existentes en la lista inferior.">
+<!ENTITY wmsinspector.addservice.tagsinstructions "Introduzca nuevas etiquetas separadas por comas o seleccione algunas de las existentes en la lista inferior.">
 <!ENTITY wmsinspector.addservice.favorite "Favorito">
 
 <!-- Default XSL templates for GetCapabilities reports -->

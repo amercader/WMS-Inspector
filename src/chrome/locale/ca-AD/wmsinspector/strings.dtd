@@ -58,6 +58,7 @@
 <!ENTITY wmsinspector.options.chooseaneditor "Escolliu un editor">
 <!ENTITY wmsinspector.options.appearance "Aparen&#231;a">
 <!ENTITY wmsinspector.options.hidecontextmenu "Amaga el men&#250; contextual">
+<!ENTITY wmsinspector.options.libraryconfirmdelete "Confirma abans d'eliminar serveis">
 
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Biblioteca">

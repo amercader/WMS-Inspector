@@ -1,6 +1,6 @@
 WMSInspector.Library = {
     
-    //prefs: null,
+    prefs: null,
 
     list: null,
     
@@ -8,12 +8,14 @@ WMSInspector.Library = {
 
     selectedServiceId: false,
 
+    confirmBeforeDelete: true,
+
     init: function(){
 
-        //this.prefs = WMSInspector.Utils.getPrefs();
+        this.prefs = WMSInspector.Utils.getPrefs();
+        WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
         
-        //Set values from current preferences values
-        //var versions = this.prefs.getCharPref("wmsversions").split("|");
+        this.confirmBeforeDelete = this.prefs.getBoolPref("libraryconfirmbeforedelete");
 
         this.list = document.getElementById("wiServicesListbox");
 
@@ -53,11 +55,43 @@ WMSInspector.Library = {
                 break
             case 3:
                 //Delete service
+                var deleteService = true;
+
+                if (WMSInspector.Library.confirmBeforeDelete){
+                    deleteService = false;
+                    var check = {value:false};
+                    var prompt = WMSInspector.Utils.showConfirm(WMSInspector.Utils.getString("wi_library_confirmdelete"),
+                                                                false,
+                                                                WMSInspector.Utils.getString("wi_dontaskagain"),
+                                                                check);
+                    if (prompt){
+                        if (check.value === true){
+                            WMSInspector.Library.confirmBeforeDelete = false;
+                            //Save preference
+                            WMSInspector.Library.prefs.setBoolPref("libraryconfirmbeforedelete",false);
+                        }
+                        deleteService = true;
+                    }
+                }
+
+                if (deleteService) WMSInspector.Library.deleteService(WMSInspector.Library.selectedServiceId,WMSInspector.Library.search);
+
                 break
         }
         return true;
     },
 
+    observe: function(subject,topic,data){
+
+        if (topic == "nsPref:changed" && data == "libraryconfirmbeforedelete"){
+            this.confirmBeforeDelete = this.prefs.getBoolPref("libraryconfirmbeforedelete");
+        }
+    },
+
+    shutdown: function(){
+        this.prefs.removeObserver("", this);
+    },
+    
     fetchList: function(type,list,callback){
         if (!type || !list) return false;
 
@@ -347,7 +381,7 @@ WMSInspector.Library = {
             statement.executeAsync({
 
                 handleError: function(error) {
-                    Components.utils.reportError("WMSInspector - Error inserting a new service: " + error.message);
+                    Components.utils.reportError("WMSInspector - Error updating service: " + error.message);
                 },
 
                 handleCompletion: function(reason) {
@@ -498,8 +532,43 @@ WMSInspector.Library = {
             Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
             return false;
         }
-    }
+    },
 
+    deleteService: function(id,callback){
+        try{
+            if (typeof(id) != "number") return false;
+
+            var sql = "DELETE FROM services WHERE id = :id";
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+
+            WMSInspector.DB.bindParameters(statement,{id:id});
+
+            statement.executeAsync({
+
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error deleting service: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+                    // The services_after_delete_trigger trigger will deal with the service's tags
+
+                    if (callback) callback();
+                    
+                    return true;
+                }
+            });
+
+            return true;
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
+    }
 
 }
 
