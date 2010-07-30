@@ -65,11 +65,38 @@ WMSInspector.Utils = {
         if (!c || !i) return null;
         return c.createInstance(i);
     },
-    showAlert: function(text,title){
-        var prompts = this.getService("@mozilla.org/embedcomp/prompt-service;1",Components.interfaces.nsIPromptService);
-        title = title || this.getString("wi_extension_name")
-        prompts.alert(null, title, text);
 
+    showAlert: function(text,title,checkText,check){
+        if (checkText && check){
+            return this.showPrompt("alertCheck", text, title, checkText, check);
+        } else {
+            return this.showPrompt("alert", text, title);
+        }
+    },
+
+    showConfirm: function(text,title,checkText,check){
+        if (checkText && check){
+            return this.showPrompt("confirmCheck", text, title, checkText, check);
+        } else {
+            return this.showPrompt("confirm", text, title);
+        }
+    },
+    // Helper functions showAlert and showConfirm should be used instead of this one
+    // See https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIPromptService
+    showPrompt: function(type,text,title,checkText,check){
+        var prompts = this.getService("@mozilla.org/embedcomp/prompt-service;1","nsIPromptService");
+        title = title || this.getString("wi_extension_name");
+        var prompt = null;
+        if (type == "alert"){
+            prompt = prompts.alert(null, title, text);
+        } else if (type == "alertCheck"){
+            prompt = prompts.alertCheck(null, title, text, checkText, check);
+        } else if (type == "confirm"){
+            prompt = prompts.confirm(null, title, text);
+        } else if (type == "confirmCheck"){
+            prompt = prompts.confirmCheck(null, title, text, checkText, check);
+        }
+        return prompt;
     },
     checkURL: function(URL){
         if (URL.length == 0) return false;
