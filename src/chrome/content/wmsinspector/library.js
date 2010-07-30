@@ -6,7 +6,8 @@ WMSInspector.Library = {
     
     services: [],
 
-    selectedServiceId: false,
+    //selectedServiceId: false,
+    selectedService: null,
 
     confirmBeforeDelete: true,
 
@@ -39,19 +40,30 @@ WMSInspector.Library = {
 
 
     },
+    setSelectedService: function(element){
+        WMSInspector.Library.selectedService = new WMSInspector.libraryService();
+        WMSInspector.Library.selectedService.id = element.serviceId;
+        WMSInspector.Library.selectedService.URL = element.serviceURL;
 
+        return WMSInspector.Library.selectedService;
+    },
     onContextMenu: function(event){
-        WMSInspector.Library.selectedServiceId = event.target.serviceId;
+        WMSInspector.Library.setSelectedService(event.target);
+        //WMSInspector.Library.selectedServiceId = event.target.serviceId;
     },
 
     doContextMenuAction: function(mode,event){
-        if (WMSInspector.Library.selectedServiceId === false) return false;
+        if (!WMSInspector.Library.selectedService) return false;
         switch (mode){
             case 1:
                 //Copy URL
+                    var out = WMSInspector.Library.selectedService.URL;
+                    var clipboardService = WMSInspector.Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
+                    if (out && clipboardService) clipboardService.copyString(out);
+                break;
             case 2:
                 //Edit service
-                WMSInspector.Library.openAddServiceDialog(WMSInspector.Library.selectedServiceId);
+                WMSInspector.Library.openAddServiceDialog(WMSInspector.Library.selectedService.id);
                 break
             case 3:
                 //Delete service
@@ -74,7 +86,7 @@ WMSInspector.Library = {
                     }
                 }
 
-                if (deleteService) WMSInspector.Library.deleteService(WMSInspector.Library.selectedServiceId,WMSInspector.Library.search);
+                if (deleteService) WMSInspector.Library.deleteService(WMSInspector.Library.selectedService.id,WMSInspector.Library.search);
 
                 break
         }
@@ -247,7 +259,14 @@ WMSInspector.Library = {
     addServiceRow: function(service) {
         var item = document.createElement("richlistboxitem");
         item.setAttribute("class","libraryItem");
+        
+        /*
+         * Custom properties can be defined to avoid querying the DB when performing
+         * actions over the service (copy, getcapabilities...)
+         */
+
         item.serviceId = service.id;
+        item.serviceURL = service.URL;
         item.setAttribute("title", service.title);
         item.setAttribute("type", service.type);
         item.setAttribute("URL", service.URL);

@@ -18,6 +18,7 @@
 <!ENTITY wmsinspector.common.browser "Browser">
 <!ENTITY wmsinspector.common.refresh "Refresh">
 <!ENTITY wmsinspector.common.restore "Restore">
+<!ENTITY wmsinspector.common.copyurl "Copy URL">
 
 <!-- Index page -->
 <!ENTITY wmsinspector.index.welcome "Welcome to the WMS Inspector">

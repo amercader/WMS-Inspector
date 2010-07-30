@@ -98,8 +98,8 @@
     </richlistbox>
 
     <menupopup id="wiLibraryContextMenu">
-        <menuitem label="&wmsinspector.common.copy;"
-                                  oncommand=""
+        <menuitem label="&wmsinspector.common.copyurl;"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(1,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/copy.png" />
         <menuseparator/>

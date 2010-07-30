@@ -18,6 +18,7 @@
 <!ENTITY wmsinspector.common.browser "Navegador">
 <!ENTITY wmsinspector.common.refresh "Actualitza">
 <!ENTITY wmsinspector.common.restore "Restaura">
+<!ENTITY wmsinspector.common.copyurl "Copiar URL">
 
 <!-- Index page -->
 <!ENTITY wmsinspector.index.welcome "Benvinguts al WMS Inspector">

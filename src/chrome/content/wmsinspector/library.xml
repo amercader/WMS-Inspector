@@ -30,6 +30,7 @@
         
         <implementation>
             <field name="serviceId"/>
+            <field name="serviceURL"/>
 
             <method name="setFavorite">
                 <parameter name="value" />
