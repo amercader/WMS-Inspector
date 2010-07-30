@@ -61,6 +61,15 @@ CREATE VIEW v_services
 			ON t.id = r.tags_id 
 	GROUP BY s.id;
 
+-- Triger to delete services' tags when deleting a service
+CREATE TRIGGER services_after_delete_trigger
+    AFTER DELETE ON services
+        FOR EACH ROW
+            WHEN OLD.id IS NOT NULL
+                BEGIN
+                    DELETE FROM rel_services_tags WHERE services_id = OLD.id;
+                END;
+
 COMMIT;
 
 
@@ -83,5 +92,3 @@ COMMIT;
 -- of WMSInspector.DB must be the same as this, and a corresponding upgrade
 -- method must be provided.
 PRAGMA user_version = 1;
-
-
