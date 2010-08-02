@@ -10,22 +10,26 @@
 
     <binding id="libraryItem">
         <content>
-            <xul:hbox flex="1">
-                <xul:vbox style="width:15px">
-                    <xul:image class="wiLibraryFavImg" src="chrome://wmsinspector/skin/icons/favorite.png" />
-                </xul:vbox>
+            <xul:vbox style="width:100%">
+                <xul:hbox>
+                    <xul:vbox>
+                        <xul:hbox align="start">
+                            <xul:image class="wiLibraryFavImg" src="chrome://wmsinspector/skin/icons/favorite.png" />
+                            <xul:label xbl:inherits="value=title" class="wiLibraryServiceTitle" />
+                        </xul:hbox>
+                        <xul:label flex="1" xbl:inherits="value=URL" />
+                    </xul:vbox>
 
-                <xul:vbox>
-                    <xul:label xbl:inherits="value=title" class="wiLibraryServiceTitle" />
-                    <xul:label flex="1" xbl:inherits="value=URL" />
-                    <xul:hbox class="wiLibraryTagsBox" />
-                                       
-                </xul:vbox>
-                <xul:spacer flex="1" />
-                <xul:vbox>
-                    <xul:label xbl:inherits="value=type" class="wiLibraryServiceTypeLabel"/>
-                </xul:vbox>
-            </xul:hbox>
+                    <xul:spacer flex="1"/>
+                    
+                    <xul:vbox>
+                        <xul:label xbl:inherits="value=type" class="wiLibraryServiceTypeLabel"/>
+                    </xul:vbox>
+                </xul:hbox>
+
+                <xul:hbox class="wiLibraryTagsBox" />
+
+            </xul:vbox>
         </content>
         
         <implementation>

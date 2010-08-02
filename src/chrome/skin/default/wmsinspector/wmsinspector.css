@@ -116,6 +116,7 @@
 }
 
 richlistboxitem {
+    display: block;
     padding: 10px;
     border-bottom: 1px dotted #C0C0C0
 }
@@ -123,6 +124,10 @@ richlistboxitem {
 richlistboxitem:hover {
     background-color: -moz-dialog;
     color: -moz-DialogText;
+}
+
+.wiLibraryTagsBox{
+    display: block
 }
 
 .wiLibraryTag{

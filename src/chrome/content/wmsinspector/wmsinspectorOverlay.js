@@ -805,7 +805,8 @@ WMSInspector.Overlay = {
     },
 
     openOptionsDialog: function() {
-        var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");
+        //var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");
+        var dialog = window.openDialog("chrome://wmsinspector/content/test.xul", "wiOptionsDialog", "chrome,centerscreen");
         dialog.focus();
     },
 
