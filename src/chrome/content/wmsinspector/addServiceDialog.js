@@ -159,12 +159,16 @@ WMSInspector.AddServiceDialog = {
         var tags = WMSInspector.AddServiceDialog.getTagsFromTagField()
         if (tags) service.tags = tags;
 
+        //If the dialog was called from the Library window, refresh the services list after adding or updating
+        //the service
+        var callback = (window.opener.name == "wiLibrary") ? WMSInspector.AddServiceDialog.Library.search : null;
+
         if (WMSInspector.AddServiceDialog.serviceId){
             //Update an existing service
-            WMSInspector.AddServiceDialog.Library.updateService(service,WMSInspector.AddServiceDialog.Library.search);
+            WMSInspector.AddServiceDialog.Library.updateService(service,callback);
         } else {
             //Add a new service to Library
-            WMSInspector.AddServiceDialog.Library.addService(service,WMSInspector.AddServiceDialog.Library.search);
+            WMSInspector.AddServiceDialog.Library.addService(service,callback);
         }
 
         window.close();
