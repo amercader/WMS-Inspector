@@ -35,6 +35,8 @@
         <implementation>
             <field name="serviceId"/>
             <field name="serviceURL"/>
+            <field name="serviceType"/>
+            <field name="serviceVersion"/>
 
             <method name="setFavorite">
                 <parameter name="value" />

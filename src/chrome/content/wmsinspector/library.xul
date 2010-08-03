@@ -111,6 +111,15 @@
                                   oncommand="WMSInspector.Library.doContextMenuAction(3,event)"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/delete.png" />
-
+        <menuseparator/>
+        <menuitem label="Get Capabilities (HTML report)"
+                                  id="wiLibraryContextMenuGetCapabilitiesReport"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(4,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/getcapabilities.png" />
+        <menuitem label="Get Capabilities (XML)"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(5,event)"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/getcapabilities.png" />
     </menupopup>
 </window>

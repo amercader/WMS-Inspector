@@ -44,6 +44,12 @@ WMSInspector.Library = {
         WMSInspector.Library.selectedService = new WMSInspector.libraryService();
         WMSInspector.Library.selectedService.id = element.serviceId;
         WMSInspector.Library.selectedService.URL = element.serviceURL;
+        WMSInspector.Library.selectedService.type = element.serviceType;
+        WMSInspector.Library.selectedService.version = element.serviceVersion;
+
+        //Currently, only WMS are supported for HTML reports, so if it is a different type, we disable the context menu entry
+        document.getElementById("wiLibraryContextMenuGetCapabilitiesReport").setAttribute("disabled", (element.serviceType != "WMS"));
+
 
         return WMSInspector.Library.selectedService;
     },
@@ -53,28 +59,33 @@ WMSInspector.Library = {
 
     doContextMenuAction: function(mode,event){
         if (!WMSInspector.Library.selectedService) return false;
+
+        var service = WMSInspector.Library.selectedService;
+
         switch (mode){
             case 1:
                 //Copy URL
-                    var out = WMSInspector.Library.selectedService.URL;
-                    var clipboardService = WMSInspector.Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
-                    if (out && clipboardService) clipboardService.copyString(out);
+                var out = service.URL;
+                var clipboardService = WMSInspector.Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
+                if (out && clipboardService) clipboardService.copyString(out);
                 break;
             case 2:
                 //Edit service
-                WMSInspector.Library.openAddServiceDialog(WMSInspector.Library.selectedService.id);
-                break
+                WMSInspector.Library.openAddServiceDialog(service.id);
+                break;
             case 3:
                 //Delete service
                 var deleteService = true;
 
                 if (WMSInspector.Library.confirmBeforeDelete){
                     deleteService = false;
-                    var check = {value:false};
+                    var check = {
+                        value:false
+                    };
                     var prompt = WMSInspector.Utils.showConfirm(WMSInspector.Utils.getString("wi_library_confirmdelete"),
-                                                                false,
-                                                                WMSInspector.Utils.getString("wi_dontaskagain"),
-                                                                check);
+                        false,
+                        WMSInspector.Utils.getString("wi_dontaskagain"),
+                        check);
                     if (prompt){
                         if (check.value === true){
                             WMSInspector.Library.confirmBeforeDelete = false;
@@ -85,9 +96,26 @@ WMSInspector.Library = {
                     }
                 }
 
-                if (deleteService) WMSInspector.Library.deleteService(WMSInspector.Library.selectedService.id,WMSInspector.Library.search);
+                if (deleteService) WMSInspector.Library.deleteService(service.id,WMSInspector.Library.search);
 
-                break
+                break;
+            case 4:
+            case 5:
+                // GetCapabilities request 
+                // Currently, for HTML reports only WMS are supported
+
+                let url = window.opener.WMSInspector.Overlay.getGetCapabilitiesURL(service.URL,service.type,service.version);
+                if (mode == 4){
+                    window.opener.WMSInspector.Overlay.requestGetCapabilities(url);
+                } else if (mode == 5){
+                    window.opener.WMSInspector.Overlay.requestDocument(url);
+                }
+                
+                break;
+            
+                // GetCapabilities request (HTML report)
+
+                break;
         }
         return true;
     },
@@ -266,6 +294,8 @@ WMSInspector.Library = {
 
         item.serviceId = service.id;
         item.serviceURL = service.URL;
+        item.serviceType = service.type;
+        item.serviceVersion = service.version;
         item.setAttribute("title", service.title);
         item.setAttribute("type", service.type);
         item.setAttribute("URL", service.URL);
@@ -557,7 +587,9 @@ WMSInspector.Library = {
             var sql = "DELETE FROM services WHERE id = :id";
             var statement = WMSInspector.DB.conn.createStatement(sql);
 
-            WMSInspector.DB.bindParameters(statement,{id:id});
+            WMSInspector.DB.bindParameters(statement,{
+                id:id
+            });
 
             statement.executeAsync({
 

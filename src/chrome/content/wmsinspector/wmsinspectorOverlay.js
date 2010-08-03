@@ -623,6 +623,24 @@ WMSInspector.Overlay = {
         }
     },
 
+    getGetCapabilitiesURL: function(server,type,version){
+        if (!server) return false;
+        type = type || "WMS";
+        
+        if (server.substring(server.length-1) != "?" && server.indexOf("?") == -1 ) {
+            server += "?";
+        } else if (server.substring(server.length-1) != "?" && server.indexOf("?") !== -1 ) {
+            server += "&";
+        }
+
+        var url = server + "REQUEST=GetCapabilities"
+                         + "&SERVICE=" + type;
+        if (version) url += "&VERSION=" + version;
+
+        return url;
+
+    },
+
     requestGetCapabilities: function(url){
         var request = new WMSInspector.GET(url,
             this.showGetCapabilitiesReportVersion,
@@ -781,16 +799,8 @@ WMSInspector.Overlay = {
         switch (mode){
             case 1:
                 //Request getCapabilities report
-                if (url.substring(url.length-1) != "?" && url.indexOf("?") == -1 ) {
-                    url += "?";
-                } else if (url.substring(url.length-1) != "?" && url.indexOf("?") !== -1 ) {
-                    url += "&";
-                }
 
-                url += "REQUEST=GetCapabilities"
-                + "&SERVICE=WMS"
-                + "&VERSION=1.1.1";
-
+                url = WMSInspector.Overlay.getGetCapabilitiesURL(url);
 
                 WMSInspector.Overlay.requestGetCapabilities(url);
                 break;
