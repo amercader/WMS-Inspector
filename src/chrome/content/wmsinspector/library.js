@@ -49,7 +49,6 @@ WMSInspector.Library = {
     },
     onContextMenu: function(event){
         WMSInspector.Library.setSelectedService(event.target);
-        //WMSInspector.Library.selectedServiceId = event.target.serviceId;
     },
 
     doContextMenuAction: function(mode,event){
@@ -271,8 +270,6 @@ WMSInspector.Library = {
         item.setAttribute("type", service.type);
         item.setAttribute("URL", service.URL);
         item.setAttribute("context", "wiLibraryContextMenu");
-
-        item.addEventListener("contextmenu",WMSInspector.Library.onContextMenu,true);
         
         //Without the timeout, the created item methods are not found
         setTimeout(function(){

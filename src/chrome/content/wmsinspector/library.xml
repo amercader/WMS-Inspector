@@ -67,6 +67,9 @@
 
         </implementation>
 
+        <handlers>
+            <handler event="contextmenu" action="WMSInspector.Library.onContextMenu(event)" />
+        </handlers>
     </binding>
 </bindings>
 
