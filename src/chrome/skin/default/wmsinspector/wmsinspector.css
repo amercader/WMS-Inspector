@@ -59,6 +59,10 @@
     list-style-image: url("chrome://wmsinspector/skin/icons/getcapabilities.png");
 }
 
+#wiLibraryButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/library.png");
+}
+
 #wiMsg{
     font-weight: bold;
     color: #FF0000;
@@ -97,4 +101,57 @@
 #wiIndexDescription{
     font-size: 0.8em;
     display: inline;
+}
+
+#wiLibraryAddButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/library_add.png");
+}
+
+#wiLibraryDBError{
+    margin: 30px;
+}
+
+#wiLibrarySearchFilter{
+    width: 15em;
+}
+
+richlistboxitem {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px dotted #C0C0C0
+}
+
+richlistboxitem:hover {
+    background-color: -moz-dialog;
+    color: -moz-DialogText;
+}
+
+.wiLibraryTagsBox{
+    display: block
+}
+
+.wiLibraryTag{
+    cursor: pointer;
+    border: 1px solid #C0C0C0;
+    margin-top: 3px;
+    padding: 2px 5px 2px 20px;
+    -moz-border-radius: 5px;
+    background: white url("chrome://wmsinspector/skin/icons/tag.png") 3px 3px no-repeat;
+}
+
+.wiLibraryServiceTitle{
+    font-weight:bold
+}
+
+.wiLibraryServiceTypeLabel{
+    font-style: italic
+}
+
+.wiLibraryNoServicesFound{
+   font-style: italic;
+   margin-top: 30px;
+}
+
+#wiAddServiceTagsLabel{
+    font-style: italic
 }

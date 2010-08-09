@@ -54,15 +54,8 @@ WMSInspector.GetCapabilitiesDialog = {
             return false;
 
         } else {
-            if (url.substring(url.length-1) != "?" && url.indexOf("?") == -1 ) {
-                url += "?";
-            } else if (url.substring(url.length-1) != "?" && url.indexOf("?") !== -1 ) { 
-                url += "&";
-            }
-            
-            url += "REQUEST=GetCapabilities"
-            + "&SERVICE=" + service
-            + "&VERSION=" + version;
+
+            url = window.opener.WMSInspector.Overlay.getGetCapabilitiesURL(url,service,version);
             
             if (outputXML){
                 var outputEditor = (document.getElementById("wiGetcapabilitiesOutputEditor").selected);

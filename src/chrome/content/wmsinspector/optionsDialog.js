@@ -19,7 +19,10 @@ WMSInspector.OptionsDialog = {
         }
 
         document.getElementById("wiHideContextMenu").checked = this.prefs.getBoolPref("hidecontextmenu");
+        
         document.getElementById("wiEditorPath").value = this.prefs.getCharPref("editor");
+
+        document.getElementById("wiLibraryConfirmBeforeDelete").checked = this.prefs.getBoolPref("libraryconfirmbeforedelete");
     },
 
     selectEditor: function() {
@@ -45,6 +48,9 @@ WMSInspector.OptionsDialog = {
 
         //Default editor
         this.prefs.setCharPref("editor",document.getElementById("wiEditorPath").value);
+
+        //Ask before deleting one of the Library items
+        this.prefs.setBoolPref("libraryconfirmbeforedelete",(document.getElementById("wiLibraryConfirmBeforeDelete").checked === true));
         
     }
 

@@ -16,6 +16,9 @@
 <!ENTITY wmsinspector.common.openinanewtab "Open in a new tab">
 <!ENTITY wmsinspector.common.editor "Editor">
 <!ENTITY wmsinspector.common.browser "Browser">
+<!ENTITY wmsinspector.common.refresh "Refresh">
+<!ENTITY wmsinspector.common.restore "Restore">
+<!ENTITY wmsinspector.common.copyurl "Copy URL">
 
 <!-- Index page -->
 <!ENTITY wmsinspector.index.welcome "Welcome to the WMS Inspector">
@@ -30,6 +33,7 @@
 <!ENTITY wmsinspector.toolbar.requesttype "Request type">
 <!ENTITY wmsinspector.toolbar.service "Service">
 <!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
+<!ENTITY wmsinspector.toolbar.library "Library">
 <!ENTITY wmsinspector.toolbar.options "Open the configuration options">
 
 <!-- Tree -->
@@ -55,6 +59,33 @@
 <!ENTITY wmsinspector.options.chooseaneditor "Choose an editor">
 <!ENTITY wmsinspector.options.appearance "Appearance">
 <!ENTITY wmsinspector.options.hidecontextmenu "Hide the context menu">
+<!ENTITY wmsinspector.options.libraryconfirmdelete "Ask before deleting services">
+
+<!-- Library window -->
+<!ENTITY wmsinspector.library.title "Library">
+<!ENTITY wmsinspector.library.advancedsearch "Advanced search">
+<!ENTITY wmsinspector.library.searchoptions "Search options">
+<!ENTITY wmsinspector.library.tags "Tags">
+<!ENTITY wmsinspector.library.servicetype "Service type">
+<!ENTITY wmsinspector.library.orderby "Order by">
+<!ENTITY wmsinspector.library.creationdate "Creation date">
+<!ENTITY wmsinspector.library.servicetitle "Title">
+<!ENTITY wmsinspector.library.ascending "Ascending">
+<!ENTITY wmsinspector.library.descending "Descending">
+<!ENTITY wmsinspector.library.favoritesfirst "Favorites first">
+<!ENTITY wmsinspector.library.dberror "Error connecting to the database">
+<!ENTITY wmsinspector.library.addservice "Add service">
+<!ENTITY wmsinspector.library.importexport "Import / Export">
+<!ENTITY wmsinspector.library.export "Export">
+<!ENTITY wmsinspector.library.exportall "Export all...">
+<!ENTITY wmsinspector.library.exportselection "Export selection...">
+<!ENTITY wmsinspector.library.import "Import...">
+
+<!-- AddService dialog -->
+<!ENTITY wmsinspector.addservice.title "Add service to Library">
+<!ENTITY wmsinspector.addservice.url "Service URL">
+<!ENTITY wmsinspector.addservice.tagsinstructions "Enter new tags separated by commas or select existing ones from the list below.">
+<!ENTITY wmsinspector.addservice.favorite "Favorite">
 
 <!-- Default XSL templates for GetCapabilities reports -->
 

@@ -1,10 +1,10 @@
 
 window.addEventListener("load",  function(){
     WMSInspector.Overlay.init()
-    }, false);
+}, false);
 window.addEventListener("unload", function(){
     WMSInspector.Overlay.unload()
-    }, false);
+}, false);
 
 
 WMSInspector.Overlay = {
@@ -21,6 +21,8 @@ WMSInspector.Overlay = {
 
     noServicesFoundCellId: "wiCellNoServicesFound",
 
+    libraryWindow: null,
+
     init: function(){
         //Set preferences object
         this.prefs = WMSInspector.Utils.getPrefs();
@@ -31,12 +33,61 @@ WMSInspector.Overlay = {
         //Check if tmp dir exists
         WMSInspector.IO.checkWITmpDir();
 
+        //Check if profile dir exists
+        //WMSInspector.IO.checkWIProfileDir();
+
+        //Check if first run or upgrade actions must be performed
+        this.checkForUpgrades();
+        
         //Show/Hide Context menu
         document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
+
+
+
     },
 	
     unload: function(){
         this.prefs.removeObserver("", this);
+        if (WMSInspector.DB.conn){
+            WMSInspector.DB.conn.close();
+        }
+    },
+
+    checkForUpgrades: function(){
+        var installedVersion = -1;
+        var firstRun = true;
+        
+        var extensionManager = WMSInspector.Utils.getService("@mozilla.org/extensions/manager;1", "nsIExtensionManager");
+        var currentVersion = extensionManager.getItemForID(WMSInspector.Utils.extensionId).version;
+        
+        try {
+            installedVersion = this.prefs.getCharPref("version");
+            firstRun = this.prefs.getBoolPref("firstrun");
+        } catch(e){
+
+        } finally {
+            if (firstRun){
+                this.prefs.setBoolPref("firstrun",false);
+                this.prefs.setCharPref("version",currentVersion);
+
+                //Code to be executed only when the extension is first installed
+
+                //Copy an empty database to the profile directory
+                WMSInspector.DB.restoreDB();
+
+            } else if (installedVersion != currentVersion && !firstRun) {
+                this.prefs.setCharPref("version",currentVersion);
+
+                //Code to be executed when the extension is upgraded
+
+                //Check if the database schema needs to be updated
+                WMSInspector.DB.checkDB();
+
+            } else {
+        // No first run nor upgrade
+        }
+
+        }
     },
 
 
@@ -71,7 +122,8 @@ WMSInspector.Overlay = {
 
         }
     },
-	
+
+    // TODO: implement this as binding?
     buildServiceImagesTree: function (){
         var t;
         var tChMain;
@@ -306,6 +358,8 @@ WMSInspector.Overlay = {
         var cellText = this.currentNameColumnText;
         var cellValues = this.currentNameColumnValues;
         if (!cellText) return;
+
+        var serviceImage;
         switch (mode){
             case 1:
                 //Copy to clipboard
@@ -333,7 +387,7 @@ WMSInspector.Overlay = {
                 break;
             case 5:
                 //Delete parameter
-                var serviceImage = this.getServiceImage(cellValues[2]);
+                serviceImage = this.getServiceImage(cellValues[2]);
                 if(serviceImage.removeParam(cellText) !== false){
 
                     var newURL = serviceImage.updateSrc();
@@ -348,6 +402,24 @@ WMSInspector.Overlay = {
                     this.showURLInPreviewBrowser(newURL);
 
                 }
+                break;
+            case 6:
+                //Add service to Library
+
+                let version = false;
+                let url = "";
+                if (cellValues[1] == "2"){
+                    // Image
+                    serviceImage = this.getServiceImage(cellValues[2]);
+                    url = serviceImage.server;
+                    let param = serviceImage.getParamByName("VERSION");
+                    if (param) version = param.value;
+                } else {
+                    // Server
+                    url = cellText.substr(0,cellText.indexOf(" "));
+                }
+                WMSInspector.Overlay.openAddServiceDialog(false,url,version);
+
                 break;
         }
     },
@@ -559,6 +631,24 @@ WMSInspector.Overlay = {
         }
     },
 
+    getGetCapabilitiesURL: function(server,type,version){
+        if (!server) return false;
+        type = type || "WMS";
+        
+        if (server.substring(server.length-1) != "?" && server.indexOf("?") == -1 ) {
+            server += "?";
+        } else if (server.substring(server.length-1) != "?" && server.indexOf("?") !== -1 ) {
+            server += "&";
+        }
+
+        var url = server + "REQUEST=GetCapabilities"
+                         + "&SERVICE=" + type;
+        if (version) url += "&VERSION=" + version;
+
+        return url;
+
+    },
+
     requestGetCapabilities: function(url){
         var request = new WMSInspector.GET(url,
             this.showGetCapabilitiesReportVersion,
@@ -624,6 +714,7 @@ WMSInspector.Overlay = {
     },
 
     getExtensionFromMimeType: function(mimeType){
+        
         if (mimeType.indexOf(";") != -1){
             mimeType = mimeType.substring(0,mimeType.indexOf(";"))
         }
@@ -700,41 +791,60 @@ WMSInspector.Overlay = {
     checkSelection: function(){
         var enabled = (getBrowserSelection() != "");
         document.getElementById("wiContextGetCapabilitesReport").setAttribute("disabled", !enabled );
+        document.getElementById("wiContextAddToLibrary").setAttribute("disabled", !enabled );
     },
 
-    checkGetCapabilities: function(url){
+    doBrowserContextMenuAction: function(mode){
+        if (mode == 1 || mode == 2){
+            var url = getBrowserSelection();
 
-        if (url == null){
-            url = getBrowserSelection();
-        }
-
-        if (!WMSInspector.Utils.checkURL(url)){
-            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
-            return false;
-
-        } else {
-
-            if (url.substring(url.length-1) != "?" && url.indexOf("?") == -1 ) {
-                url += "?";
-            } else if (url.substring(url.length-1) != "?" && url.indexOf("?") !== -1 ) {
-                url += "&";
+            if (!WMSInspector.Utils.checkURL(url)){
+                WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
+                return false;
             }
-
-            url += "REQUEST=GetCapabilities"
-            + "&SERVICE=WMS"
-            + "&VERSION=1.1.1";
-
-            
-            WMSInspector.Overlay.requestGetCapabilities(url);
-
-            return true;
         }
+
+        switch (mode){
+            case 1:
+                //Request getCapabilities report
+
+                url = WMSInspector.Overlay.getGetCapabilitiesURL(url);
+
+                WMSInspector.Overlay.requestGetCapabilities(url);
+                break;
+            case 2:
+                //Open Add service to Library dialog
+                WMSInspector.Overlay.openAddServiceDialog(false,url);
+                break;
+        }
+
+        return true;
+        
     },
 
     openOptionsDialog: function() {
         var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");
         dialog.focus();
-    }
+    },
 
+    openLibrary: function(){
+        if (this.libraryWindow == null || this.libraryWindow.closed){
+            this.libraryWindow = window.open("chrome://wmsinspector/content/library.xul", "wiLibrary", "chrome,centerscreen,resizable=yes");
+        } else {
+            this.libraryWindow.focus();
+        }
+    },
+
+    openAddServiceDialog: function(id,url,version){
+        var dialog = window.openDialog(
+            "chrome://wmsinspector/content/addServiceDialog.xul",
+            "wiAddServiceDialog",
+            "chrome,centerscreen",
+            id, // If a service id provided, dialog will show in edit mode
+            url,
+            version
+            );
+        dialog.focus();
+    }
 
 }

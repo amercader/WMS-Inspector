@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<window id="wiLibrary"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        title="&wmsinspector.library.title;"
+        onload="WMSInspector.Library.init()"
+        persist="width height screenX screenY sizemode">
+
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/threads.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
+    </stringbundleset>
+
+    <hbox id="wiLibraryToolbox">
+        <toolbar id="wiLibraryToolbar" >
+            <toolbarbutton id="wiLibraryAddButton" label="&wmsinspector.library.addservice;" tooltiptext="&wmsinspector.library.addservice;" oncommand="WMSInspector.Library.openAddServiceDialog()" />
+            <toolbarbutton type="menu" label="&wmsinspector.library.importexport;">
+                <menupopup>
+                    <menu id="wiLibraryMenuExport" label="&wmsinspector.library.export;" onpopupshowing="WMSInspector.Library.onExportPopUpShowing()" >
+                        <menupopup>
+                            <menuitem id="wiLibraryMenuExportAll" label="&wmsinspector.library.exportall;" oncommand="WMSInspector.Library.exportAll()" />
+                            <menuitem id="wiLibraryMenuExportSelection" label="&wmsinspector.library.exportselection;" oncommand="WMSInspector.Library.exportCurrentSelection()" />
+                        </menupopup>
+                    </menu>
+                    <menuitem id="wiLibraryMenuImport" label="&wmsinspector.library.import;" oncommand="WMSInspector.Library.importFromFile()" />
+                </menupopup>
+            </toolbarbutton>
+            
+        </toolbar>
+
+        <spacer flex="1"/>
+        <textbox id="wiLibrarySearchFilter"
+               clickSelectsAll="true"
+               type="search"
+               oncommand="WMSInspector.Library.searchText(this.value);"
+               style="width: 300px;">
+        </textbox>
+
+    </hbox>
+    <hbox>
+        <spacer flex="1"/>
+        <label id= "wiLibraryAdvancedSearchLink" class="text-link" onclick="WMSInspector.Library.toggleAdvancedSearch();" value="&wmsinspector.library.advancedsearch;" />
+    </hbox>
+
+    <hbox id="wiLibraryAdvancedSearch" collapsed="true">
+        <groupbox flex="1" >
+            <caption label="&wmsinspector.library.searchoptions;"/>
+            <hbox flex="1">
+                <hbox>
+                    <label value="&wmsinspector.library.tags;" />
+                    <listbox id="wiLibraryTagsList" rows="4">
+
+                    </listbox>
+                </hbox>
+
+                <hbox align="start">
+
+                    <label value="&wmsinspector.library.servicetype;" />
+                    <menulist id="wiLibraryServiceTypeList" style="width:7em">
+                        <menupopup>
+
+                        </menupopup>
+                    </menulist>
+
+                </hbox>
+
+                <vbox>
+                    <hbox>
+                        <label value="&wmsinspector.library.orderby;" />
+                        <menulist id="wiLibraryOrderBy" style="min-width:10em;max-width:15em">
+                            <menupopup>
+                                <menuitem value="creation_date" label="&wmsinspector.library.creationdate;"/>
+                                <menuitem value="title" label="&wmsinspector.library.servicetitle;"/>
+                            </menupopup>
+                        </menulist>
+                    </hbox>
+                    <radiogroup id="wiLibraryDirection" orient="horizontal">
+                        <radio id="wiLibraryDirectionDesc" label="&wmsinspector.library.ascending;" selected="true" />
+                        <radio id="wiLibraryDirectionAsc" label="&wmsinspector.library.descending;" selected="false" />
+                        
+                    </radiogroup>
+
+                    <checkbox id="wiLibraryFavoritesFirst" label="&wmsinspector.library.favoritesfirst;" persist="checked" checked="true"/>
+                </vbox>
+                <spacer flex="1" />
+                <vbox>
+                    <button label="&wmsinspector.common.refresh;" icon="refresh" oncommand="WMSInspector.Library.refresh()" />
+                    <button label="&wmsinspector.common.restore;" icon="clear" oncommand="WMSInspector.Library.restore()" />
+                </vbox>
+            </hbox>
+        </groupbox>
+    </hbox>
+
+    <hbox id="wiLibraryDBError" style="visibility:collapse">
+        <image src="chrome://wmsinspector/skin/icons/warning.png" />
+        <label value="&wmsinspector.library.dberror;" />
+    </hbox>
+
+    <richlistbox id="wiServicesListbox" flex="1">
+    </richlistbox>
+
+    <menupopup id="wiLibraryContextMenu">
+        <menuitem label="&wmsinspector.common.copyurl;"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(1,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/copy.png" />
+        <menuseparator/>
+        <menuitem label="&wmsinspector.common.edit;"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(2,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/edit.png" />
+        <menuitem label="&wmsinspector.common.delete;"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(3,event)"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/delete.png" />
+        <menuseparator/>
+        <menuitem label="Get Capabilities (HTML report)"
+                                  id="wiLibraryContextMenuGetCapabilitiesReport"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(4,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/getcapabilities.png" />
+        <menuitem label="Get Capabilities (XML)"
+                                  oncommand="WMSInspector.Library.doContextMenuAction(5,event)"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/getcapabilities.png" />
+    </menupopup>
+
+    <statusbar id="wiLibraryStatusBar">
+        <label id="wiLibraryNumServices" value=""/>
+        <spacer flex="1" />
+        <hbox id="wiLibraryProgressMeterBox" collapsed="true">
+            <label id="wiLibraryProgressMeterLabel" value="" />
+            <progressmeter
+                id="wiLibraryProgressMeter"
+                mode="undetermined"
+                value="0"/>
+        </hbox>
+    </statusbar>
+
+</window>

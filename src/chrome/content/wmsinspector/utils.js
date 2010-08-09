@@ -5,6 +5,9 @@ var WMSInspector = {};
 
 
 WMSInspector.Utils = {
+
+    //Extension id for WMSInspector
+    extensionId: "wmsinspector@flentic.net",
     
     //Preferences branch for WMSInspector stuff
     prefBranch: "extensions.wmsinspector.",
@@ -62,15 +65,122 @@ WMSInspector.Utils = {
         if (!c || !i) return null;
         return c.createInstance(i);
     },
-    showAlert: function(text,title){
-        var prompts = this.getService("@mozilla.org/embedcomp/prompt-service;1",Components.interfaces.nsIPromptService);
-        title = title || this.getString("wi_extension_name")
-        prompts.alert(null, title, text);
 
+    showAlert: function(text,title,checkText,check){
+        if (checkText && check){
+            return this.showPrompt("alertCheck", text, title, checkText, check);
+        } else {
+            return this.showPrompt("alert", text, title);
+        }
+    },
+
+    showConfirm: function(text,title,checkText,check){
+        if (checkText && check){
+            return this.showPrompt("confirmCheck", text, title, checkText, check);
+        } else {
+            return this.showPrompt("confirm", text, title);
+        }
+    },
+    // Helper functions showAlert and showConfirm should be used instead of this one
+    // See https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIPromptService
+    showPrompt: function(type,text,title,checkText,check){
+        var prompts = this.getService("@mozilla.org/embedcomp/prompt-service;1","nsIPromptService");
+        title = title || this.getString("wi_extension_name");
+        var prompt = null;
+        if (type == "alert"){
+            prompt = prompts.alert(null, title, text);
+        } else if (type == "alertCheck"){
+            prompt = prompts.alertCheck(null, title, text, checkText, check);
+        } else if (type == "confirm"){
+            prompt = prompts.confirm(null, title, text);
+        } else if (type == "confirmCheck"){
+            prompt = prompts.confirmCheck(null, title, text, checkText, check);
+        }
+        return prompt;
     },
     checkURL: function(URL){
         if (URL.length == 0) return false;
         return (URL.toLowerCase().substr(0,5) === "http:" || URL.toLowerCase().substr(0,6) === "https:");
+    },
+    compareFirefoxVersions:function(a,b){
+        var comparator = this.getService("@mozilla.org/xpcom/version-comparator;1","nsIVersionComparator");
+        return comparator.compare(a,b);
+    },
+    
+    // See the following for details
+    // http://www.bennadel.com/blog/504-Ask-Ben-Parsing-CSV-Strings-With-Javascript-Exec-Regular-Expression-Command.htm
+    parseCSV: function(string, delimiter){
+
+        delimiter = delimiter || ",";
+
+        var pattern = new RegExp(
+            (
+                // Delimiters.
+                "(\\" + delimiter + "|\\r?\\n|\\r|^)" +
+
+                // Quoted fields.
+                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+
+                // Standard fields.
+                "([^\"\\" + delimiter + "\\r\\n]*))"
+                ),
+            "gi"
+            );
+
+        var data = [[]];
+
+        var matches = null;
+
+        var matchedValue = "";
+        while (matches = pattern.exec( string )){
+
+            var matchedDelimiter = matches[1];
+
+            if (matchedDelimiter.length && (matchedDelimiter != delimiter)){
+                data.push( [] );
+            }
+
+            if (matches[2]){
+                matchedValue = matches[2].replace(new RegExp( "\"\"", "g" ),"\"");
+            } else {
+                matchedValue = matches[3];
+            }
+
+            data[ data.length - 1 ].push( matchedValue );
+        }
+
+        return data ;
+
+    },
+    
+    // https://developer.mozilla.org/en/nsICryptoHash#Computing_the_Hash_of_a_String
+    getHash: function(string,algorithm){
+
+        var converter = this.getInstance("@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter")
+        converter.charset = "UTF-8";
+        // result is an out parameter,
+        // result.value will contain the array length
+        var result = {};
+        // data is an array of bytes
+        var data = converter.convertToByteArray(string, result);
+
+        var ch = this.getInstance("@mozilla.org/security/hash;1","nsICryptoHash");
+
+        algorithm = algorithm || ch.MD5;
+        ch.init(algorithm);
+        ch.update(data, data.length);
+        var hash = ch.finish(false);
+
+        // return the two-digit hexadecimal code for a byte
+        function toHexString(charCode) {
+            return ("0" + charCode.toString(16)).slice(-2);
+        }
+
+        // convert the binary hash data to a hex string.
+        var s = [toHexString(hash.charCodeAt(i)) for (i in hash)].join("");
+
+        return s;
+
     }
 
 
