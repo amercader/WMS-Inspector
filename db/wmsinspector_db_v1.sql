@@ -24,6 +24,7 @@ CREATE TABLE "services"(
   "creation_date" INTEGER NOT NULL,
   "update_date" INTEGER,
   "service_type_id" INTEGER NOT NULL,
+  "hash" VARCHAR(32) NOT NULL,
   CONSTRAINT "fk_services_service_type"
     FOREIGN KEY("service_type_id")
     REFERENCES "service_type"("id")
@@ -81,8 +82,8 @@ INSERT INTO service_type (name,title) VALUES ("WCS","Web Coverage Service");
 
 INSERT INTO tags (id,title) VALUES (1,"World");
 
-INSERT INTO services (title,url,version,favorite,service_type_id,creation_date) VALUES
-("JPL Global Imagery Service","http://wms.jpl.nasa.gov/wms.cgi","1.1.1",0,1,strftime('%s','now'));
+INSERT INTO services (title,url,version,favorite,service_type_id,creation_date,hash) VALUES
+("JPL Global Imagery Service","http://wms.jpl.nasa.gov/wms.cgi","1.1.1",0,1,strftime('%s','now'),"c25c93974fcd6b7ce10367a34d535ce5");
 
 INSERT INTO rel_services_tags (services_id,tags_id) VALUES (1,1);
 COMMIT;
