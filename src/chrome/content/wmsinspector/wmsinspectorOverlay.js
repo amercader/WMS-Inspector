@@ -122,7 +122,8 @@ WMSInspector.Overlay = {
 
         }
     },
-	
+
+    // TODO: implement this as binding?
     buildServiceImagesTree: function (){
         var t;
         var tChMain;
@@ -404,13 +405,20 @@ WMSInspector.Overlay = {
                 break;
             case 6:
                 //Add service to Library
-                serviceImage = this.getServiceImage(cellValues[2]);
+
                 let version = false;
+                let url = "";
                 if (cellValues[1] == "2"){
+                    // Image
+                    serviceImage = this.getServiceImage(cellValues[2]);
+                    url = serviceImage.server;
                     let param = serviceImage.getParamByName("VERSION");
                     if (param) version = param.value;
+                } else {
+                    // Server
+                    url = cellText.substr(0,cellText.indexOf(" "));
                 }
-                WMSInspector.Overlay.openAddServiceDialog(false,serviceImage.server,version);
+                WMSInspector.Overlay.openAddServiceDialog(false,url,version);
 
                 break;
         }
@@ -815,8 +823,7 @@ WMSInspector.Overlay = {
     },
 
     openOptionsDialog: function() {
-        //var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");
-        var dialog = window.openDialog("chrome://wmsinspector/content/test.xul", "wiOptionsDialog", "chrome,centerscreen");
+        var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");
         dialog.focus();
     },
 
