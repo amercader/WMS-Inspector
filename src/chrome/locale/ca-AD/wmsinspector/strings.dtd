@@ -75,6 +75,11 @@
 <!ENTITY wmsinspector.library.favoritesfirst "Favorits primer">
 <!ENTITY wmsinspector.library.dberror "Error connectant a la base de dades">
 <!ENTITY wmsinspector.library.addservice "Afegir servei">
+<!ENTITY wmsinspector.library.importexport "Importar / Exportar">
+<!ENTITY wmsinspector.library.export "Exportar">
+<!ENTITY wmsinspector.library.exportall "Exportar tot...">
+<!ENTITY wmsinspector.library.exportselection "Exportar selecci&#243;...">
+<!ENTITY wmsinspector.library.import "Importar...">
 
 <!-- AddService dialog -->
 <!ENTITY wmsinspector.addservice.title "Afegir servei a la Biblioteca">

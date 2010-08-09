@@ -15,6 +15,7 @@
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/threads.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
 
     <stringbundleset id="stringbundleset">
@@ -24,8 +25,20 @@
     <hbox id="wiLibraryToolbox">
         <toolbar id="wiLibraryToolbar" >
             <toolbarbutton id="wiLibraryAddButton" label="&wmsinspector.library.addservice;" tooltiptext="&wmsinspector.library.addservice;" oncommand="WMSInspector.Library.openAddServiceDialog()" />
+            <toolbarbutton type="menu" label="&wmsinspector.library.importexport;">
+                <menupopup>
+                    <menu id="wiLibraryMenuExport" label="&wmsinspector.library.export;" onpopupshowing="WMSInspector.Library.onExportPopUpShowing()" >
+                        <menupopup>
+                            <menuitem id="wiLibraryMenuExportAll" label="&wmsinspector.library.exportall;" oncommand="WMSInspector.Library.exportAll()" />
+                            <menuitem id="wiLibraryMenuExportSelection" label="&wmsinspector.library.exportselection;" oncommand="WMSInspector.Library.exportCurrentSelection()" />
+                        </menupopup>
+                    </menu>
+                    <menuitem id="wiLibraryMenuImport" label="&wmsinspector.library.import;" oncommand="WMSInspector.Library.importFromFile()" />
+                </menupopup>
+            </toolbarbutton>
+            
         </toolbar>
-        
+
         <spacer flex="1"/>
         <textbox id="wiLibrarySearchFilter"
                clickSelectsAll="true"
@@ -122,4 +135,17 @@
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/getcapabilities.png" />
     </menupopup>
+
+    <statusbar id="wiLibraryStatusBar">
+        <label id="wiLibraryNumServices" value=""/>
+        <spacer flex="1" />
+        <hbox id="wiLibraryProgressMeterBox" collapsed="true">
+            <label id="wiLibraryProgressMeterLabel" value="" />
+            <progressmeter
+                id="wiLibraryProgressMeter"
+                mode="undetermined"
+                value="0"/>
+        </hbox>
+    </statusbar>
+
 </window>

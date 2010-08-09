@@ -4,3 +4,4 @@ pref("extensions.wmsinspector.wmsversion", "1.1.1");
 pref("extensions.wmsinspector.editor", "");
 pref("extensions.wmsinspector.hidecontextmenu", false);
 pref("extensions.wmsinspector.libraryconfirmbeforedelete", true);
+pref("extensions.wmsinspector.exportseparator", ",");

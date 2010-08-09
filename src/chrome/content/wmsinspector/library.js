@@ -3,13 +3,12 @@ WMSInspector.Library = {
     prefs: null,
 
     list: null,
-    
-    services: [],
 
-    //selectedServiceId: false,
     selectedService: null,
 
     confirmBeforeDelete: true,
+
+    currentResults: [],
 
     init: function(){
 
@@ -53,6 +52,11 @@ WMSInspector.Library = {
 
         return WMSInspector.Library.selectedService;
     },
+
+    onExportPopUpShowing: function(){
+        document.getElementById("wiLibraryMenuExportSelection").setAttribute("disabled", !(WMSInspector.Library.currentResults.length > 0));
+    },
+
     onContextMenu: function(event){
         WMSInspector.Library.setSelectedService(event.target);
     },
@@ -260,18 +264,169 @@ WMSInspector.Library = {
         this.search()
     },
 
+    exportAll: function(){
+        var libraryQuery = new WMSInspector.libraryQuery(null,this.exportToFile);
+        libraryQuery.query();
+
+    },
+
+    exportCurrentSelection: function(){
+        if (this.currentResults.length == 0) return false;
+        return this.exportToFile(this.currentResults);
+    },
+
+    exportToFile: function(records){
+
+        if (records.length == 0) return false;
+
+
+        var file = WMSInspector.IO.pickFile(
+            WMSInspector.Utils.getString("wi_library_exportprompttitle"),
+            "save",
+            [{
+                title:"CSV files",
+                filter:"*.csv"
+            }],
+            "csv",
+            "wmsinspector.csv",
+            null,
+            window);
+            
+        if (!file) return false;
+        
+        WMSInspector.Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_exporting"));
+
+        var out = WMSInspector.Library.buildExportFile(records);
+
+        WMSInspector.IO.write(file, out,"w",true);
+
+        WMSInspector.Library.toggleProgressMeter();
+
+        return true;
+
+    },
+
+    buildExportFile: function(records){
+        if (records.length == 0) return false;
+        var out = "";
+
+        var separator = this.prefs.getCharPref("exportseparator");
+
+        var columns = ["title","URL","type","version","favorite","tags"];
+        out += columns.join(separator) + "\n";
+
+        for (let i = 0; i < records.length; i++){
+            let service = records[i];
+            let line = ["\"" + service.title + "\"",
+            "\"" + service.URL + "\"",
+            "\"" + service.type + "\"",
+            "\"" + service.version + "\"",
+            (service.favorite) ? "1" : "0",
+            "\"" + service.tags.join(",") + "\"",
+            ];
+
+            out += line.join(separator) + "\n";
+
+        }
+        
+        return out;
+    },
+
+    importFromFile: function(){
+        var file = WMSInspector.IO.pickFile(
+            WMSInspector.Utils.getString("wi_library_importprompttitle"),
+            "open",
+            [{
+                title:"CSV files",
+                filter:"*.csv"
+            }],
+            "csv",
+            false,
+            null,
+            window);
+            
+        if (!file) return false;
+
+
+        WMSInspector.Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_importing"));
+
+        var contents = WMSInspector.IO.readLineByLine(file);
+        
+        if (!contents){
+            Components.utils.reportError("WMS Inspector - Error reading file");
+            return false;
+        } 
+
+        var processFunction = function(contents){
+            try{
+
+                var separator = WMSInspector.Library.prefs.getCharPref("exportseparator");
+
+                var columns = contents.shift().split(separator);
+
+                for (let i = 0; i < contents.length;i++){
+                    if (contents[i].length > 0){
+
+                        let record = WMSInspector.Utils.parseCSV(contents[i],separator)[0];
+
+                        if (record.length){
+
+                            let service = new WMSInspector.libraryService();
+
+                            service.title = record[columns.indexOf("title")];
+                            service.URL = record[columns.indexOf("URL")];
+                            service.favorite = (record[columns.indexOf("favorite")] == "1");
+                            service.version = record[columns.indexOf("version")];
+                            service.type = record[columns.indexOf("type")];
+                            if (record[columns.indexOf("tags")]) service.tags = record[columns.indexOf("tags")].split(",");
+
+                            if (service.URL) {
+                                let add = WMSInspector.Library.addService(service);
+                                if (!add) return false;
+                            }
+                        }
+                    }
+                }
+                
+                return contents.length;
+            } catch (e){
+                Components.utils.reportError(e);
+                return false;
+            }
+        };
+
+        var callbackFunction = function(result){
+            WMSInspector.Library.toggleProgressMeter();
+
+                var msg = (result !== false) ?
+                    WMSInspector.Utils.getString("wi_library_importprompt").replace("%S",result) :
+                    "Errors were found during the import operation";
+            
+            WMSInspector.Utils.showAlert(msg);
+        }
+
+        WMSInspector.Threads.runThread(1,processFunction,contents,callbackFunction);
+
+        return true;
+
+    },
+
     build: function(results){
        
         results = results || [];
         
-        WMSInspector.Library.clearList();
+        WMSInspector.Library.currentResults = results;
 
+        WMSInspector.Library.clearList();
+        var numServices = "";
         if (results.length){
             WMSInspector.Library.list.setAttribute("align","stretch");
             for (let i=0; i < results.length; i++){
                 WMSInspector.Library.addServiceRow(results[i]);
 
             }
+            numServices = (results.length == 1) ? WMSInspector.Utils.getString("wi_library_serviceshown") : WMSInspector.Utils.getString("wi_library_servicesshown").replace("%S",results.length);
+            
         } else{
             WMSInspector.Library.list.setAttribute("align","center");
             var label = document.createElement("label");
@@ -279,7 +434,10 @@ WMSInspector.Library = {
             label.setAttribute("class","wiLibraryNoServicesFound");
             label.setAttribute("pack","center");
             WMSInspector.Library.list.appendChild(label);
+            
         }
+
+        document.getElementById("wiLibraryNumServices").setAttribute("value",numServices);
     },
 
     //Service should be a WMSInspector.libraryService object
@@ -325,6 +483,13 @@ WMSInspector.Library = {
         document.getElementById("wiLibraryAdvancedSearchLink").setAttribute("value",(value) ? WMSInspector.Utils.getString("wi_library_simplesearch") : WMSInspector.Utils.getString("wi_library_advancedsearch"));
     },
 
+    toggleProgressMeter: function(msg){
+        var box = document.getElementById("wiLibraryProgressMeterBox");
+        var value = (box.getAttribute("collapsed") == "true");
+        if (value && msg) document.getElementById("wiLibraryProgressMeterLabel").setAttribute("value", msg);
+        box.setAttribute("collapsed",!value);
+    },
+
     openAddServiceDialog: function(id) {
 
         var dialog = window.openDialog(
@@ -339,10 +504,17 @@ WMSInspector.Library = {
     //Service should be a WMSInspector.libraryService object
     addService: function(service,callback){
         try{
+
+            // In asynchronous calls, it is not safe to rely on conn.lastInsertRowID,
+            // so we build a unique hash to identify the record and be able to get its
+            // id later on handleCompletion
+
+            var hash = WMSInspector.Utils.getHash(service.URL + service.type + new Date().getTime());
+
             var sql = "INSERT INTO services \n\
-                        (title,url,version,favorite,creation_date,service_type_id) \n\
+                        (title,url,version,favorite,creation_date,service_type_id,hash) \n\
                    VALUES \n\
-                        (:title,:url,:version,:favorite,strftime('%s','now'),(SELECT id FROM service_type WHERE name = :type))";
+                        (:title,:url,:version,:favorite,strftime('%s','now'),(SELECT id FROM service_type WHERE name = :type),:hash)";
 
             var statement = WMSInspector.DB.conn.createStatement(sql);
             
@@ -351,7 +523,8 @@ WMSInspector.Library = {
                 "url": service.URL,
                 "version": service.version,
                 "favorite": (service.favorite) ? "1" : "0",
-                "type": service.type
+                "type": service.type,
+                "hash": hash
             });
 
             statement.executeAsync({
@@ -366,16 +539,47 @@ WMSInspector.Library = {
                         return false;
                     }
 
-                    var serviceId = WMSInspector.DB.conn.lastInsertRowID;
-                    if (service.tags) {
-                        WMSInspector.Library.setTags(serviceId,service.tags,callback);
-                    } else {
-                        if (callback) callback();
-                    }
+                    // We need to get the inserted service id, and as it's not safe to rely on
+                    // conn.lastInsertRowID, we need to select the record with the previously generated
+                    // hash. Ugly, but works.
+
+                    let sql = "SELECT id FROM services WHERE hash = :hash";
+                    let selectStatement = WMSInspector.DB.conn.createStatement(sql);
+                    WMSInspector.DB.bindParameter(selectStatement, "hash", hash);
+
+                    selectStatement.executeAsync({
+                        serviceId:false,
+
+                        handleResult: function(resultSet) {
+                            let row = resultSet.getNextRow();
+                            this.serviceId = row.getResultByName("id");
+                        },
+
+                        handleError: function(error) {
+                            Components.utils.reportError("WMSInspector - Error inserting a new service: " + error.message);
+                        },
+
+                        handleCompletion: function(reason) {
+                            if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                                Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                                return false;
+                            }
+
+                            if (service.tags && service.tags.length) {
+                                WMSInspector.Library.setTags(this.serviceId,service.tags,callback);
+                            } else {
+                                if (callback) callback(this.serviceId);
+                            }
+                            
+                            return true;
+                        }
+                    });
 
                     return true;
                 }
             });
+
+            return true;
 
         } catch (e) {
             Components.utils.reportError(e);
@@ -484,14 +688,13 @@ WMSInspector.Library = {
 
                     //Check if tags exist and insert new ones if not
                     var tagIds = [];
-
                     for (let i = 0; i < tags.length; i ++){
                         let tagExists = false;
                         let selectSql = "SELECT id FROM tags WHERE title = :tag" + i;
                         let selectStatement = WMSInspector.DB.conn.createStatement(selectSql);
 
                         WMSInspector.DB.bindParameter(selectStatement, "tag"+i, tags[i]);
-
+                    
                         try {
                             
                             while (selectStatement.step()) {
@@ -515,12 +718,13 @@ WMSInspector.Library = {
                                 tagIds.push(WMSInspector.DB.conn.lastInsertRowID);
                             }
                         }
+                        
                     }
 
                     if (tagIds.length){
                         //Insert records in the services-tags relationship table
                         var statements = [];
-
+//throw "ERROR a TAGS!!";
                         if (WMSInspector.DB.legacyCode){
                             for (let i = 0; i < tagIds.length; i ++){
                                 let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";

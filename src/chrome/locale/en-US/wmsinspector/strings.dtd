@@ -75,6 +75,11 @@
 <!ENTITY wmsinspector.library.favoritesfirst "Favorites first">
 <!ENTITY wmsinspector.library.dberror "Error connecting to the database">
 <!ENTITY wmsinspector.library.addservice "Add service">
+<!ENTITY wmsinspector.library.importexport "Import / Export">
+<!ENTITY wmsinspector.library.export "Export">
+<!ENTITY wmsinspector.library.exportall "Export all...">
+<!ENTITY wmsinspector.library.exportselection "Export selection...">
+<!ENTITY wmsinspector.library.import "Import...">
 
 <!-- AddService dialog -->
 <!ENTITY wmsinspector.addservice.title "Add service to Library">
