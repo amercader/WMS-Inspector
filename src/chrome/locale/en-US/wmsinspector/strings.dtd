@@ -51,6 +51,8 @@
 
 <!-- AddParameter dialog -->
 <!ENTITY wmsinspector.addparameter.title "Add parameter">
+<!ENTITY wmsinspector.addparameter.name "Name">
+<!ENTITY wmsinspector.addparameter.value "Value">
 
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Options">

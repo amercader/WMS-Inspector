@@ -23,9 +23,9 @@
     </stringbundleset>
 
     <groupbox>
-        <label value="Name" />
+        <label value="&wmsinspector.addparameter.name;" />
         <textbox id="wiParamName" class="padded" flex="1" />
-        <label value="Value" />
+        <label value="&wmsinspector.addparameter.value;" />
         <textbox id="wiParamValue" class="padded" flex="1" />
     </groupbox>
 
