@@ -1,46 +1,23 @@
-.wiToolbar{
-    height: 25px;
-    display: -moz-box;
-}
-
-.toolbarbutton-iconic {
-    width: 16px !important;
-    height: 16px !important;
-    margin: 0 4px 0 1px !important;
-    padding: 0 !important;
-    border: none !important;
-    background: transparent !important;
-}
-
-.toolbarbutton-iconic > .toolbarbutton-icon {
-    padding: 0;
-}
-
-.toolbarbutton-iconic > .toolbarbutton-text {
-    display: none;
-}
 
 .wiImgLink{
     cursor: pointer;
 }
 
-
 #wiStatusBarImage{
-    list-style-image: url("chrome://wmsinspector/skin/wmsinspector_logo_bar.png") !important;
+    list-style-image: url("chrome://wmsinspector/skin/wmsinspector_logo_bar.png");
 
 }
 
-
 #wiCloseButton {
-    list-style-image: url("chrome://wmsinspector/skin/icons/close.png") !important;
+    list-style-image: url("chrome://wmsinspector/skin/icons/close.png");
 }
 
 #wiCloseButton:hover {
-    list-style-image: url("chrome://wmsinspector/skin/icons/closeHover.png") !important;
+    list-style-image: url("chrome://wmsinspector/skin/icons/closeHover.png");
 }
 
 #wiCloseButton:hover:active {
-    list-style-image: url("chrome://wmsinspector/skin/icons/closeActive.png") !important;
+    list-style-image: url("chrome://wmsinspector/skin/icons/closeActive.png");
 }
 
 #wiConfigButton {

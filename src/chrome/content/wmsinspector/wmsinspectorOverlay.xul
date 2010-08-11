@@ -13,7 +13,6 @@
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
 
-
     <stringbundleset id="stringbundleset">
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
     </stringbundleset>
@@ -36,37 +35,39 @@
     <vbox id="appcontent" >
         <splitter id="wiContentSplitter" hidden="true"/>
         <vbox id="wiContent" persist="height" hidden="true">
+
             <hbox id="wiMenuContainer">
-                <hbox id="wiMenuBarLeft" flex="1">
-                    <toolbox id="wiMenuLeftToolbox" flex="1">
-                        <toolbar id="wiMenuLeftToolbar" class="wiToolbar" style="display: -moz-box;">
-                            <toolbarbutton id="wiRefreshButton" label="&wmsinspector.toolbar.refresh;" tooltiptext="&wmsinspector.toolbar.refresh;" oncommand="WMSInspector.Overlay.refreshServiceImages();"/>
-                            <toolbarseparator />
-                            <toolbaritem>
-                                <label id="wiGroupByMenuLabel" value="&wmsinspector.toolbar.groupby;" align="center" style="margin-top:6px"/>
-                                <menulist id="wiGroupByMenu" oncommand="WMSInspector.Overlay.groupTree(this.selectedIndex);">
-                                    <menupopup>
-                                        <menuitem value="0" label="&wmsinspector.toolbar.service;"/>
-                                        <menuitem value="1" label="&wmsinspector.toolbar.requesttype;"/>
-                                    </menupopup>
-                                </menulist>
-                            </toolbaritem>
-                            <toolbarseparator />
-                            
-                            <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WMSInspector.Overlay.openGetCapabilitiesDialog();" />
-                            <toolbarbutton id="wiLibraryButton" label="&wmsinspector.toolbar.library;" tooltiptext="&wmsinspector.toolbar.library;" oncommand="WMSInspector.Overlay.openLibrary();" />
-                        </toolbar>
-                    </toolbox>
-                </hbox>
-                <hbox id="wiMenuBarRight" flex="1" align="right">
-                    <toolbox id="wiMenuRightToolbox" flex="1">
-                        <toolbar id="wiMenuRightToolbar" align="right" class="wiToolbar"  style="display: -moz-box;">
-                            <toolbarbutton id="wiConfigButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="WMSInspector.Overlay.openOptionsDialog();"/>
-                            <toolbarseparator />
-                            <toolbarbutton id="wiCloseButton" class="toolbarbutton-iconic wiImgLink" tooltiptext="&wmsinspector.common.close;" oncommand="WMSInspector.Overlay.togglePanel()" />
-                        </toolbar>
-                    </toolbox>
-                </hbox>
+
+                <toolbox id="wiMenuLeftToolbox">
+                    <toolbar id="wiMenuLeftToolbar">
+                        <toolbarbutton id="wiRefreshButton" label="&wmsinspector.toolbar.refresh;" tooltiptext="&wmsinspector.toolbar.refresh;" oncommand="WMSInspector.Overlay.refreshServiceImages();"/>
+                        <toolbarseparator />
+                        <toolbaritem align="center">
+                            <label id="wiGroupByMenuLabel" value="&wmsinspector.toolbar.groupby;" />
+                            <menulist id="wiGroupByMenu" oncommand="WMSInspector.Overlay.groupTree(this.selectedIndex);">
+                                <menupopup>
+                                    <menuitem value="0" label="&wmsinspector.toolbar.service;"/>
+                                    <menuitem value="1" label="&wmsinspector.toolbar.requesttype;"/>
+                                </menupopup>
+                            </menulist>
+                        </toolbaritem>
+                        <toolbarseparator />
+                        <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WMSInspector.Overlay.openGetCapabilitiesDialog();" />
+                        <toolbarbutton id="wiLibraryButton" label="&wmsinspector.toolbar.library;" tooltiptext="&wmsinspector.toolbar.library;" oncommand="WMSInspector.Overlay.openLibrary();" />
+
+                    </toolbar>
+                </toolbox>
+
+                <spacer flex="1" />
+
+                <toolbox id="wiMenuRightToolbox" >
+                    <toolbar id="wiMenuRightToolbar">
+                        <toolbarbutton id="wiConfigButton" class="wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="WMSInspector.Overlay.openOptionsDialog();"/>
+                        <toolbarseparator />
+                        <toolbarbutton id="wiCloseButton" class="wiImgLink" tooltiptext="&wmsinspector.common.close;" oncommand="WMSInspector.Overlay.togglePanel()" />
+                    </toolbar>
+                </toolbox>
+
             </hbox>
             <hbox id="wiTreeImageContainer" flex="1">
                 <vbox id="wiTreeContainer" flex="1">
@@ -78,7 +79,6 @@
                           ondblclick="WMSInspector.Overlay.onTreeDoubleClicked(event);"
                           oncontextmenu="WMSInspector.Overlay.onContextMenu(event);"
                           >
-                        <!--onselect="WMSInspector.Overlay.onTreeClicked(event);"-->
 
                         <treecols>
                             <treecol id="wiTreeNameColumn" label="&wmsinspector.tree.servicecol;" flex="1" primary="true" persist="width"/>
@@ -145,7 +145,7 @@
                     </menupopup>
                 </vbox>
 
-                <splitter id="wiTreeSplitter" collapsed="false"/>
+                <splitter id="wiTreeSplitter"/>
 
                 <vbox id="wiImageContainer" flex="1">
                     <browser type="content" id="wiBrowser" flex="1" src="chrome://wmsinspector/content/index.xhtml" />
