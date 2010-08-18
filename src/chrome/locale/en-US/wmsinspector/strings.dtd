@@ -1,13 +1,16 @@
 <!-- Common -->
-<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.appname "WMS Inspector">
 <!ENTITY wmsinspector.common.yes "Yes">
 <!ENTITY wmsinspector.common.no "No">
 <!ENTITY wmsinspector.common.close "Close">
 <!ENTITY wmsinspector.common.options "Options">
+<!ENTITY wmsinspector.common.name "Name">
+<!ENTITY wmsinspector.common.title "Title">
 <!ENTITY wmsinspector.common.server "Server">
 <!ENTITY wmsinspector.common.service "Service">
 <!ENTITY wmsinspector.common.version "Version">
 <!ENTITY wmsinspector.common.versions "Versions">
+<!ENTITY wmsinspector.common.value "Value">
 <!ENTITY wmsinspector.common.copy "Copy">
 <!ENTITY wmsinspector.common.add "Add">
 <!ENTITY wmsinspector.common.delete "Delete">

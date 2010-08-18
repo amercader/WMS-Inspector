@@ -1,13 +1,16 @@
 <!-- Common -->
-<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.appname "WMS Inspector">
 <!ENTITY wmsinspector.common.yes "Si">
 <!ENTITY wmsinspector.common.no "No">
 <!ENTITY wmsinspector.common.close "Tancar">
 <!ENTITY wmsinspector.common.options "Opcions">
+<!ENTITY wmsinspector.common.name "Nom">
+<!ENTITY wmsinspector.common.title "T&#237;tol">
 <!ENTITY wmsinspector.common.server "Servidor">
 <!ENTITY wmsinspector.common.service "Servei">
 <!ENTITY wmsinspector.common.version "Versi&#243;">
 <!ENTITY wmsinspector.common.versions "Versions">
+<!ENTITY wmsinspector.common.value "Valor">
 <!ENTITY wmsinspector.common.copy "Copiar">
 <!ENTITY wmsinspector.common.add "Afegir">
 <!ENTITY wmsinspector.common.delete "Eliminar">
@@ -52,8 +55,6 @@
 
 <!-- AddParameter dialog -->
 <!ENTITY wmsinspector.addparameter.title "Afegir par&#224;metre">
-<!ENTITY wmsinspector.addparameter.name "Nom">
-<!ENTITY wmsinspector.addparameter.value "Valor">
 
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Opcions">

@@ -600,7 +600,7 @@
     <xsl:template match="/">
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
-                <title>&wmsinspector.xsl.reporttitle; - &wmsinspector.common.name;</title>
+                <title>&wmsinspector.xsl.reporttitle; - &wmsinspector.common.appname;</title>
 
 
                 <style type="text/css">
@@ -729,7 +729,7 @@
 
 
                 <div id="footer">
-                    &wmsinspector.xsl.generatedby; &wmsinspector.common.name;
+                    &wmsinspector.xsl.generatedby; &wmsinspector.common.appname;
                 </div>
 
 

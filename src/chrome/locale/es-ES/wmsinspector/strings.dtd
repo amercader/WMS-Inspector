@@ -1,13 +1,16 @@
 <!-- Common -->
-<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.appname "WMS Inspector">
 <!ENTITY wmsinspector.common.yes "S&#237;">
 <!ENTITY wmsinspector.common.no "No">
 <!ENTITY wmsinspector.common.close "Cerrar">
 <!ENTITY wmsinspector.common.options "Opciones">
+<!ENTITY wmsinspector.common.name "Nom">
+<!ENTITY wmsinspector.common.title "T&#237;tulo">
 <!ENTITY wmsinspector.common.server "Servidor">
 <!ENTITY wmsinspector.common.service "Servicio">
 <!ENTITY wmsinspector.common.version "Versi&#243;n">
 <!ENTITY wmsinspector.common.versions "Versiones">
+<!ENTITY wmsinspector.common.value "Valor">
 <!ENTITY wmsinspector.common.copy "Copiar">
 <!ENTITY wmsinspector.common.add "A&#241;adir">
 <!ENTITY wmsinspector.common.delete "Eliminar">
@@ -52,8 +55,6 @@
 
 <!-- AddParameter dialog -->
 <!ENTITY wmsinspector.addparameter.title "A&#241;adir par&#225;metro">
-<!ENTITY wmsinspector.addparameter.name "Nombre">
-<!ENTITY wmsinspector.addparameter.value "Valor">
 
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Opciones">

@@ -70,9 +70,9 @@
                 <tree flex="1" id="wiServiceTypesTree" context="wiServiceTypesContextMenu" >
 
                     <treecols>
-                        <treecol id="name" label="Name" flex="1" persist="hidden"/>
+                        <treecol id="name" label="&wmsinspector.common.name;" flex="1" persist="hidden"/>
                         <splitter class="tree-splitter"/>
-                        <treecol id="title" label="Title" flex="2" persist="width hidden"/>
+                        <treecol id="title" label="&wmsinspector.common.title;" flex="2" persist="width hidden"/>
 
                         <splitter class="tree-splitter"/>
                         <treecol label="&wmsinspector.addservicetype.defaultversion;" flex="3" persist="width hidden"/>

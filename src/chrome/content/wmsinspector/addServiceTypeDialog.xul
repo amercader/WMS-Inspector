@@ -25,12 +25,12 @@
 
     <vbox>
         <hbox align="center">
-            <label value="Name" />
+            <label value="&wmsinspector.common.name;" />
             <label value="&wmsinspector.addservicetype.nameexample;" class="wiHelper" />
             <textbox id="wiAddServiceTypeName"  flex="1"/>
         </hbox>
         <hbox align="center">
-            <label value="Title" />
+            <label value="&wmsinspector.common.title;" />
             <textbox id="wiAddServiceTypeTitle" flex="1" />
         </hbox>
         <hbox align="center">

@@ -18,7 +18,7 @@
     </stringbundleset>
 
     <popup id="contentAreaContextMenu">
-        <menu label="&wmsinspector.common.name;" id="wiContextMenu" insertafter="devToolsSeparator">
+        <menu label="&wmsinspector.common.appname;" id="wiContextMenu" insertafter="devToolsSeparator">
             <menupopup id="wiContextPopUp" onpopupshowing="WMSInspector.Overlay.checkSelection()">
                 <menuitem id="wiContextGetCapabilitesReport"
                           label="&wmsinspector.context.capabilitiesreport;"
@@ -165,7 +165,7 @@
     <!-- Status bar panel-->
     <statusbar id="status-bar">
         <statusbarpanel id="wiStatusBar" onclick="WMSInspector.Overlay.togglePanel()">
-            <image id="wiStatusBarImage" class="wiImgLink" tooltiptext="&wmsinspector.common.name;" />
+            <image id="wiStatusBarImage" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
         </statusbarpanel>
     </statusbar>
 
