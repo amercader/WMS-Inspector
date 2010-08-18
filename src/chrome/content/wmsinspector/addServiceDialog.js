@@ -2,15 +2,17 @@
 WMSInspector.AddServiceDialog = {
     Library : window.opener.WMSInspector.Library,
 
+    serviceTypes:[],
+    
     serviceId: false,
 
     prefs: null,
 
     init: function(){
         this.prefs = WMSInspector.Utils.getPrefs();
-
-        window.opener.WMSInspector.DB.checkDB();
-
+        
+        this.serviceTypes= (this.Library.serviceTypes.length) ? this.Library.serviceTypes : window.opener.WMSInspector.Overlay.serviceTypes;
+        
         document.documentElement.getButton("accept").addEventListener(
             "command",
             WMSInspector.AddServiceDialog.onAccept, false);
@@ -18,27 +20,21 @@ WMSInspector.AddServiceDialog = {
         if (window.arguments) this.serviceId = window.arguments[0];
 
         this.Library.fetchList("tags",document.getElementById("wiAddServiceTagsList"));
-        this.Library.fetchList("types",document.getElementById("wiAddServiceTypeMenu"));
-
-        //TODO: get versions from DB, and suitable ones for each service type
-        // (also in GetCapabilities dialog)
-        var versions = this.prefs.getCharPref("wmsversions").split("|");
-        var versionsMenuList = document.getElementById("wiAddServiceVersionMenu");
-        for (let i=0; i < versions.length; i++){
-            versionsMenuList.appendItem(versions[i],i);
-        }
-
+        this.setServiceTypesList();
+ 
         if (!this.serviceId){
             //If no id provided, open dialog in add mode
 
             if (window.arguments[1]) document.getElementById("wiAddServiceURL").value = window.arguments[1];
-            var version = (window.arguments[2]) ? window.arguments[2] : this.prefs.getCharPref("wmsversion");
-
-            for (let i=0; i < versionsMenuList.itemCount; i++){
-                let item = versionsMenuList.getItemAtIndex(i);
-                if (item.getAttribute("label") == version) {
-                    versionsMenuList.selectedItem = item;
-                    break;
+            var version = window.arguments[2];
+            if (version){
+                var versionsList = document.getElementById("wiAddServiceVersionMenu");
+                for (let i=0; i < versionsList.itemCount; i++){
+                    let item = versionsList.getItemAtIndex(i);
+                    if (item.getAttribute("label") == version) {
+                        versionsList.selectedItem = item;
+                        break;
+                    }
                 }
             }
 
@@ -55,6 +51,38 @@ WMSInspector.AddServiceDialog = {
             var libraryQuery = new window.opener.WMSInspector.libraryQuery(params,this.fetchDetails)
             libraryQuery.query();
 
+        }
+
+    },
+
+    setServiceTypesList: function(){
+
+        var serviceTypesList = document.getElementById("wiAddServiceTypeMenu");
+        for (let i=0; i < this.serviceTypes.length; i++){
+            serviceTypesList.appendItem(this.serviceTypes[i].name,this.serviceTypes[i].name);
+        }
+        serviceTypesList.selectedIndex = 0;
+
+    },
+
+    setVersionsList: function(){
+        
+        var serviceTypes = WMSInspector.AddServiceDialog.serviceTypes;
+        var selectedType = document.getElementById("wiAddServiceTypeMenu").selectedItem.value;
+
+        for (let i=0; i < serviceTypes.length; i++){
+            if (serviceTypes[i].name == selectedType){
+                var versionsList = document.getElementById("wiAddServiceVersionMenu");
+                versionsList.removeAllItems()
+                for (let j=0; j < serviceTypes[i].versions.length; j++){
+                    versionsList.appendItem(serviceTypes[i].versions[j],serviceTypes[i].versions[j]);
+                    if (serviceTypes[i].versions[j] == serviceTypes[i].defaultversion)
+                        versionsList.selectedIndex = j;
+                }
+                if (versionsList.selectedIndex == -1) versionsList.selectedIndex = 0;
+                break;
+            }
+            
         }
 
     },

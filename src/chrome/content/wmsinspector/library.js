@@ -4,6 +4,8 @@ WMSInspector.Library = {
 
     list: null,
 
+    serviceTypes: [],
+
     selectedService: null,
 
     confirmBeforeDelete: true,
@@ -11,6 +13,8 @@ WMSInspector.Library = {
     currentResults: [],
 
     init: function(){
+
+        this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
 
         this.prefs = WMSInspector.Utils.getPrefs();
         WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
@@ -142,7 +146,7 @@ WMSInspector.Library = {
         if (type == "tags"){
             sql = "SELECT title AS name FROM tags ORDER BY title";
         } else if (type == "types"){
-            sql = "SELECT name FROM service_type";
+            sql = "SELECT name FROM service_types";
         } else {
             return false;
         }
@@ -512,9 +516,9 @@ WMSInspector.Library = {
             var hash = WMSInspector.Utils.getHash(service.URL + service.type + new Date().getTime());
 
             var sql = "INSERT INTO services \n\
-                        (title,url,version,favorite,creation_date,service_type_id,hash) \n\
+                        (title,url,version,favorite,creation_date,type,hash) \n\
                    VALUES \n\
-                        (:title,:url,:version,:favorite,strftime('%s','now'),(SELECT id FROM service_type WHERE name = :type),:hash)";
+                        (:title,:url,:version,:favorite,strftime('%s','now'),:type,:hash)";
 
             var statement = WMSInspector.DB.conn.createStatement(sql);
             
@@ -609,7 +613,7 @@ WMSInspector.Library = {
                 params.version = service.version
             }
             if (service.type) {
-                sqlUpdate.push(" service_type_id = (SELECT id FROM service_type WHERE name = :type)");
+                sqlUpdate.push(" type = :type");
                 params.type = service.type
             }
             if (typeof(service.favorite) == "boolean") {
@@ -724,14 +728,14 @@ WMSInspector.Library = {
                     if (tagIds.length){
                         //Insert records in the services-tags relationship table
                         var statements = [];
-//throw "ERROR a TAGS!!";
+
                         if (WMSInspector.DB.legacyCode){
                             for (let i = 0; i < tagIds.length; i ++){
                                 let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";
                                 let statement = WMSInspector.DB.conn.createStatement(sql);
                                 let params = {};
                                 params.serviceid = serviceId;
-                                params["tag"+i] = tags[i];
+                                params["tagid"+i] = tagIds[i];
                                 WMSInspector.DB.bindParameters(statement,params);
 
                                 statements.push(statement);

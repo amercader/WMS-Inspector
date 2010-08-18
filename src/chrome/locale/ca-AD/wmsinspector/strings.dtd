@@ -7,6 +7,7 @@
 <!ENTITY wmsinspector.common.server "Servidor">
 <!ENTITY wmsinspector.common.service "Servei">
 <!ENTITY wmsinspector.common.version "Versi&#243;">
+<!ENTITY wmsinspector.common.versions "Versions">
 <!ENTITY wmsinspector.common.copy "Copiar">
 <!ENTITY wmsinspector.common.add "Afegir">
 <!ENTITY wmsinspector.common.delete "Eliminar">
@@ -62,6 +63,8 @@
 <!ENTITY wmsinspector.options.appearance "Aparen&#231;a">
 <!ENTITY wmsinspector.options.hidecontextmenu "Amaga el men&#250; contextual">
 <!ENTITY wmsinspector.options.libraryconfirmdelete "Confirma abans d'eliminar serveis">
+<!ENTITY wmsinspector.options.servicetypes "Tipus de serveis">
+<!ENTITY wmsinspector.options.addservicetype "Afegir tipus de servei">
 
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Biblioteca">
@@ -88,6 +91,12 @@
 <!ENTITY wmsinspector.addservice.url "URL del servei">
 <!ENTITY wmsinspector.addservice.tagsinstructions "Introdu&#239;u noves etiquetes separades per comes o seleccioneu-ne de les existents a la llista inferior.">
 <!ENTITY wmsinspector.addservice.favorite "Favorit">
+
+<!-- AddServiceType dialog -->
+<!ENTITY wmsinspector.addservicetype.title "Afegir tipus de servei">
+<!ENTITY wmsinspector.addservicetype.nameexample "(p.ex. WMS)">
+<!ENTITY wmsinspector.addservicetype.versionsinstructions "Introdu&#239;u les versions suportades, separades per comes">
+<!ENTITY wmsinspector.addservicetype.defaultversion "Versi&#243; per defecte">
 
 <!-- Default XSL templates for GetCapabilities reports -->
 

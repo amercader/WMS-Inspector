@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<dialog xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="wiAddServiceTypeDialog"
+        title="&wmsinspector.addservicetype.title;"
+        onload="WMSInspector.AddServiceTypeDialog.init();"
+        ondialogextra1="WMSInspector.AddServiceTypeDialog.onAccept();"
+        buttons="cancel,extra1"
+        width="380"
+        height="220"
+>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/addServiceTypeDialog.js"/>
+	
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
+    </stringbundleset>
+
+
+    <vbox>
+        <hbox align="center">
+            <label value="Name" />
+            <label value="&wmsinspector.addservicetype.nameexample;" class="wiHelper" />
+            <textbox id="wiAddServiceTypeName"  flex="1"/>
+        </hbox>
+        <hbox align="center">
+            <label value="Title" />
+            <textbox id="wiAddServiceTypeTitle" flex="1" />
+        </hbox>
+        <hbox align="center">
+            <label value="&wmsinspector.common.versions;" />
+            <textbox id="wiAddServiceTypeVersions" flex="1" />
+        </hbox>
+
+        <label class="wiHelper">&wmsinspector.addservicetype.versionsinstructions;</label>
+        <hbox align="center">
+            <label value="&wmsinspector.addservicetype.defaultversion;" />
+            <textbox id="wiAddServiceTypeDefault" style="width: 5em"/>
+        </hbox>
+
+
+   
+    </vbox>
+
+    <hbox style="margin-top:2em">
+        <spacer flex="1" />
+    
+        <button dlgtype="cancel"/>
+        <button dlgtype="extra1" label="&wmsinspector.common.add;" icon="accept" />
+    </hbox>
+
+
+</dialog>

@@ -40,9 +40,12 @@
     list-style-image: url("chrome://wmsinspector/skin/icons/library.png");
 }
 
-#wiMsg{
-    font-weight: bold;
-    color: #FF0000;
+#wiLibraryAddButton {
+    list-style-image: url("chrome://wmsinspector/skin/icons/library_add.png");
+}
+
+.wiHelper{
+    font-style: italic
 }
 
 #wiIndexContent{
@@ -78,10 +81,6 @@
 #wiIndexDescription{
     font-size: 0.8em;
     display: inline;
-}
-
-#wiLibraryAddButton {
-    list-style-image: url("chrome://wmsinspector/skin/icons/library_add.png");
 }
 
 #wiLibraryDBError{
@@ -127,8 +126,4 @@ richlistboxitem:hover {
 .wiLibraryNoServicesFound{
    font-style: italic;
    margin-top: 30px;
-}
-
-#wiAddServiceTagsLabel{
-    font-style: italic
 }

@@ -7,6 +7,7 @@
 <!ENTITY wmsinspector.common.server "Server">
 <!ENTITY wmsinspector.common.service "Service">
 <!ENTITY wmsinspector.common.version "Version">
+<!ENTITY wmsinspector.common.versions "Versions">
 <!ENTITY wmsinspector.common.copy "Copy">
 <!ENTITY wmsinspector.common.add "Add">
 <!ENTITY wmsinspector.common.delete "Delete">
@@ -62,6 +63,9 @@
 <!ENTITY wmsinspector.options.appearance "Appearance">
 <!ENTITY wmsinspector.options.hidecontextmenu "Hide the context menu">
 <!ENTITY wmsinspector.options.libraryconfirmdelete "Ask before deleting services">
+<!ENTITY wmsinspector.options.servicetypes "Service Types">
+<!ENTITY wmsinspector.options.addservicetype "Add Service Type">
+
 
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Library">
@@ -89,8 +93,14 @@
 <!ENTITY wmsinspector.addservice.tagsinstructions "Enter new tags separated by commas or select existing ones from the list below.">
 <!ENTITY wmsinspector.addservice.favorite "Favorite">
 
-<!-- Default XSL templates for GetCapabilities reports -->
+<!-- AddServiceType dialog -->
+<!ENTITY wmsinspector.addservicetype.title "Add service type">
+<!ENTITY wmsinspector.addservicetype.nameexample "(e.g. WMS)">
+<!ENTITY wmsinspector.addservicetype.versionsinstructions "Enter the supported versions, comma separated">
+<!ENTITY wmsinspector.addservicetype.defaultversion "Default version">
 
+
+<!-- Default XSL templates for GetCapabilities reports -->
 <!ENTITY wmsinspector.xsl.reporttitle "Capabilities report">
 <!ENTITY wmsinspector.xsl.service "Service">
 <!ENTITY wmsinspector.xsl.generalinfo "General information">

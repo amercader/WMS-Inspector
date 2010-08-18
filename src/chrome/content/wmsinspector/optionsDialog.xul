@@ -11,48 +11,98 @@
         title="&wmsinspector.options.title;"
         buttons="accept,cancel"
         onload="WMSInspector.OptionsDialog.init();"
-        ondialogaccept="WMSInspector.OptionsDialog.onAccept();">
+        ondialogaccept="WMSInspector.OptionsDialog.onAccept();"
+        persist="width height"
+>
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/optionsDialog.js"/>
 
 
     <stringbundleset id="stringbundleset">
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
     </stringbundleset>
-    <groupbox>
-        <caption label="&wmsinspector.options.general;"/>
-        <hbox flex="1" align="center">
-            <label value="&wmsinspector.options.defaultwmsversion;"/>
-            <menulist id="wiVersionMenu">
-                <menupopup>
-                </menupopup>
-            </menulist>
-        </hbox>
-    </groupbox>
-    <groupbox>
-        <caption label="&wmsinspector.options.appearance;"/>
-        <vbox pack="center" flex="1">
-            <checkbox id="wiHideContextMenu" label="&wmsinspector.options.hidecontextmenu;"/>
-        </vbox>
-    </groupbox>
-    <groupbox>
-        <caption label="&wmsinspector.common.editor;"/>
-        <vbox pack="center" flex="1">
-            <label value="&wmsinspector.options.chooseaneditor;" />
-            <hbox>
-                <textbox id="wiEditorPath" value="" style="width:200px;"/>
-                <button label="&wmsinspector.common.change;" oncommand="WMSInspector.OptionsDialog.selectEditor();"/>
-            </hbox>
 
-        </vbox>
-    </groupbox>
-    <groupbox>
-        <caption label="&wmsinspector.library.title;"/>
-        <vbox pack="center" flex="1">
-            <checkbox id="wiLibraryConfirmBeforeDelete" label="&wmsinspector.options.libraryconfirmdelete;"/>
-        </vbox>
-    </groupbox>
+
+
+    <tabbox>
+        <tabs>
+            <tab label="&wmsinspector.options.general;"/>
+            <tab label="&wmsinspector.options.servicetypes;"/>
+            
+        </tabs>
+        <tabpanels>
+
+            <tabpanel id="wiGeneralTab">
+                <vbox>
+                    <groupbox>
+                        <caption label="&wmsinspector.options.appearance;"/>
+                        <vbox pack="center" flex="1">
+                            <checkbox id="wiHideContextMenu" label="&wmsinspector.options.hidecontextmenu;"/>
+                        </vbox>
+                    </groupbox>
+                    <groupbox>
+                        <caption label="&wmsinspector.common.editor;"/>
+                        <vbox pack="center" flex="1">
+                            <label value="&wmsinspector.options.chooseaneditor;" />
+                            <hbox>
+                                <textbox id="wiEditorPath" value="" style="width:200px;"/>
+                                <button label="&wmsinspector.common.change;" oncommand="WMSInspector.OptionsDialog.selectEditor();"/>
+                            </hbox>
+
+                        </vbox>
+                    </groupbox>
+                    <groupbox>
+                        <caption label="&wmsinspector.library.title;"/>
+                        <vbox pack="center" flex="1">
+                            <checkbox id="wiLibraryConfirmBeforeDelete" label="&wmsinspector.options.libraryconfirmdelete;"/>
+                        </vbox>
+                    </groupbox>
+                </vbox>
+            </tabpanel>
+            <tabpanel id="wiServiceTypesTab" orient="vertical">
+                <hbox flex="0">
+                    <button id="wiAddServiceTypeButton" label="Add Service Type" tooltiptext="&wmsinspector.options.addservicetype;" oncommand="WMSInspector.OptionsDialog.openAddServiceTypeDialog()" image="chrome://wmsinspector/skin/icons/add.png" />
+                </hbox>
+
+
+                <tree flex="1" id="wiServiceTypesTree" context="wiServiceTypesContextMenu" >
+
+                    <treecols>
+                        <treecol id="name" label="Name" flex="1" persist="hidden"/>
+                        <splitter class="tree-splitter"/>
+                        <treecol id="title" label="Title" flex="2" persist="width hidden"/>
+
+                        <splitter class="tree-splitter"/>
+                        <treecol label="&wmsinspector.addservicetype.defaultversion;" flex="3" persist="width hidden"/>
+                        <splitter class="tree-splitter"/>
+                        <treecol label="&wmsinspector.common.versions;" flex="4" persist="width hidden"/>
+
+                    </treecols>
+
+                    <treechildren id="wiServiceTypesTreeChildren" />
+
+
+                </tree>
+
+
+
+
+                <menupopup id="wiServiceTypesContextMenu">
+                    <menuitem label="&wmsinspector.common.edit;"
+                                  oncommand="WMSInspector.OptionsDialog.doContextMenuAction(1,event);"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/edit.png" />
+                    <menuitem label="&wmsinspector.common.delete;"
+                                  oncommand="WMSInspector.OptionsDialog.doContextMenuAction(2,event)"
+                                  class="menuitem-iconic"
+                                  image="chrome://wmsinspector/skin/icons/delete.png" />
+                </menupopup>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+
 
 
 

@@ -17,8 +17,6 @@
                                 height="300"
 >
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/requests.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/getCapabilitiesDialog.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorReport.js"/>
     
@@ -37,14 +35,12 @@
     <groupbox>
         <caption label="&wmsinspector.common.options;"/>
         <hbox align="center" flex="1">
-            <label id="wiServiceTypeMenuLabel" value="&wmsinspector.common.service;" align="center" />
-            <menulist id="wiServiceTypeMenu">
+            <label id="wiServiceTypeMenuLabel" value="&wmsinspector.common.service;" />
+            <menulist id="wiServiceTypeMenu" onselect="WMSInspector.GetCapabilitiesDialog.setVersionsList()">
                 <menupopup>
-                    <menuitem value="0" label="WMS"/>
-                    <menuitem value="1" label="WFS"/>
                 </menupopup>
             </menulist>
-            <label id="wiVersionMenuLabel" value="&wmsinspector.common.version;" align="center" />
+            <label id="wiVersionMenuLabel" value="&wmsinspector.common.version;" />
             <menulist id="wiVersionMenu">
                 <menupopup>
                 </menupopup>
@@ -56,7 +52,7 @@
         <caption label="&wmsinspector.common.output;"/>
         <vbox flex="1">
             <checkbox id="wiGetcapabilitiesOutputHTML" label="&wmsinspector.getcapabilities.outputHTML;" persist="checked"/>
-            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" persist="checked" onclick="WMSInspector.GetCapabilitiesDialog.updateOutputRadios();"/>
+            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" persist="checked" oncommand="WMSInspector.GetCapabilitiesDialog.updateOutputRadios();"/>
         </vbox>
             
         <hbox id="wiGetcapabilitiesOutputOptionsBox" style="margin-left: 22px" align="center" >

@@ -23,6 +23,8 @@ WMSInspector.Overlay = {
 
     libraryWindow: null,
 
+    serviceTypes: [],
+
     init: function(){
         //Set preferences object
         this.prefs = WMSInspector.Utils.getPrefs();
@@ -42,6 +44,9 @@ WMSInspector.Overlay = {
         //Show/Hide Context menu
         document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
 
+        //Get the service types and versions from the DB.
+        //These will be reused on the dialogs to avoid re-querying the DB
+        if (typeof(WMSInspector.DB.conn) == "object") this.getServiceTypes();
 
 
     },
@@ -84,8 +89,11 @@ WMSInspector.Overlay = {
                 WMSInspector.DB.checkDB();
 
             } else {
-        // No first run nor upgrade
-        }
+                // No first run nor upgrade
+
+                //This will set up the DB connection
+                WMSInspector.DB.checkDB();
+            }
 
         }
     },
@@ -642,7 +650,7 @@ WMSInspector.Overlay = {
         }
 
         var url = server + "REQUEST=GetCapabilities"
-                         + "&SERVICE=" + type;
+        + "&SERVICE=" + type;
         if (version) url += "&VERSION=" + version;
 
         return url;
@@ -845,6 +853,264 @@ WMSInspector.Overlay = {
             version
             );
         dialog.focus();
+    },
+
+    getServiceTypes: function(callback){
+        WMSInspector.Overlay.serviceTypes = [];
+        var sql = "SELECT id,name,title,default_version,versions FROM v_service_types_versions";
+
+        var statement = WMSInspector.DB.conn.createStatement(sql);
+        statement.executeAsync({
+            result: [],
+            handleResult: function(resultSet) {
+                for (let row = resultSet.getNextRow();
+                    row;
+                    row = resultSet.getNextRow()) {
+                    
+                    let serviceType = new WMSInspector.ServiceType();
+                    serviceType.id =  row.getResultByName("id"),
+                    serviceType.name = row.getResultByName("name"),
+                    serviceType.title = row.getResultByName("title"),
+                    serviceType.defaultversion = row.getResultByName("default_version"),
+                    serviceType.versions = row.getResultByName("versions").split(",").sort()
+                    WMSInspector.Overlay.serviceTypes.push(serviceType)
+                }
+            },
+
+            handleError: function(error) {
+                Components.utils.reportError("WMSInspector - Error querying v_service_types_versions view" + error.message);
+            },
+
+            handleCompletion: function(reason) {
+                if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                    Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                    return false;
+                }
+
+                if (callback) callback(WMSInspector.Overlay.serviceTypes);
+                
+                return true;
+            }
+        });
+        return true;
+    },
+
+    addServiceType: function(serviceType,callback){
+        try{
+
+            var sql = "INSERT INTO service_types \n\
+                        (name,title) \n\
+                   VALUES \n\
+                        (:name,:title)";
+
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+
+            WMSInspector.DB.bindParameters(statement,{
+                "name":serviceType.name,
+                "title": serviceType.title
+            });
+
+            statement.executeAsync({
+
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error inserting a new service type: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+                    serviceType.id = WMSInspector.DB.conn.lastInsertRowID;
+
+                    WMSInspector.Overlay.setServiceTypeVersions(serviceType,callback);
+
+
+                    return true;
+                }
+            });
+
+            return true;
+
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
+    },
+
+    //serviceType should be a WMSInspector.ServiceType object
+    updateServiceType: function(serviceType,callback){
+        try{
+
+            //We will only update properties defined in the serviceType object provided
+            var sql = "UPDATE service_types";
+            var sqlUpdate = [];
+            var params = {};
+            if (serviceType.name) {
+                sqlUpdate.push(" name = :name");
+                params.name = serviceType.name
+            }
+            if (serviceType.title) {
+                sqlUpdate.push(" title = :title");
+                params.title = serviceType.title
+            }
+
+            if (sqlUpdate.length == 0) return false;
+
+            sql += " SET " + sqlUpdate.join(",") + " WHERE id = :id";
+            params.id = serviceType.id;
+
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+
+            WMSInspector.DB.bindParameters(statement,params);
+
+            statement.executeAsync({
+
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error updating service type: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+                    
+
+                    WMSInspector.Overlay.setServiceTypeVersions(serviceType,callback);
+
+
+
+                    return true;
+                }
+            });
+
+            return true;
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
+    },
+
+
+    setServiceTypeVersions: function(serviceType,callback){
+        try{
+            //Delete previous tags from service
+            var sql = "DELETE FROM versions WHERE service_types_id = :id";
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+
+            WMSInspector.DB.bindParameter(statement, "id", serviceType.id);
+
+            statement.executeAsync({
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error deleting records from the versions table: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+
+                    var statements = [];
+
+                    if (WMSInspector.DB.legacyCode){
+                        for (let i = 0; i < serviceType.versions.length; i ++){
+                            let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name" + i + ",:isdefault" + i + ")";
+                            let statement = WMSInspector.DB.conn.createStatement(sql);
+                            let params = {};
+                            params.servicetypeid = serviceType.id;
+                            params["name"+i] = serviceType.versions[i];
+                            params["isdefault"+i] = (serviceType.versions[i] == serviceType.defaultversion) ? 1 : 0;
+                            WMSInspector.DB.bindParameters(statement,params);
+
+                            statements.push(statement);
+                        }
+                    } else {
+                        let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name,:isdefault)";
+                        let statement = WMSInspector.DB.conn.createStatement(sql);
+                        let params = statement.newBindingParamsArray();
+                        for (let i = 0; i < serviceType.versions.length; i ++){
+                            bp = params.newBindingParams();
+                            bp.bindByName("servicetypeid", serviceType.id);
+                            bp.bindByName("name", serviceType.versions[i]);
+                            bp.bindByName("isdefault", (serviceType.versions[i] == serviceType.defaultversion) ? 1 : 0);
+                            params.addParams(bp);
+                        }
+                        statement.bindParameters(params);
+
+                        statements.push(statement);
+
+                    }
+
+
+                    WMSInspector.DB.conn.executeAsync(
+                        statements,
+                        statements.length,
+                        {
+                            handleError: function(error) {
+                                Components.utils.reportError("WMSInspector - Error inserting records in the versions table: " + error.message);
+                            },
+
+                            handleCompletion: function(reason) {
+                                if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                                    Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                                    return false;
+                                }
+                                //Refresh the serviceTypes array
+                                WMSInspector.Overlay.getServiceTypes(callback);
+                                return true;
+                            }
+                        });
+                    return true;
+                }
+            });
+            return true;
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
+    },
+    deleteServiceType: function(id,callback){
+        try{
+
+            var sql = "DELETE FROM service_types WHERE id = :id";
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+
+            WMSInspector.DB.bindParameters(statement,{
+                id:id
+            });
+
+            statement.executeAsync({
+
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error deleting service type: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return false;
+                    }
+
+                    // The service_types_after_delete_trigger trigger will deal with the service type's versions
+                    
+                    //Refresh the serviceTypes array
+                    WMSInspector.Overlay.getServiceTypes(callback);
+
+                    return true;
+                }
+            });
+
+            return true;
+        } catch (e) {
+            Components.utils.reportError(e);
+            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+            return false;
+        }
     }
 
 }

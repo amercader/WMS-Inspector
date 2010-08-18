@@ -1,7 +1,9 @@
 
 WMSInspector.GetCapabilitiesDialog = {
     prefs: null,
-	
+
+    serviceTypes:[],
+
     init: function(){
         this.prefs = WMSInspector.Utils.getPrefs();
         WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
@@ -10,10 +12,12 @@ WMSInspector.GetCapabilitiesDialog = {
         button.setAttribute("label", WMSInspector.Utils.getString("wi_getcapabilities_request"));
         button.addEventListener("command", WMSInspector.GetCapabilitiesDialog.onAccept, false);
   
-        if (window.arguments){
-            var server = window.arguments[0];
-            var version = window.arguments[1];
-        }
+     
+        var server = (window.arguments) ? window.arguments[0] : false;
+        var version = (window.arguments) ? window.arguments[1] : false;
+   
+
+        this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
 
         if (server) document.getElementById("wiTextServer").value = server;
 
@@ -21,22 +25,65 @@ WMSInspector.GetCapabilitiesDialog = {
         
         document.getElementById("wiGetcapabilitiesOutputEditor").setAttribute("disabled",this.prefs.getCharPref("editor") == "");
         
-        
-		
-        var versions = this.prefs.getCharPref("wmsversions").split("|");
-        var defVersion = this.prefs.getCharPref("wmsversion");
-		
-        var menuList = document.getElementById("wiVersionMenu");
-        var item;
-		
-        for (var i=0; i < versions.length; i++){
-            item = menuList.appendItem(versions[i],i);
-            if ((version && (versions[i] == version)) || (!version && (versions[i] == defVersion)))  menuList.selectedItem = item;
+        this.setServiceTypesList();
+
+        if (version){
+            var versionsList = document.getElementById("wiVersionMenu");
+            for (let i=0; i < versionsList.itemCount; i++){
+                let item = versionsList.getItemAtIndex(i);
+                if (item.getAttribute("label") == version) {
+                    versionsList.selectedItem = item;
+                    break;
+                }
+            }
         }
+
     },
-	
+
+    setServiceTypesList: function(){
+
+        var serviceTypesList = document.getElementById("wiServiceTypeMenu");
+        for (let i=0; i < this.serviceTypes.length; i++){
+            serviceTypesList.appendItem(this.serviceTypes[i].name,this.serviceTypes[i].name);
+        }
+        serviceTypesList.selectedIndex = 0;
+
+    },
+
+    setVersionsList: function(){
+
+        var serviceTypes = WMSInspector.GetCapabilitiesDialog.serviceTypes;
+        var selectedType = document.getElementById("wiServiceTypeMenu").selectedItem.value;
+
+        for (let i=0; i < serviceTypes.length; i++){
+            if (serviceTypes[i].name == selectedType){
+                var versionsList = document.getElementById("wiVersionMenu");
+                versionsList.removeAllItems()
+                for (let j=0; j < serviceTypes[i].versions.length; j++){
+                    versionsList.appendItem(serviceTypes[i].versions[j],serviceTypes[i].versions[j]);
+                    if (serviceTypes[i].versions[j] == serviceTypes[i].defaultversion)
+                        versionsList.selectedIndex = j;
+                }
+                if (versionsList.selectedIndex == -1) versionsList.selectedIndex = 0;
+                break;
+            }
+
+        }
+
+        //Disable HTML output option for non WMS services
+        var html =  (selectedType == "WMS");
+        document.getElementById("wiGetcapabilitiesOutputHTML").collapsed = !html;
+        document.getElementById("wiGetcapabilitiesOutputXML").disabled = !html
+        if (html){
+            document.getElementById("wiGetcapabilitiesOutputXML").checked = true;
+            WMSInspector.GetCapabilitiesDialog.updateOutputRadios();
+        }
+   
+
+    },
+
     onAccept: function(){
-        var outputHTML = document.getElementById("wiGetcapabilitiesOutputHTML").checked;
+        var outputHTML = document.getElementById("wiGetcapabilitiesOutputHTML").checked && !document.getElementById("wiGetcapabilitiesOutputHTML").collapsed;
         var outputXML = document.getElementById("wiGetcapabilitiesOutputXML").checked;
 
 
@@ -71,16 +118,10 @@ WMSInspector.GetCapabilitiesDialog = {
     },
 
     updateOutputRadios: function(){
-        
-        //The click event fires before changing the checkbox value
-        var disabled = document.getElementById("wiGetcapabilitiesOutputXML").checked;
-        document.getElementById("wiGetcapabilitiesOutputOptionsBox").setAttribute("collapsed",disabled);
-        
+        document.getElementById("wiGetcapabilitiesOutputOptionsBox").collapsed = !document.getElementById("wiGetcapabilitiesOutputXML").checked;
     },
 
-    //Unfortunately, there is bug that sometimes prevents the preference
-    //observer from being called. See
-    //  https://bugzilla.mozilla.org/show_bug.cgi?id=488587
+
     observe: function(subject,topic,data){
 
         if (topic == "nsPref:changed" && data == "editor"){

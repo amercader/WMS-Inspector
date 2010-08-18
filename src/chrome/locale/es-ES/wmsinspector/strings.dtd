@@ -7,6 +7,7 @@
 <!ENTITY wmsinspector.common.server "Servidor">
 <!ENTITY wmsinspector.common.service "Servicio">
 <!ENTITY wmsinspector.common.version "Versi&#243;n">
+<!ENTITY wmsinspector.common.versions "Versiones">
 <!ENTITY wmsinspector.common.copy "Copiar">
 <!ENTITY wmsinspector.common.add "A&#241;adir">
 <!ENTITY wmsinspector.common.delete "Eliminar">
@@ -62,6 +63,8 @@
 <!ENTITY wmsinspector.options.appearance "Apariencia">
 <!ENTITY wmsinspector.options.hidecontextmenu "Esconde el men&#250; contextual">
 <!ENTITY wmsinspector.options.libraryconfirmdelete "Confirma antes de eliminar servicios">
+<!ENTITY wmsinspector.options.servicetypes "Tipos de servicios">
+<!ENTITY wmsinspector.options.addservicetype "A&#241;adir tipo de servicio">
 
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Biblioteca">
@@ -90,8 +93,13 @@
 <!ENTITY wmsinspector.addservice.tagsinstructions "Introduzca nuevas etiquetas separadas por comas o seleccione algunas de las existentes en la lista inferior.">
 <!ENTITY wmsinspector.addservice.favorite "Favorito">
 
-<!-- Default XSL templates for GetCapabilities reports -->
+<!-- AddServiceType dialog -->
+<!ENTITY wmsinspector.addservicetype.title "A&#241;adir tipo de servicio">
+<!ENTITY wmsinspector.addservicetype.nameexample "(p.ej. WMS)">
+<!ENTITY wmsinspector.addservicetype.versionsinstructions "Introduzca las versiones soportadas, separadas por comas">
+<!ENTITY wmsinspector.addservicetype.defaultversion "Versi&#243;n por defecto">
 
+<!-- Default XSL templates for GetCapabilities reports -->
 <!ENTITY wmsinspector.xsl.reporttitle "Informe de capacidades">
 <!ENTITY wmsinspector.xsl.service "Servicio">
 <!ENTITY wmsinspector.xsl.generalinfo "Datos generales">

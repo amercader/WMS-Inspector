@@ -1,28 +1,59 @@
 WMSInspector.OptionsDialog = {
     
     prefs: null,
-    
+
+    serviceTypes: window.opener.WMSInspector.Overlay.serviceTypes,
+
     init: function(){
 
         this.prefs = WMSInspector.Utils.getPrefs();
         
-        //Set values from current preferences values
-        var versions = this.prefs.getCharPref("wmsversions").split("|");
-        var defVersion = this.prefs.getCharPref("wmsversion");
-
-        var menuList = document.getElementById("wiVersionMenu");
-        var item;
-
-        for (var i=0; i < versions.length; i++){
-            item = menuList.appendItem(versions[i],i);
-            if (versions[i] == defVersion)  menuList.selectedItem = item;
-        }
 
         document.getElementById("wiHideContextMenu").checked = this.prefs.getBoolPref("hidecontextmenu");
         
         document.getElementById("wiEditorPath").value = this.prefs.getCharPref("editor");
 
         document.getElementById("wiLibraryConfirmBeforeDelete").checked = this.prefs.getBoolPref("libraryconfirmbeforedelete");
+
+        //Build service types tree
+        this.buildServiceTypesTree();
+    },
+
+    buildServiceTypesTree: function(){
+
+        var treeChildren = document.getElementById("wiServiceTypesTreeChildren");
+
+        while(treeChildren.firstChild) treeChildren.removeChild(treeChildren.firstChild);
+
+        for (let i = 0; i < WMSInspector.OptionsDialog.serviceTypes.length; i++){
+            let serviceType = WMSInspector.OptionsDialog.serviceTypes[i];
+            let treeItem = document.createElement("treeitem");
+            let treeRow = document.createElement("treerow");
+
+
+            let treeCellName = document.createElement("treecell");
+            treeCellName.setAttribute("value", serviceType.id);
+            treeCellName.setAttribute("label", serviceType.name);
+            treeRow.appendChild(treeCellName);
+
+            let treeCellTitle = document.createElement("treecell");
+            treeCellTitle.setAttribute("label", serviceType.title);
+            treeRow.appendChild(treeCellTitle);
+
+            let treeCellDefault = document.createElement("treecell");
+            treeCellDefault.setAttribute("label", serviceType.defaultversion);
+            treeRow.appendChild(treeCellDefault);
+
+            let treeCellVersions = document.createElement("treecell");
+            treeCellVersions.setAttribute("label", serviceType.versions.join(","));
+            treeRow.appendChild(treeCellVersions);
+
+            treeItem.appendChild(treeRow);
+            treeChildren.appendChild(treeItem);
+
+        }
+
+
     },
 
     selectEditor: function() {
@@ -40,9 +71,6 @@ WMSInspector.OptionsDialog = {
 
     onAccept: function(){
 
-        //Default WMS version
-        this.prefs.setCharPref("wmsversion",document.getElementById("wiVersionMenu").selectedItem.getAttribute("label"));
-
         //Hide context menu
         this.prefs.setBoolPref("hidecontextmenu",(document.getElementById("wiHideContextMenu").checked === true));
 
@@ -52,6 +80,57 @@ WMSInspector.OptionsDialog = {
         //Ask before deleting one of the Library items
         this.prefs.setBoolPref("libraryconfirmbeforedelete",(document.getElementById("wiLibraryConfirmBeforeDelete").checked === true));
         
+    },
+
+    openAddServiceTypeDialog: function(id){
+        var dialog = window.openDialog(
+            "chrome://wmsinspector/content/addServiceTypeDialog.xul",
+            "wiAddServiceTypeDialog",
+            "chrome,centerscreen",
+            id // If a service type id provided, dialog will be shown in edit mode
+            );
+        dialog.focus();
+    },
+    
+    doContextMenuAction: function(mode,event){
+        var tree = document.getElementById("wiServiceTypesTree");
+
+        var serviceTypeId = tree.view.getCellValue(tree.currentIndex,tree.columns.getNamedColumn('name'));
+
+        switch (mode){
+            case 1:
+                //Edit service type
+                WMSInspector.OptionsDialog.openAddServiceTypeDialog(serviceTypeId);
+                break;
+            case 2:
+                //Delete service type
+                var prompt = WMSInspector.Utils.showConfirm(WMSInspector.Utils.getString("wi_options_confirmdeleteservicetype"));
+                if (prompt){
+
+                    WMSInspector.OptionsDialog.deleteServiceType(serviceTypeId);
+                }
+                break;
+
+        }
+        return true;
+    },
+
+    addServiceType: function(serviceType){
+        window.opener.WMSInspector.Overlay.addServiceType(serviceType,this.refreshServiceTypeTree);
+    },
+
+    updateServiceType: function(serviceType){
+        window.opener.WMSInspector.Overlay.updateServiceType(serviceType,this.refreshServiceTypeTree);
+    },
+
+    deleteServiceType: function(serviceTypeId){
+
+        window.opener.WMSInspector.Overlay.deleteServiceType(serviceTypeId,this.refreshServiceTypeTree);
+    },
+
+    refreshServiceTypeTree: function(serviceTypes){
+        WMSInspector.OptionsDialog.serviceTypes = serviceTypes;
+        WMSInspector.OptionsDialog.buildServiceTypesTree();
     }
 
 }
