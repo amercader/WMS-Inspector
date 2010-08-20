@@ -175,7 +175,7 @@ WMSInspector.AddServiceDialog = {
             return false;
         }
 
-        var service = new window.opener.WMSInspector.libraryService();
+        var service = new WMSInspectorClasses.Service();
 
         service.id = WMSInspector.AddServiceDialog.serviceId;
         service.title = document.getElementById("wiAddServiceTitle").value;
@@ -189,7 +189,7 @@ WMSInspector.AddServiceDialog = {
 
         //If the dialog was called from the Library window, refresh the services list after adding or updating
         //the service
-        var callback = (window.opener.name == "wiLibrary") ? WMSInspector.AddServiceDialog.Library.search : null;
+        var callback = (window.opener.name == "wiLibrary") ? WMSInspector.AddServiceDialog.Library.onServiceOperationFinished : null;
 
         if (WMSInspector.AddServiceDialog.serviceId){
             //Update an existing service

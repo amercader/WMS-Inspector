@@ -38,13 +38,14 @@ WMSInspector.Library = {
         //Add <All> option to service types list
         var typesList = document.getElementById("wiLibraryServiceTypeList");
         typesList.appendItem(WMSInspector.Utils.getString("wi_all"),0);
-        this.fetchList("types",typesList,this.search);
+        this.fetchList("types",typesList,function (){WMSInspector.Library.search()});
 
 
 
     },
+    
     setSelectedService: function(element){
-        WMSInspector.Library.selectedService = new WMSInspector.libraryService();
+        WMSInspector.Library.selectedService = new WMSInspectorClasses.Service();
         WMSInspector.Library.selectedService.id = element.serviceId;
         WMSInspector.Library.selectedService.URL = element.serviceURL;
         WMSInspector.Library.selectedService.type = element.serviceType;
@@ -104,7 +105,7 @@ WMSInspector.Library = {
                     }
                 }
 
-                if (deleteService) WMSInspector.Library.deleteService(service.id,WMSInspector.Library.search);
+                if (deleteService) WMSInspector.Library.deleteService(service.id,WMSInspector.Library.onServiceOperationFinished);
 
                 break;
             case 4:
@@ -140,50 +141,62 @@ WMSInspector.Library = {
     },
     
     fetchList: function(type,list,callback){
-        if (!type || !list) return false;
+        try{
+            if (!type || !list) return false;
 
-        var sql;
-        if (type == "tags"){
-            sql = "SELECT title AS name FROM tags ORDER BY title";
-        } else if (type == "types"){
-            sql = "SELECT name FROM service_types";
-        } else {
-            return false;
-        }
-        var statement = WMSInspector.DB.conn.createStatement(sql);
-        statement.executeAsync({
-            handleResult: function(resultSet) {
-                for (let row = resultSet.getNextRow();
-                    row;
-                    row = resultSet.getNextRow()) {
-                            
-                    let name = row.getResultByName("name");
-                    let element = list.appendItem(name,name);
-                    if (type == "tags")
-                        element.setAttribute("type", "checkbox");
-                }
-            },
-
-            handleError: function(error) {
-                Components.utils.reportError("WMSInspector - Error querying table (" + type + "): " + error.message);
-            },
-
-            handleCompletion: function(reason) {
-                if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                    Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                    return false;
-                }
-                    
-                if (type == "types")
-                    list.selectedIndex = 0;
-
-                if (callback)
-                    callback();
-
-                return true;
+            var sql;
+            if (type == "tags"){
+                sql = "SELECT title AS name FROM tags ORDER BY title";
+            } else if (type == "types"){
+                sql = "SELECT name FROM service_types";
+            } else {
+                return false;
             }
-        });
-        return true;
+            var statement = WMSInspector.DB.conn.createStatement(sql);
+            statement.executeAsync({
+                errorsFound: false,
+                handleResult: function(resultSet) {
+                    try{
+                        for (let row = resultSet.getNextRow();
+                            row;
+                            row = resultSet.getNextRow()) {
+                            
+                            let name = row.getResultByName("name");
+                            let element = list.appendItem(name,name);
+                            if (type == "tags")
+                                element.setAttribute("type", "checkbox");
+                        }
+                    } catch (error) {
+                        this.errorsFound = true;
+                        WMSInspector.Library.exceptionHandler(error);
+                    }
+                },
+
+                handleError: function(error) {
+                    WMSInspector.Library.exceptionHandler(error,callback);
+                },
+
+                handleCompletion: function(reason) {
+                    try {
+                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                    
+                        if (type == "types")
+                            list.selectedIndex = 0;
+
+                        if (callback)
+                            callback(!this.errorsFound);
+
+                        return true;
+                    } catch (error){
+                        WMSInspector.Library.exceptionHandler(error,callback);
+                    }
+                }
+            });
+            return true;
+        } catch (error){
+            return WMSInspector.Library.exceptionHandler(error,callback);
+        }
     },
 
     searchText: function(text){
@@ -232,7 +245,6 @@ WMSInspector.Library = {
     },
 
     search: function(params){
-
         var libraryQuery = new WMSInspector.libraryQuery(params,WMSInspector.Library.build)
         libraryQuery.query();
         
@@ -361,69 +373,52 @@ WMSInspector.Library = {
             return false;
         } 
 
-        var processFunction = function(contents){
-            try{
+        var wiService = WMSInspector.Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
 
-                var separator = WMSInspector.Library.prefs.getCharPref("exportseparator");
-
-                var columns = contents.shift().split(separator);
-
-                for (let i = 0; i < contents.length;i++){
-                    if (contents[i].length > 0){
-
-                        let record = WMSInspector.Utils.parseCSV(contents[i],separator)[0];
-
-                        if (record.length){
-
-                            let service = new WMSInspector.libraryService();
-
-                            service.title = record[columns.indexOf("title")];
-                            service.URL = record[columns.indexOf("URL")];
-                            service.favorite = (record[columns.indexOf("favorite")] == "1");
-                            service.version = record[columns.indexOf("version")];
-                            service.type = record[columns.indexOf("type")];
-                            if (record[columns.indexOf("tags")]) service.tags = record[columns.indexOf("tags")].split(",");
-
-                            if (service.URL) {
-                                let add = WMSInspector.Library.addService(service);
-                                if (!add) return false;
-                            }
-                        }
-                    }
-                }
-                
-                return contents.length;
-            } catch (e){
-                Components.utils.reportError(e);
-                return false;
-            }
-        };
-
-        var callbackFunction = function(result){
-            WMSInspector.Library.toggleProgressMeter();
-
-                var msg = (result !== false) ?
-                    WMSInspector.Utils.getString("wi_library_importprompt").replace("%S",result) :
-                    "Errors were found during the import operation";
-            
-            WMSInspector.Utils.showAlert(msg);
-        }
-
-        WMSInspector.Threads.runThread(1,processFunction,contents,callbackFunction);
-
+        wiService.importServicesFromCSV(contents,this,this.onServicesImported);
         return true;
 
     },
 
-    build: function(results){
-       
-        results = results || [];
+    onServiceOperationFinished: function(result){
+        if (result === false){
+            //Errors were found
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_anerroroccurred"));
+        } else {
+            //All went good, refresh the list
+            WMSInspector.Library.search();
+        }
+    },
+
+    onServicesImported: function(result){
+        WMSInspector.Library.toggleProgressMeter();
         
+        var msg = (result !== false) ?
+        WMSInspector.Utils.getString("wi_library_importprompt").replace("%S",result) :
+        WMSInspector.Utils.getString("wi_library_errorsinimport");
+
+        WMSInspector.Utils.showAlert(msg);
+        if (result !== false) WMSInspector.Library.search();
+        return true;
+    },
+    
+    build: function(results){
+
         WMSInspector.Library.currentResults = results;
 
         WMSInspector.Library.clearList();
         var numServices = "";
-        if (results.length){
+
+        if (results === false || results.length == 0){
+            WMSInspector.Library.list.setAttribute("align","center");
+            var label = document.createElement("label");
+
+            label.setAttribute("value",(results === false) ? WMSInspector.Utils.getString("wi_library_errorsinquery") : WMSInspector.Utils.getString("wi_library_noservicesfound"));
+            label.setAttribute("class","wiLibraryNoServicesFound");
+            label.setAttribute("pack","center");
+            WMSInspector.Library.list.appendChild(label);
+
+        } else if (results.length){
             WMSInspector.Library.list.setAttribute("align","stretch");
             for (let i=0; i < results.length; i++){
                 WMSInspector.Library.addServiceRow(results[i]);
@@ -431,20 +426,12 @@ WMSInspector.Library = {
             }
             numServices = (results.length == 1) ? WMSInspector.Utils.getString("wi_library_serviceshown") : WMSInspector.Utils.getString("wi_library_servicesshown").replace("%S",results.length);
             
-        } else{
-            WMSInspector.Library.list.setAttribute("align","center");
-            var label = document.createElement("label");
-            label.setAttribute("value",WMSInspector.Utils.getString("wi_library_noservicesfound"));
-            label.setAttribute("class","wiLibraryNoServicesFound");
-            label.setAttribute("pack","center");
-            WMSInspector.Library.list.appendChild(label);
-            
-        }
+        } 
 
         document.getElementById("wiLibraryNumServices").setAttribute("value",numServices);
     },
 
-    //Service should be a WMSInspector.libraryService object
+    //Service should be a WMSInspectorClasses.Service object
     addServiceRow: function(service) {
         var item = document.createElement("richlistboxitem");
         item.setAttribute("class","libraryItem");
@@ -492,6 +479,7 @@ WMSInspector.Library = {
         var value = (box.getAttribute("collapsed") == "true");
         if (value && msg) document.getElementById("wiLibraryProgressMeterLabel").setAttribute("value", msg);
         box.setAttribute("collapsed",!value);
+        return true;
     },
 
     openAddServiceDialog: function(id) {
@@ -505,23 +493,24 @@ WMSInspector.Library = {
         dialog.focus();
     },
 
-    //Service should be a WMSInspector.libraryService object
+    // TODO: move to component
+    //Service should be a WMSInspectorClasses.Service object
     addService: function(service,callback){
         try{
 
             // In asynchronous calls, it is not safe to rely on conn.lastInsertRowID,
             // so we build a unique hash to identify the record and be able to get its
-            // id later on handleCompletion
+            // id later on handleCompletion.
+            // This is temporary until this code is migrated to the component and threaded
 
             var hash = WMSInspector.Utils.getHash(service.URL + service.type + new Date().getTime());
-
             var sql = "INSERT INTO services \n\
                         (title,url,version,favorite,creation_date,type,hash) \n\
                    VALUES \n\
                         (:title,:url,:version,:favorite,strftime('%s','now'),:type,:hash)";
 
             var statement = WMSInspector.DB.conn.createStatement(sql);
-            
+
             WMSInspector.DB.bindParameters(statement,{
                 "title": service.title,
                 "url": service.URL,
@@ -534,65 +523,70 @@ WMSInspector.Library = {
             statement.executeAsync({
                 
                 handleError: function(error) {
-                    Components.utils.reportError("WMSInspector - Error inserting a new service: " + error.message);
+                    WMSInspector.Library.exceptionHandler(error,callback);
                 },
 
                 handleCompletion: function(reason) {
-                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                        return false;
-                    }
+                    try {
+                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
 
-                    // We need to get the inserted service id, and as it's not safe to rely on
-                    // conn.lastInsertRowID, we need to select the record with the previously generated
-                    // hash. Ugly, but works.
+                        // We need to get the inserted service id, and as it's not safe to rely on
+                        // conn.lastInsertRowID, we need to select the record with the previously generated
+                        // hash. This is temporary until this code is migrated to the component and threaded
 
-                    let sql = "SELECT id FROM services WHERE hash = :hash";
-                    let selectStatement = WMSInspector.DB.conn.createStatement(sql);
-                    WMSInspector.DB.bindParameter(selectStatement, "hash", hash);
+                        let sql = "SELECT id FROM services WHERE hash = :hash";
+                        let selectStatement = WMSInspector.DB.conn.createStatement(sql);
+                        WMSInspector.DB.bindParameter(selectStatement, "hash", hash);
 
-                    selectStatement.executeAsync({
-                        serviceId:false,
+                        selectStatement.executeAsync({
+                            serviceId:false,
 
-                        handleResult: function(resultSet) {
-                            let row = resultSet.getNextRow();
-                            this.serviceId = row.getResultByName("id");
-                        },
+                            handleResult: function(resultSet) {
+                                let row = resultSet.getNextRow();
+                                this.serviceId = row.getResultByName("id");
+                            },
 
-                        handleError: function(error) {
-                            Components.utils.reportError("WMSInspector - Error inserting a new service: " + error.message);
-                        },
+                            handleError: function(error) {
+                                WMSInspector.Library.exceptionHandler(error,callback);
+                            },
 
-                        handleCompletion: function(reason) {
-                            if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                                Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                                return false;
-                            }
+                            handleCompletion: function(reason) {
+                                try {
+                                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                                        return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
 
-                            if (service.tags && service.tags.length) {
-                                WMSInspector.Library.setTags(this.serviceId,service.tags,callback);
-                            } else {
-                                if (callback) callback(this.serviceId);
-                            }
+
+                                    if (service.tags && service.tags.length) {
+                                        WMSInspector.Library.setTags(this.serviceId,service.tags,callback);
+                                    } else {
+                                        if (callback) callback(this.serviceId);
+                                    }
                             
-                            return true;
-                        }
-                    });
+                                    return true;
+                                } catch (error) {
+                                    WMSInspector.Library.exceptionHandler(error,callback);
+                                }
+                            }
+                        });
 
-                    return true;
+                        return true;
+
+                    } catch (error) {
+                        WMSInspector.Library.exceptionHandler(error,callback);
+                    }
                 }
             });
 
             return true;
 
-        } catch (e) {
-            Components.utils.reportError(e);
-            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
-            return false;
+        } catch (error) {
+            WMSInspector.Library.exceptionHandler(error,callback);
         }
     },
 
-    //Service should be a WMSInspector.libraryService object
+    // TODO: move to component
+    //Service should be a WMSInspectorClasses.Service object
     updateService: function(service,callback){
         try{
 
@@ -635,29 +629,30 @@ WMSInspector.Library = {
             statement.executeAsync({
 
                 handleError: function(error) {
-                    Components.utils.reportError("WMSInspector - Error updating service: " + error.message);
+                    WMSInspector.Library.exceptionHandler(error,callback);
                 },
 
                 handleCompletion: function(reason) {
-                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                        return false;
-                    }
-                    if (service.tags.length) {
-                        WMSInspector.Library.setTags(service.id,service.tags,callback);
-                    } else {
-                        if (callback) callback();
-                    }
+                    try{
+                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
 
-                    return true;
+                        if (service.tags && service.tags.length) {
+                            WMSInspector.Library.setTags(service.id,service.tags,callback);
+                        } else {
+                            if (callback) callback(service.id);
+                        }
+
+                        return true;
+                    } catch (error){
+                        WMSInspector.Library.exceptionHandler(error,callback);
+                    }
                 }
             });
             
             return true;
-        } catch (e) {
-            Components.utils.reportError(e);
-            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
-            return false;
+        } catch (error) {
+            WMSInspector.Library.exceptionHandler(error,callback);
         }
     },
 
@@ -668,6 +663,7 @@ WMSInspector.Library = {
      *      - If not, insert tag and get new id
      * 3 - Insert records in rel_services_tag table
      */
+    // TODO: move to component
     setTags: function(serviceId,tags,callback){
 
         try {
@@ -681,113 +677,121 @@ WMSInspector.Library = {
 
             statement.executeAsync({
                 handleError: function(error) {
-                    Components.utils.reportError("WMSInspector - Error deleting records from the rel_services_tags table: " + error.message);
+                    WMSInspector.Library.exceptionHandler(error,callback);
                 },
 
                 handleCompletion: function(reason) {
-                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                        return false;
-                    }
+                    try{
+                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
 
-                    //Check if tags exist and insert new ones if not
-                    var tagIds = [];
-                    for (let i = 0; i < tags.length; i ++){
-                        let tagExists = false;
-                        let selectSql = "SELECT id FROM tags WHERE title = :tag" + i;
-                        let selectStatement = WMSInspector.DB.conn.createStatement(selectSql);
+                        //Check if tags exist and insert new ones if not
+                        var tagIds = [];
+                        for (let i = 0; i < tags.length; i ++){
+                            let tagExists = false;
+                            let selectSql = "SELECT id FROM tags WHERE title = :tag" + i;
+                            let selectStatement = WMSInspector.DB.conn.createStatement(selectSql);
 
-                        WMSInspector.DB.bindParameter(selectStatement, "tag"+i, tags[i]);
+                            WMSInspector.DB.bindParameter(selectStatement, "tag"+i, tags[i]);
                     
-                        try {
+                            try {
                             
-                            while (selectStatement.step()) {
-                                //Tag already exists
-                                tagExists = true;
-                                tagIds.push(selectStatement.row.id)
+                                while (selectStatement.step()) {
+                                    //Tag already exists
+                                    tagExists = true;
+                                    tagIds.push(selectStatement.row.id)
+                                }
                             }
-                        }
-                        finally {
-                            selectStatement.reset();
-                            if (!tagExists){
-                                //Tag does not exist
-                                let insertSql = "INSERT INTO tags (title) VALUES (:tag" + i+")";
-                                let insertStatement = WMSInspector.DB.conn.createStatement(insertSql);
+                            finally {
+                                try{
+                                    selectStatement.reset();
+                                    if (!tagExists){
+                                        //Tag does not exist
+                                        let insertSql = "INSERT INTO tags (title) VALUES (:tag" + i+")";
+                                        let insertStatement = WMSInspector.DB.conn.createStatement(insertSql);
 
-                                WMSInspector.DB.bindParameter(insertStatement, "tag"+i, tags[i]);
+                                        WMSInspector.DB.bindParameter(insertStatement, "tag"+i, tags[i]);
 
-                                insertStatement.execute();
+                                        insertStatement.execute();
                                 
-                                //Get the id of the last inserted tag
-                                tagIds.push(WMSInspector.DB.conn.lastInsertRowID);
+                                        //Get the id of the last inserted tag
+                                        tagIds.push(WMSInspector.DB.conn.lastInsertRowID);
+                                    }
+                                } catch (error) {
+                                    WMSInspector.Library.exceptionHandler(error,callback);
+                                }
                             }
-                        }
+
                         
-                    }
+                        }
 
-                    if (tagIds.length){
-                        //Insert records in the services-tags relationship table
-                        var statements = [];
+                        if (tagIds.length){
+                            //Insert records in the services-tags relationship table
+                            var statements = [];
 
-                        if (WMSInspector.DB.legacyCode){
-                            for (let i = 0; i < tagIds.length; i ++){
-                                let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";
+                            if (WMSInspector.DB.legacyCode){
+                                for (let i = 0; i < tagIds.length; i ++){
+                                    let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";
+                                    let statement = WMSInspector.DB.conn.createStatement(sql);
+                                    let params = {};
+                                    params.serviceid = serviceId;
+                                    params["tagid"+i] = tagIds[i];
+                                    WMSInspector.DB.bindParameters(statement,params);
+
+                                    statements.push(statement);
+                                }
+                            } else {
+                                let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid)";
                                 let statement = WMSInspector.DB.conn.createStatement(sql);
-                                let params = {};
-                                params.serviceid = serviceId;
-                                params["tagid"+i] = tagIds[i];
-                                WMSInspector.DB.bindParameters(statement,params);
+                                let params = statement.newBindingParamsArray();
+                                for (let i = 0; i < tagIds.length; i ++){
+                                    bp = params.newBindingParams();
+                                    bp.bindByName("serviceid", serviceId);
+                                    bp.bindByName("tagid", tagIds[i]);
+                                    params.addParams(bp);
+                                }
+                                statement.bindParameters(params);
 
                                 statements.push(statement);
+
                             }
-                        } else {
-                            let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid)";
-                            let statement = WMSInspector.DB.conn.createStatement(sql);
-                            let params = statement.newBindingParamsArray();
-                            for (let i = 0; i < tagIds.length; i ++){
-                                bp = params.newBindingParams();
-                                bp.bindByName("serviceid", serviceId);
-                                bp.bindByName("tagid", tagIds[i]);
-                                params.addParams(bp);
-                            }
-                            statement.bindParameters(params);
-
-                            statements.push(statement);
-
-                        }
 
 
-                        WMSInspector.DB.conn.executeAsync(
-                            statements,
-                            statements.length,
-                            {
-                                handleError: function(error) {
-                                    Components.utils.reportError("WMSInspector - Error inserting records in the rel_services_tags table: " + error.message);
-                                },
+                            WMSInspector.DB.conn.executeAsync(
+                                statements,
+                                statements.length,
+                                {
+                                    handleError: function(error) {
+                                        WMSInspector.Library.exceptionHandler(error,callback);
+                                    },
 
-                                handleCompletion: function(reason) {
-                                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                                        return false;
+                                    handleCompletion: function(reason) {
+                                        try{
+                                            if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                                                return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+
+                                            if (callback) callback(serviceId);
+
+                                            return true;
+                                        } catch (error){
+                                            WMSInspector.Library.exceptionHandler(error,callback);
+                                        }
                                     }
-
-                                    if (callback) callback();
-
-                                    return true;
-                                }
-                            });
+                                });
+                        }
+                        return true;
+                    } catch (error) {
+                        WMSInspector.Library.exceptionHandler(error,callback);
                     }
-                    return true;
                 }
             });
             return true;
-        } catch (e) {
-            Components.utils.reportError(e);
-            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
-            return false;
+        } catch (error) {
+            WMSInspector.Library.exceptionHandler(error,callback);
         }
     },
 
+    // TODO: move to component
     deleteService: function(id,callback){
         try{
             if (typeof(id) != "number") return false;
@@ -802,40 +806,39 @@ WMSInspector.Library = {
             statement.executeAsync({
 
                 handleError: function(error) {
-                    Components.utils.reportError("WMSInspector - Error deleting service: " + error.message);
+                    WMSInspector.Library.exceptionHandler(error,callback);
                 },
 
                 handleCompletion: function(reason) {
-                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
-                        return false;
-                    }
-                    // The services_after_delete_trigger trigger will deal with the service's tags
+                    try{
+                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
 
-                    if (callback) callback();
+                        // The services_after_delete_trigger trigger will deal with the service's tags
+
+                        if (callback) callback();
                     
-                    return true;
+                        return true;
+                    } catch (error){
+                        WMSInspector.Library.exceptionHandler(error,callback);
+                    }
                 }
             });
 
             return true;
-        } catch (e) {
-            Components.utils.reportError(e);
-            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
-            return false;
+        } catch (error) {
+            WMSInspector.Library.exceptionHandler(error,callback);
         }
+    },
+
+    exceptionHandler: function(error,callback){
+        Components.utils.reportError(error);
+        if (WMSInspector.DB.conn.lastErrorString) Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+
+        if (callback) callback(false);
+        return false;
     }
 
-}
-
-WMSInspector.libraryService = function(){
-    this.id = "";
-    this.title = "";
-    this.URL = "";
-    this.version = "";
-    this.favorite = false;
-    this.type = "";
-    this.tags = [];
 }
 
 WMSInspector.libraryQueryParams = function(text,filters,sorts,directions){
@@ -979,46 +982,61 @@ WMSInspector.libraryQuery = function(params,callback){
             var self = this;
        
             statement.executeAsync({
+                errorsFound: false,
                 handleResult: function(resultSet) {
+                    try{
+                        for (let row = resultSet.getNextRow();
+                            row;
+                            row = resultSet.getNextRow()) {
 
-                    for (let row = resultSet.getNextRow();
-                        row;
-                        row = resultSet.getNextRow()) {
-
-                        let service = new WMSInspector.libraryService();
-                        service.id = row.getResultByName("id");
-                        service.title = row.getResultByName("title");
-                        service.URL = row.getResultByName("url");
-                        service.favorite = (row.getResultByName("favorite") == 1);
-                        service.type = row.getResultByName("type");
-                        service.version = row.getResultByName("version");
-                        let tags = row.getResultByName("tags");
-                        if (tags) service.tags = tags.split(",").sort();
+                            let service = new WMSInspectorClasses.Service();
+                            service.id = row.getResultByName("id");
+                            service.title = row.getResultByName("title");
+                            service.URL = row.getResultByName("url");
+                            service.favorite = (row.getResultByName("favorite") == 1);
+                            service.type = row.getResultByName("type");
+                            service.version = row.getResultByName("version");
+                            let tags = row.getResultByName("tags");
+                            if (tags) service.tags = tags.split(",").sort();
                         
 
-                        self.results.push(service);
+                            self.results.push(service);
+                        }
+                    } catch (error) {
+                        this.errorsFound = true;
+                        self.exceptionHandler(error);
                     }
                 },
 
                 handleError: function(error) {
-                    Components.utils.reportError("WMSInspector - Error querying services view: " + error.message);
+                    self.exceptionHandler(error);
                 },
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                        Components.utils.reportError("WMSInspector - Transaction aborted or canceled");
+                        return self.exceptionHandler("WMSInspector - Transaction aborted or canceled");
 
-                    if (self.callback) self.callback(self.results);
+                    if (self.callback) 
+                        self.callback((this.errorsFound) ? false : self.results);
+                    
+                    return true;
                 }
             });
 
-        } catch (e) {
-            Components.utils.reportError(e);
-            Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
-            return false;
+        } catch (error) {
+            return this.exceptionHandler(error);
         }
 
 
+    },
+
+
+    this.exceptionHandler = function(error){
+        Components.utils.reportError(error);
+        if (WMSInspector.DB.conn.lastErrorString) Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+
+        if (this.callback) this.callback(false);
+        return false;
     }
 
 

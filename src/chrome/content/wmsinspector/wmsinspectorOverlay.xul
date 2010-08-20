@@ -12,7 +12,7 @@
     <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
-    <!--<script type="application/x-javascript" src="chrome://wmsinspector/content/test.js"/>-->
+
     <stringbundleset id="stringbundleset">
         <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
     </stringbundleset>
@@ -54,13 +54,7 @@
                         <toolbarseparator />
                         <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WMSInspector.Overlay.openGetCapabilitiesDialog();" />
                         <toolbarbutton id="wiLibraryButton" label="&wmsinspector.toolbar.library;" tooltiptext="&wmsinspector.toolbar.library;" oncommand="WMSInspector.Overlay.openLibrary();" />
-
-<!--
-                            <toolbarbutton id="wiLibraryButton" label="test" tooltiptext="&wmsinspector.toolbar.library;" oncommand="test_component()" />
-                            <toolbarbutton id="wiLibraryButton" label="test" tooltiptext="&wmsinspector.toolbar.library;" oncommand="test_component2()" />
-                            <toolbarbutton id="wiLibraryButton" label="test W" tooltiptext="&wmsinspector.toolbar.library;" oncommand="test_worker()" />
-
-                            -->
+                          
                     </toolbar>
                 </toolbox>
 

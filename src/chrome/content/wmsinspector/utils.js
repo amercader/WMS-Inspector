@@ -1,8 +1,7 @@
+Components.utils.import("resource://wmsinspector/classes.js");
 
-
-//WMSInspector namespace
-var WMSInspector = {};
-
+// WMSInspector namespace
+var WMSInspector =  {};
 
 WMSInspector.Utils = {
 
@@ -54,16 +53,20 @@ WMSInspector.Utils = {
 
     getService: function(className, interfaceName) {
         var c = Components.classes[className];
-        var i = Components.interfaces[interfaceName];
-        if (!c || !i) return null;
-        return c.getService(i);
+        if (!c) return null;
+
+        return (interfaceName) ?
+            c.getService(Components.interfaces[interfaceName]) :
+            c.getService();
     },
 
     getInstance: function(className, interfaceName) {
         var c = Components.classes[className];
-        var i = Components.interfaces[interfaceName];
-        if (!c || !i) return null;
-        return c.createInstance(i);
+        if (!c) return null;
+
+        return (interfaceName) ?
+            c.createInstance(Components.interfaces[interfaceName]) :
+            c.createInstance();
     },
 
     showAlert: function(text,title,checkText,check){
@@ -106,53 +109,7 @@ WMSInspector.Utils = {
         var comparator = this.getService("@mozilla.org/xpcom/version-comparator;1","nsIVersionComparator");
         return comparator.compare(a,b);
     },
-    
-    // See the following for details
-    // http://www.bennadel.com/blog/504-Ask-Ben-Parsing-CSV-Strings-With-Javascript-Exec-Regular-Expression-Command.htm
-    parseCSV: function(string, delimiter){
 
-        delimiter = delimiter || ",";
-
-        var pattern = new RegExp(
-            (
-                // Delimiters.
-                "(\\" + delimiter + "|\\r?\\n|\\r|^)" +
-
-                // Quoted fields.
-                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
-
-                // Standard fields.
-                "([^\"\\" + delimiter + "\\r\\n]*))"
-                ),
-            "gi"
-            );
-
-        var data = [[]];
-
-        var matches = null;
-
-        var matchedValue = "";
-        while (matches = pattern.exec( string )){
-
-            var matchedDelimiter = matches[1];
-
-            if (matchedDelimiter.length && (matchedDelimiter != delimiter)){
-                data.push( [] );
-            }
-
-            if (matches[2]){
-                matchedValue = matches[2].replace(new RegExp( "\"\"", "g" ),"\"");
-            } else {
-                matchedValue = matches[3];
-            }
-
-            data[ data.length - 1 ].push( matchedValue );
-        }
-
-        return data ;
-
-    },
-    
     // https://developer.mozilla.org/en/nsICryptoHash#Computing_the_Hash_of_a_String
     getHash: function(string,algorithm){
 
