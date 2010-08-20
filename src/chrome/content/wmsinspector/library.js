@@ -406,7 +406,7 @@ WMSInspector.Library = {
 
         WMSInspector.Library.currentResults = results;
 
-        WMSInspector.Library.clearList();
+        WMSInspector.Utils.emptyElement(WMSInspector.Library.list);
         var numServices = "";
 
         if (results === false || results.length == 0){
@@ -458,11 +458,7 @@ WMSInspector.Library = {
 
         this.list.appendChild(item);
     },
-
-    clearList: function(){
-        while(this.list.firstChild) this.list.removeChild(this.list.firstChild);
-    },
-
+    
     toggleAdvancedSearch: function(){
 
         var box = document.getElementById("wiLibraryAdvancedSearch");

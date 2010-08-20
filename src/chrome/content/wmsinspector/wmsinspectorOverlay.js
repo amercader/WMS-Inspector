@@ -158,7 +158,7 @@ WMSInspector.Overlay = {
             tChMain = document.createElement("treechildren");
             tChMain.setAttribute("id","wiTreeChildren");
         } else {
-            this.clearServiceImagesTree(tChMain);
+            WMSInspector.Utils.emptyElement(tChMain);
         }
         if (this.currentServiceImages.length){
             windowServiceImages = this.sortServiceImages(this.currentServiceImages,this.currentGroupMode);
@@ -286,13 +286,7 @@ WMSInspector.Overlay = {
         }
         return out;
     },
-
-
-    clearServiceImagesTree: function(obj){
-        while(obj.firstChild) obj.removeChild(obj.firstChild);
-    },
-
-
+    
     onTreeClicked: function(event){
         var t = document.getElementById("wiTree");
         

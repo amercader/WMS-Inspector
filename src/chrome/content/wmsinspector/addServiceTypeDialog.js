@@ -38,29 +38,14 @@ WMSInspector.AddServiceTypeDialog = {
 
     },
 
-    //http://mxr.mozilla.org/mozilla-central/source/browser/components/places/content/editBookmarkOverlay.js#1006
-    getTagsFromTagField: function() {
-        // we don't require the leading space (after each comma)
-        var tags = document.getElementById("wiAddServiceTypeVersions").value.split(",");
-        for (var i=0; i < tags.length; i++) {
-            // remove trailing and leading spaces
-            tags[i] = tags[i].replace(/^\s+/, "").replace(/\s+$/, "");
 
-            // remove empty entries from the array.
-            if (tags[i] == "") {
-                tags.splice(i, 1);
-                i--;
-            }
-        }
-        return tags;
-    },
     
     onAccept: function(){
 
         var name = document.getElementById("wiAddServiceTypeName").value;
         var title = document.getElementById("wiAddServiceTypeTitle").value;
         var defaultVersion = document.getElementById("wiAddServiceTypeDefault").value;
-        var versions = WMSInspector.AddServiceTypeDialog.getTagsFromTagField();
+        var versions = WMSInspector.Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTypeVersions"));
 
         if (!name || !title || !defaultVersion || versions.length == 0){
             WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_fillallfields"));

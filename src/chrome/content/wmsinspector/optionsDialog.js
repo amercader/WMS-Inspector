@@ -23,7 +23,7 @@ WMSInspector.OptionsDialog = {
 
         var treeChildren = document.getElementById("wiServiceTypesTreeChildren");
 
-        while(treeChildren.firstChild) treeChildren.removeChild(treeChildren.firstChild);
+        WMSInspector.Utils.emptyElement(treeChildren);
 
         for (let i = 0; i < WMSInspector.OptionsDialog.serviceTypes.length; i++){
             let serviceType = WMSInspector.OptionsDialog.serviceTypes[i];

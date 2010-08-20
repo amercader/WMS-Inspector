@@ -138,6 +138,28 @@ WMSInspector.Utils = {
 
         return s;
 
+    },
+
+    emptyElement: function(element){
+        if (element.firstChild)
+            while(element.firstChild) element.removeChild(element.firstChild);
+    },
+
+    //http://mxr.mozilla.org/mozilla-central/source/browser/components/places/content/editBookmarkOverlay.js#1006
+    getValuesFromCSVTextbox: function(element) {
+        // we don't require the leading space (after each comma)
+        var tags = element.value.split(",");
+        for (var i=0; i < tags.length; i++) {
+            // remove trailing and leading spaces
+            tags[i] = tags[i].replace(/^\s+/, "").replace(/\s+$/, "");
+
+            // remove empty entries from the array.
+            if (tags[i] == "") {
+                tags.splice(i, 1);
+                i--;
+            }
+        }
+        return tags;
     }
 
 

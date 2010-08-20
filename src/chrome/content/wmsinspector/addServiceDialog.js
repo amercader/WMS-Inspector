@@ -132,7 +132,7 @@ WMSInspector.AddServiceDialog = {
     },
 
     redrawTagTextBox: function(){
-        var tagsInTextBox = this.getTagsFromTagField();
+        var tagsInTextBox = WMSInspector.Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTags"));;
 
         var list = document.getElementById("wiAddServiceTagsList");
         
@@ -151,23 +151,6 @@ WMSInspector.AddServiceDialog = {
         document.getElementById("wiAddServiceTags").value = tagsInTextBox.join(", ");
     },
     
-    //http://mxr.mozilla.org/mozilla-central/source/browser/components/places/content/editBookmarkOverlay.js#1006
-    getTagsFromTagField: function() {
-        // we don't require the leading space (after each comma)
-        var tags = document.getElementById("wiAddServiceTags").value.split(",");
-        for (var i=0; i < tags.length; i++) {
-            // remove trailing and leading spaces
-            tags[i] = tags[i].replace(/^\s+/, "").replace(/\s+$/, "");
-
-            // remove empty entries from the array.
-            if (tags[i] == "") {
-                tags.splice(i, 1);
-                i--;
-            }
-        }
-        return tags;
-    },
-    
     onAccept: function(){
         var url = document.getElementById("wiAddServiceURL").value;
         if (!WMSInspector.Utils.checkURL(url)){
@@ -184,7 +167,7 @@ WMSInspector.AddServiceDialog = {
         service.version = document.getElementById("wiAddServiceVersionMenu").selectedItem.getAttribute("label");
         service.type = document.getElementById("wiAddServiceTypeMenu").selectedItem.getAttribute("value");
 
-        var tags = WMSInspector.AddServiceDialog.getTagsFromTagField()
+        var tags = WMSInspector.Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTags"));
         if (tags) service.tags = tags;
 
         //If the dialog was called from the Library window, refresh the services list after adding or updating
