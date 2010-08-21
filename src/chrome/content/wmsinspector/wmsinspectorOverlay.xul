@@ -38,8 +38,8 @@
 
             <hbox id="wiMenuContainer">
 
-                <toolbox id="wiMenuLeftToolbox">
-                    <toolbar id="wiMenuLeftToolbar">
+                <toolbox id="wiMenuToolbox" flex="1" >
+                    <toolbar id="wiMenuToolbar">
                         <toolbarbutton id="wiRefreshButton" label="&wmsinspector.toolbar.refresh;" tooltiptext="&wmsinspector.toolbar.refresh;" oncommand="WMSInspector.Overlay.refreshServiceImages();"/>
                         <toolbarseparator />
                         <toolbaritem align="center">
@@ -54,20 +54,15 @@
                         <toolbarseparator />
                         <toolbarbutton id="wiCapabilitiesButton" label="&wmsinspector.toolbar.capabilities;" tooltiptext="&wmsinspector.toolbar.capabilities;" oncommand="WMSInspector.Overlay.openGetCapabilitiesDialog();" />
                         <toolbarbutton id="wiLibraryButton" label="&wmsinspector.toolbar.library;" tooltiptext="&wmsinspector.toolbar.library;" oncommand="WMSInspector.Overlay.openLibrary();" />
-                          
-                    </toolbar>
-                </toolbox>
 
-                <spacer flex="1" />
+                        <toolbarspacer flex="1" />
+                        <!-- Right small toolbar icons -->
 
-                <toolbox id="wiMenuRightToolbox" >
-                    <toolbar id="wiMenuRightToolbar">
-                        <toolbarbutton id="wiConfigButton" class="wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="WMSInspector.Overlay.openOptionsDialog();"/>
+                        <toolbarbutton id="wiConfigButton" class="wiSmallIcon wiImgLink" tooltiptext="&wmsinspector.toolbar.options;" oncommand="WMSInspector.Overlay.openOptionsDialog();"/>
                         <toolbarseparator />
-                        <toolbarbutton id="wiCloseButton" class="wiImgLink" tooltiptext="&wmsinspector.common.close;" oncommand="WMSInspector.Overlay.togglePanel()" />
+                        <toolbarbutton id="wiCloseButton" class="wiSmallIcon  wiImgLink" tooltiptext="&wmsinspector.common.close;" oncommand="WMSInspector.Overlay.togglePanel()" />
                     </toolbar>
                 </toolbox>
-
             </hbox>
             <hbox id="wiTreeImageContainer" flex="1">
                 <vbox id="wiTreeContainer" flex="1">

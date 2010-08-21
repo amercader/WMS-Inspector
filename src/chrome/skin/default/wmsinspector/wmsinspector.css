@@ -8,6 +8,10 @@
 
 }
 
+.wiSmallIcon {
+    margin: 0 5px
+}
+
 #wiCloseButton {
     list-style-image: url("chrome://wmsinspector/skin/icons/close.png");
 }
