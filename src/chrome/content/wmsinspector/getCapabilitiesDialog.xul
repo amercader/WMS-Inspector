@@ -7,14 +7,15 @@
 
 <dialog xmlns:html="http://www.w3.org/1999/xhtml"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-				id="wiGetCapabilitiesDialog"
-				title="&wmsinspector.getcapabilities.title;"
-                                onload="WMSInspector.GetCapabilitiesDialog.init();"
-                                onunload="WMSInspector.GetCapabilitiesDialog.shutdown();"
-                                buttons="cancel,extra2"
-                                defaultButton="extra2"
-                                width="380"
-                                height="300"
+        id="wiGetCapabilitiesDialog"
+        title="&wmsinspector.getcapabilities.title;"
+        onload="WMSInspector.GetCapabilitiesDialog.init();"
+        onunload="WMSInspector.GetCapabilitiesDialog.shutdown();"
+        ondialogaccept="return WMSInspector.GetCapabilitiesDialog.onAccept();"
+        buttons="accept,cancel"
+        defaultButton="accept"
+        width="380"
+        height="300"
 >
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/getCapabilitiesDialog.js"/>
@@ -65,4 +66,5 @@
            
         </hbox>
     </groupbox>
+
 </dialog>

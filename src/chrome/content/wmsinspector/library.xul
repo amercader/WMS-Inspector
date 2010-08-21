@@ -10,6 +10,7 @@
         xmlns:html="http://www.w3.org/1999/xhtml"
         title="&wmsinspector.library.title;"
         onload="WMSInspector.Library.init()"
+        onunload="WMSInspector.Library.shutdown();"
         persist="width height screenX screenY sizemode">
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>

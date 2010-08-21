@@ -12,11 +12,11 @@ WMSInspector.AddServiceDialog = {
         this.prefs = WMSInspector.Utils.getPrefs();
         
         this.serviceTypes= (this.Library.serviceTypes.length) ? this.Library.serviceTypes : window.opener.WMSInspector.Overlay.serviceTypes;
-        
+       /*
         document.documentElement.getButton("accept").addEventListener(
             "command",
             WMSInspector.AddServiceDialog.onAccept, false);
-
+*/
         if (window.arguments) this.serviceId = window.arguments[0];
 
         this.Library.fetchList("tags",document.getElementById("wiAddServiceTagsList"));

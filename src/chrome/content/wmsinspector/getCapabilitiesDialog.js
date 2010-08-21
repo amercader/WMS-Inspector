@@ -7,11 +7,6 @@ WMSInspector.GetCapabilitiesDialog = {
     init: function(){
         this.prefs = WMSInspector.Utils.getPrefs();
         WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
-        
-        var button = document.documentElement.getButton("extra2");
-        button.setAttribute("label", WMSInspector.Utils.getString("wi_getcapabilities_request"));
-        button.addEventListener("command", WMSInspector.GetCapabilitiesDialog.onAccept, false);
-  
      
         var server = (window.arguments) ? window.arguments[0] : false;
         var version = (window.arguments) ? window.arguments[1] : false;

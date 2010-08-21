@@ -10,6 +10,7 @@
         id="wiAddServiceDialog"
         title="&wmsinspector.addservice.title;"
         onload="WMSInspector.AddServiceDialog.init();"
+        ondialogaccept="return WMSInspector.AddServiceDialog.onAccept();"
         buttons="accept,cancel"
         defaultButton="accept"
         width="380"
@@ -51,4 +52,5 @@
         </listbox>
         <checkbox id="wiAddServiceFavorite" label="&wmsinspector.addservice.favorite;" />
     </groupbox>
+    
 </dialog>

@@ -10,8 +10,9 @@
         id="wiAddServiceTypeDialog"
         title="&wmsinspector.addservicetype.title;"
         onload="WMSInspector.AddServiceTypeDialog.init();"
-        ondialogextra1="WMSInspector.AddServiceTypeDialog.onAccept();"
-        buttons="cancel,extra1"
+        ondialogaccept="return WMSInspector.AddServiceTypeDialog.onAccept();"
+        buttons="accept,cancel"
+        defaultButton="accept"
         width="380"
         height="220"
 >
@@ -47,13 +48,5 @@
 
    
     </vbox>
-
-    <hbox style="margin-top:2em">
-        <spacer flex="1" />
-    
-        <button dlgtype="cancel"/>
-        <button dlgtype="extra1" label="&wmsinspector.common.add;" icon="accept" />
-    </hbox>
-
 
 </dialog>
