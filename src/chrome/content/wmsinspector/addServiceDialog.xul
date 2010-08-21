@@ -14,7 +14,7 @@
         buttons="accept,cancel"
         defaultButton="accept"
         width="380"
-        height="380"
+        height="390"
 >
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/addServiceDialog.js"/>
