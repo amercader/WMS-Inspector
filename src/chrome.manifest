@@ -7,3 +7,5 @@ locale wmsinspector es-ES chrome/locale/es-ES/wmsinspector/
 skin wmsinspector default/1.0 chrome/skin/default/wmsinspector/
 
 overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/wmsinspectorOverlay.xul
+
+resource wmsinspector modules/
