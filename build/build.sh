@@ -13,12 +13,18 @@ do	case "$option" in
 done
 shift $(($OPTIND - 1))
 
-if [ ! $1 ] 
+if [ ! "$1" ] 
 then
 	echo "Parameter missing"	
 	echo $usage
 	exit 1
 fi
+
+if [ ! -d "$1" ]; then
+    echo "Directory not found"
+	exit 1
+fi
+
 
 currentdate=$(date +%Y%m%d)
 fulldate=$(date +%Y%m%d%H%M%S)
