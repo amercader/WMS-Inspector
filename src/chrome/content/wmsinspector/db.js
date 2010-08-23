@@ -110,10 +110,6 @@ WMSInspector.DB = {
     restoreDB: function(){
         //Copy default database to profile folder
         var src = WMSInspector.IO.getDefaultsDir();
-        /*
-        var src = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-        src.initWithPath("/home/adria/dev/wmsinspector/dev/master/src/defaults");
-        */
         
         if (src){
             src.append(this.DBName);
