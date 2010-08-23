@@ -158,6 +158,11 @@
         </statusbarpanel>
     </statusbar>
 
+    <!-- Firefox toolbar palette -->
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="wiToolbarOpenLibrary" class="toolbarbutton-1"
+                   label="&wmsinspector.toolbar.openlibrary;" oncommand="WMSInspector.Overlay.openLibrary()" tooltiptext="&wmsinspector.common.appname; - &wmsinspector.toolbar.openlibrary;"/>
+    </toolbarpalette>
 </overlay>
 
 

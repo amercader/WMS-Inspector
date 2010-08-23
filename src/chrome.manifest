@@ -1,11 +1,16 @@
 content wmsinspector chrome/content/wmsinspector/
 
-locale wmsinspector en-US chrome/locale/en-US/wmsinspector/
-locale wmsinspector ca-AD chrome/locale/ca-AD/wmsinspector/
-locale wmsinspector es-ES chrome/locale/es-ES/wmsinspector/
-
 skin wmsinspector default/1.0 chrome/skin/default/wmsinspector/
+style chrome://global/content/customizeToolbar.xul chrome://wmsinspector/skin/wmsinspector.css
 
 overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/wmsinspectorOverlay.xul
 
 resource wmsinspector modules/
+
+locale wmsinspector en-US chrome/locale/en-US/wmsinspector/
+locale wmsinspector ca-AD chrome/locale/ca-AD/wmsinspector/
+locale wmsinspector es-ES chrome/locale/es-ES/wmsinspector/
+locale wmsinspector pt-BR chrome/locale/pt-BR/wmsinspector/
+locale wmsinspector fr chrome/locale/fr/wmsinspector/
+locale wmsinspector pl chrome/locale/pl/wmsinspector/
+locale wmsinspector zh-CN chrome/locale/zh-CN/wmsinspector/

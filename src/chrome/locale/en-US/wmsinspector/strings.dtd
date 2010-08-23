@@ -39,6 +39,7 @@
 <!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
 <!ENTITY wmsinspector.toolbar.library "Library">
 <!ENTITY wmsinspector.toolbar.options "Open the configuration options">
+<!ENTITY wmsinspector.toolbar.openlibrary "Open Library">
 
 <!-- Tree -->
 <!ENTITY wmsinspector.tree.servicecol "Service \ Parameter name">
@@ -55,8 +56,6 @@
 
 <!-- AddParameter dialog -->
 <!ENTITY wmsinspector.addparameter.title "Add parameter">
-<!ENTITY wmsinspector.addparameter.name "Name">
-<!ENTITY wmsinspector.addparameter.value "Value">
 
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Options">

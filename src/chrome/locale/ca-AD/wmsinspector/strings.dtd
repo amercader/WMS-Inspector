@@ -39,6 +39,7 @@
 <!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
 <!ENTITY wmsinspector.toolbar.library "Biblioteca">
 <!ENTITY wmsinspector.toolbar.options "Obrir les opcions de configuraci&#243;">
+<!ENTITY wmsinspector.toolbar.openlibrary "Obrir biblioteca">
 
 <!-- Tree -->
 <!ENTITY wmsinspector.tree.servicecol "Servei \ Nom par&#224;metre">

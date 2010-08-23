@@ -48,6 +48,15 @@
     list-style-image: url("chrome://wmsinspector/skin/icons/library_add.png");
 }
 
+#wiToolbarOpenLibrary{
+    list-style-image: url("chrome://wmsinspector/skin/icons/openLibrary_24.png");
+}
+
+toolbar[iconsize="small"] #wiToolbarOpenLibrary {
+  list-style-image: url("chrome://wmsinspector/skin/icons/openLibrary_16.png");
+}
+
+
 .wiHelper{
     font-style: italic
 }
