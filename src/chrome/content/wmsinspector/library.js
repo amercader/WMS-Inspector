@@ -172,14 +172,15 @@ WMSInspector.Library = {
                     }
                 },
 
+                //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(error,callback);
+                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
                     
                         if (type == "types")
                             list.selectedIndex = 0;
@@ -517,15 +518,15 @@ WMSInspector.Library = {
             });
 
             statement.executeAsync({
-                
+                //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(error,callback);
+                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         // We need to get the inserted service id, and as it's not safe to rely on
                         // conn.lastInsertRowID, we need to select the record with the previously generated
@@ -543,14 +544,15 @@ WMSInspector.Library = {
                                 this.serviceId = row.getResultByName("id");
                             },
 
+                            //error is a mozIStorageError object
                             handleError: function(error) {
-                                WMSInspector.Library.exceptionHandler(error,callback);
+                                WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                             },
 
                             handleCompletion: function(reason) {
                                 try {
                                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                                        return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                                        return WMSInspector.Library.exceptionHandler("Transaction aborted or canceled",callback);
 
 
                                     if (service.tags && service.tags.length) {
@@ -624,14 +626,15 @@ WMSInspector.Library = {
 
             statement.executeAsync({
 
+                //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(error,callback);
+                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try{
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         if (service.tags && service.tags.length) {
                             WMSInspector.Library.setTags(service.id,service.tags,callback);
@@ -672,14 +675,16 @@ WMSInspector.Library = {
             WMSInspector.DB.bindParameter(statement, "id", serviceId);
 
             statement.executeAsync({
+
+                //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(error,callback);
+                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try{
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         //Check if tags exist and insert new ones if not
                         var tagIds = [];
@@ -757,14 +762,16 @@ WMSInspector.Library = {
                                 statements,
                                 statements.length,
                                 {
+
+                                    //error is a mozIStorageError object
                                     handleError: function(error) {
-                                        WMSInspector.Library.exceptionHandler(error,callback);
+                                        WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                                     },
 
                                     handleCompletion: function(reason) {
                                         try{
                                             if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                                                return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                                                return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                                             if (callback) callback(serviceId);
 
@@ -801,14 +808,15 @@ WMSInspector.Library = {
 
             statement.executeAsync({
 
+                //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(error,callback);
+                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try{
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler("WMSInspector - Transaction aborted or canceled",callback);
+                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         // The services_after_delete_trigger trigger will deal with the service's tags
 
@@ -828,8 +836,12 @@ WMSInspector.Library = {
     },
 
     exceptionHandler: function(error,callback){
-        Components.utils.reportError(error);
-        if (WMSInspector.DB.conn.lastErrorString) Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+
+        var msg = "WMSInspector - " + error.message;
+        if (WMSInspector.DB.conn.lastErrorString && WMSInspector.DB.conn.lastErrorString != "not an error")
+            msg += " - " + WMSInspector.DB.conn.lastErrorString;
+        msg += " (line " + error.lineNumber + ")"
+        Components.utils.reportError(msg);
 
         if (callback) callback(false);
         return false;
@@ -1004,13 +1016,14 @@ WMSInspector.libraryQuery = function(params,callback){
                     }
                 },
 
+                //error is a mozIStorageError object
                 handleError: function(error) {
-                    self.exceptionHandler(error);
+                    self.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                        return self.exceptionHandler("WMSInspector - Transaction aborted or canceled");
+                        return self.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                     if (self.callback) 
                         self.callback((this.errorsFound) ? false : self.results);
@@ -1028,8 +1041,11 @@ WMSInspector.libraryQuery = function(params,callback){
 
 
     this.exceptionHandler = function(error){
-        Components.utils.reportError(error);
-        if (WMSInspector.DB.conn.lastErrorString) Components.utils.reportError("WMSInspector - " + WMSInspector.DB.conn.lastErrorString);
+        var msg = "WMSInspector - " + error.message;
+        if (WMSInspector.DB.conn.lastErrorString && WMSInspector.DB.conn.lastErrorString != "not an error")
+            msg += " - " + WMSInspector.DB.conn.lastErrorString;
+        msg += " (line " + error.lineNumber + ")"
+        Components.utils.reportError(msg);
 
         if (this.callback) this.callback(false);
         return false;
