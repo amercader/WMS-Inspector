@@ -63,12 +63,22 @@ WMSInspectorService.prototype = {
 
                         let service = new WMSInspectorClasses.Service();
 
-                        service.title = record[columns.indexOf("title")];
-                        service.URL = record[columns.indexOf("URL")];
-                        service.favorite = (record[columns.indexOf("favorite")] == "1");
-                        service.version = record[columns.indexOf("version")];
-                        service.type = record[columns.indexOf("type")];
-                        if (record[columns.indexOf("tags")]) service.tags = record[columns.indexOf("tags")].split(",");
+                        if (columns.indexOf("title") != -1) service.title = record[columns.indexOf("title")];
+                        if (columns.indexOf("URL") != -1) service.URL = record[columns.indexOf("URL")];
+                        if (columns.indexOf("favorite") != -1) service.favorite = (record[columns.indexOf("favorite")] == "1");
+
+                        if (columns.indexOf("type") != -1) service.type = record[columns.indexOf("type")];
+                        if (columns.indexOf("version") != -1) {
+                            service.version = record[columns.indexOf("version")];
+                        } else {
+                            for (let i=0; i < this.library.serviceTypes.length; i++){
+                                if (this.library.serviceTypes[i].name == service.type){
+                                    service.version = this.library.serviceTypes[i].defaultversion;
+                                    break;
+                                }
+                            }
+                        }
+                        if (columns.indexOf("tags") != -1 && record[columns.indexOf("tags")].length) service.tags = record[columns.indexOf("tags")].split(",");
 
                         if (service.URL) {
                             this.servicesQueue.push(service);
@@ -177,8 +187,8 @@ WMSInspectorService.prototype = {
                 // This is where the working thread does its processing work.
                 this.parent._importServicesFromCSV(contents);
 
-                // onServicesImported will call back to the main thread to let it know
-                // we're finished.
+            // onServicesImported will call back to the main thread to let it know
+            // we're finished.
 
             } catch(err) {
                 Components.utils.reportError(err);

@@ -9,6 +9,6 @@ WMSInspectorClasses.Service = function(){
     this.URL = "";
     this.version = "";
     this.favorite = false;
-    this.type = "";
+    this.type = "WMS";
     this.tags = [];
 }
