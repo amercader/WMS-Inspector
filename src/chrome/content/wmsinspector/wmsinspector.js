@@ -173,10 +173,3 @@ WMSInspector.ServiceImage = function(src,parent){
     }
 
 }
-
-WMSInspector.ServiceType = function(){
-    this.id = "";
-    this.name = "";
-    this.title = "";
-    this.defaultversion = "";
-}

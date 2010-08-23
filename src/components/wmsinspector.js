@@ -73,7 +73,7 @@ WMSInspectorService.prototype = {
                         } else {
                             for (let i=0; i < this.library.serviceTypes.length; i++){
                                 if (this.library.serviceTypes[i].name == service.type){
-                                    service.version = this.library.serviceTypes[i].defaultversion;
+                                    service.version = this.library.serviceTypes[i].defaultVersion;
                                     break;
                                 }
                             }

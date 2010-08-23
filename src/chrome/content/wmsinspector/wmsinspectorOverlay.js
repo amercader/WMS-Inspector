@@ -861,11 +861,11 @@ WMSInspector.Overlay = {
                     row;
                     row = resultSet.getNextRow()) {
                     
-                    let serviceType = new WMSInspector.ServiceType();
+                    let serviceType = new WMSInspectorClasses.ServiceType();
                     serviceType.id =  row.getResultByName("id"),
                     serviceType.name = row.getResultByName("name"),
                     serviceType.title = row.getResultByName("title"),
-                    serviceType.defaultversion = row.getResultByName("default_version"),
+                    serviceType.defaultVersion = row.getResultByName("default_version"),
                     serviceType.versions = row.getResultByName("versions").split(",").sort()
                     WMSInspector.Overlay.serviceTypes.push(serviceType)
                 }
@@ -933,7 +933,7 @@ WMSInspector.Overlay = {
         }
     },
 
-    //serviceType should be a WMSInspector.ServiceType object
+    //serviceType should be a WMSInspectorClasses.ServiceType object
     updateServiceType: function(serviceType,callback){
         try{
 
@@ -1017,7 +1017,7 @@ WMSInspector.Overlay = {
                             let params = {};
                             params.servicetypeid = serviceType.id;
                             params["name"+i] = serviceType.versions[i];
-                            params["isdefault"+i] = (serviceType.versions[i] == serviceType.defaultversion) ? 1 : 0;
+                            params["isdefault"+i] = (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0;
                             WMSInspector.DB.bindParameters(statement,params);
 
                             statements.push(statement);
@@ -1030,7 +1030,7 @@ WMSInspector.Overlay = {
                             bp = params.newBindingParams();
                             bp.bindByName("servicetypeid", serviceType.id);
                             bp.bindByName("name", serviceType.versions[i]);
-                            bp.bindByName("isdefault", (serviceType.versions[i] == serviceType.defaultversion) ? 1 : 0);
+                            bp.bindByName("isdefault", (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0);
                             params.addParams(bp);
                         }
                         statement.bindParameters(params);

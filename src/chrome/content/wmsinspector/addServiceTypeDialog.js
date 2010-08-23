@@ -33,7 +33,7 @@ WMSInspector.AddServiceTypeDialog = {
 
         document.getElementById("wiAddServiceTypeName").value = serviceType.name;
         document.getElementById("wiAddServiceTypeTitle").value = serviceType.title;
-        document.getElementById("wiAddServiceTypeDefault").value = serviceType.defaultversion;
+        document.getElementById("wiAddServiceTypeDefault").value = serviceType.defaultVersion;
         document.getElementById("wiAddServiceTypeVersions").value = serviceType.versions.join(",");
 
     },
@@ -64,12 +64,12 @@ WMSInspector.AddServiceTypeDialog = {
             }
         }
 
-        var serviceType = new window.opener.WMSInspector.ServiceType();
+        var serviceType = new WMSInspectorClasses.ServiceType();
 
         serviceType.id = WMSInspector.AddServiceTypeDialog.serviceTypeId;
         serviceType.name = name;
         serviceType.title = title;
-        serviceType.defaultversion = defaultVersion;
+        serviceType.defaultVersion = defaultVersion;
         serviceType.versions = versions;
 
         if (WMSInspector.AddServiceTypeDialog.serviceTypeId){

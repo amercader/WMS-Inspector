@@ -12,3 +12,11 @@ WMSInspectorClasses.Service = function(){
     this.type = "WMS";
     this.tags = [];
 }
+
+
+WMSInspectorClasses.ServiceType = function(){
+    this.id = "";
+    this.name = "";
+    this.title = "";
+    this.defaultVersion = "";
+}

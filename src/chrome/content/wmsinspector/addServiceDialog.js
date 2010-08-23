@@ -76,7 +76,7 @@ WMSInspector.AddServiceDialog = {
                 versionsList.removeAllItems()
                 for (let j=0; j < serviceTypes[i].versions.length; j++){
                     versionsList.appendItem(serviceTypes[i].versions[j],serviceTypes[i].versions[j]);
-                    if (serviceTypes[i].versions[j] == serviceTypes[i].defaultversion)
+                    if (serviceTypes[i].versions[j] == serviceTypes[i].defaultVersion)
                         versionsList.selectedIndex = j;
                 }
                 if (versionsList.selectedIndex == -1) versionsList.selectedIndex = 0;

@@ -41,7 +41,7 @@ WMSInspector.OptionsDialog = {
             treeRow.appendChild(treeCellTitle);
 
             let treeCellDefault = document.createElement("treecell");
-            treeCellDefault.setAttribute("label", serviceType.defaultversion);
+            treeCellDefault.setAttribute("label", serviceType.defaultVersion);
             treeRow.appendChild(treeCellDefault);
 
             let treeCellVersions = document.createElement("treecell");
