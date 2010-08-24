@@ -344,7 +344,8 @@ WMSInspector.Overlay = {
                 t.setAttribute("context","");
                 this.currentNameColumnText = false;
                 this.currentNameColumnValues = false;
-            } else {
+            }
+            else {
                 var col = t.columns.getNamedColumn("wiTreeNameColumn");
                 this.currentNameColumnText = t.view.getCellText(t.currentIndex,col);
                 this.currentNameColumnValues = t.view.getCellValue(t.currentIndex,col).split("_");
@@ -561,20 +562,30 @@ WMSInspector.Overlay = {
 
     showGetCapabilitiesReportVersion: function(xhr){
 
-        var version;
-        if (xhr.responseXML){
-            //Check if this is a GetCapabilities response
-            version = WMSInspector.Overlay.getWMSVersion(xhr.responseXML);
-        } else if (xhr.responseText) {
-            var file = WMSInspector.IO.createTmpFile(WMSInspector.IO.getTmpFileName("tmp"));
-            WMSInspector.IO.write(file,xhr.responseText);
-            WMSInspector.Overlay.showFileInBrowser(file);
-            return false;
+        if (xhr.responseXML || xhr.responseText) {
+            var errorContents = false;
+            if (xhr.responseXML){
+                //Check parsing errors
+                var check = WMSInspector.Overlay.checkXMLParsing(xhr.responseXML);
+                if (check !== true) errorContents = check;
+            } else if (xhr.responseText){
+                errorContents = xhr.responseText
+            }
+
+            if (errorContents){
+                var file = WMSInspector.IO.createTmpFile(WMSInspector.IO.getTmpFileName("tmp"));
+                WMSInspector.IO.write(file,errorContents);
+                WMSInspector.Overlay.showFileInBrowser(file);
+                return false;
+            }
+
+            
         } else {
             WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + WMSInspector.Utils.getString("wi_request_servernotfound"));
             return false;
         }
-		
+
+        var version = WMSInspector.Overlay.getWMSVersion(xhr.responseXML);
         var supportedVersions = WMSInspector.Overlay.prefs.getCharPref("reportwmsversions").split("|");
         //inArray?
         var supported = false;
@@ -672,17 +683,42 @@ WMSInspector.Overlay = {
             this.onRequestError);
         request.send();
     },
-    //TODO: check encoding
+
     saveResponseToFile: function(xhr){
+        var contents, extension;
         if (xhr instanceof XMLHttpRequest){
-            var extension = WMSInspector.Overlay.getExtensionFromMimeType(xhr.getResponseHeader("Content-type"))
+            if (xhr.responseXML){
+                var check = WMSInspector.Overlay.checkXMLParsing(xhr.responseXML);
+                if (check !== true) contents = check;
+                extension = "txt";
+            }
+                
+            if (!contents) {
+                contents = xhr.responseText;
+                extension = WMSInspector.Overlay.getExtensionFromMimeType(xhr.getResponseHeader("Content-type"));
+            }
+
             var file = WMSInspector.IO.createTmpFile(WMSInspector.IO.getTmpFileName(extension));
-            WMSInspector.IO.write(file,xhr.responseText);
+
+            WMSInspector.IO.write(file,contents);
             return file;
         }
 
+
         return false;
 
+    },
+    
+    checkXMLParsing: function(xmlDoc){
+        if (!xmlDoc.documentElement) return false;
+        if (xmlDoc.documentElement.nodeName == "parsererror") {
+            var contents = "";
+            contents += xmlDoc.documentElement.childNodes[0].nodeValue;
+            contents += "\n\n";
+            contents += xmlDoc.documentElement.childNodes[1].childNodes[0].nodeValue;
+            return contents;
+        }
+        return true;
     },
 
     saveURLtoFile: function(url) {
