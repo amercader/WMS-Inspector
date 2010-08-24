@@ -95,7 +95,6 @@
                 </vbox>
                 <spacer flex="1" />
                 <vbox>
-                    <button label="&wmsinspector.common.refresh;" icon="refresh" oncommand="WMSInspector.Library.refresh()" />
                     <button label="&wmsinspector.common.restore;" icon="clear" oncommand="WMSInspector.Library.restore()" />
                 </vbox>
             </hbox>

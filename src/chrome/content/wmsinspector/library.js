@@ -38,10 +38,23 @@ WMSInspector.Library = {
         //Add <All> option to service types list
         var typesList = document.getElementById("wiLibraryServiceTypeList");
         typesList.appendItem(WMSInspector.Utils.getString("wi_all"),0);
-        this.fetchList("types",typesList,function (){WMSInspector.Library.search()});
+        this.fetchList("types",typesList,function (){WMSInspector.Library.onWindowReady()});
 
+    },
 
+    onWindowReady: function(){
+        document.getElementById("wiLibraryTagsList")
+            .addEventListener("command",WMSInspector.Library.refresh,true);
+        document.getElementById("wiLibraryServiceTypeList")
+            .addEventListener("select",WMSInspector.Library.refresh,true);
+        document.getElementById("wiLibraryOrderBy")
+            .addEventListener("select",WMSInspector.Library.refresh,true);
+        document.getElementById("wiLibraryDirection")
+            .addEventListener("select",WMSInspector.Library.refresh,true);
+        document.getElementById("wiLibraryFavoritesFirst")
+            .addEventListener("command",WMSInspector.Library.refresh,true);
 
+        WMSInspector.Library.search();
     },
     
     setSelectedService: function(element){
@@ -252,7 +265,7 @@ WMSInspector.Library = {
     },
 
     refresh: function(){
-        this.searchText(document.getElementById("wiLibrarySearchFilter").getAttribute("value"));
+        WMSInspector.Library.searchText(document.getElementById("wiLibrarySearchFilter").value);
     },
 
     restore: function(){
@@ -888,7 +901,7 @@ WMSInspector.libraryQuery = function(params,callback){
         
         var sqlWhere = "";
         if (text)
-            sqlWhere = "s.title LIKE :text OR s.url LIKE :text OR s.tags LIKE :text";
+            sqlWhere = "(s.title LIKE :text OR s.url LIKE :text OR s.tags LIKE :text)";
         
 
         if (filters){

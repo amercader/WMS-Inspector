@@ -47,7 +47,7 @@
         <caption label="&wmsinspector.library.tags;"/>
         <label class="wiHelper">&wmsinspector.addservice.tagsinstructions;</label>
         <textbox id="wiAddServiceTags" />
-        <listbox id="wiAddServiceTagsList" rows="3" onclick="WMSInspector.AddServiceDialog.redrawTagTextBox()" >
+        <listbox id="wiAddServiceTagsList" rows="3" oncommand="WMSInspector.AddServiceDialog.redrawTagTextBox()" >
 
         </listbox>
         <checkbox id="wiAddServiceFavorite" label="&wmsinspector.addservice.favorite;" />
