@@ -1,5 +1,6 @@
 ---
 title: User Manual
+layout: default
 ---
 
 
