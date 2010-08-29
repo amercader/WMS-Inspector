@@ -12,6 +12,8 @@ WMSInspector.Library = {
 
     currentResults: [],
 
+    minWidth: 760,
+
     init: function(){
 
         this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
@@ -478,9 +480,8 @@ WMSInspector.Library = {
         var box = document.getElementById("wiLibraryAdvancedSearch");
         var value = (box.getAttribute("collapsed") == "true");
         box.setAttribute("collapsed",!value);
-        if (value && window.outerWidth < box.getBoundingClientRect().width){
-            window.sizeToContent();
-        }
+        if (value && window.outerWidth < WMSInspector.Library.minWidth)
+            window.resizeTo(WMSInspector.Library.minWidth,window.outerHeight)
         document.getElementById("wiLibraryAdvancedSearchLink").setAttribute("value",(value) ? WMSInspector.Utils.getString("wi_library_simplesearch") : WMSInspector.Utils.getString("wi_library_advancedsearch"));
     },
 
