@@ -1,0 +1,140 @@
+<!-- Common -->
+<!ENTITY wmsinspector.common.appname "WMS Inspector">
+<!ENTITY wmsinspector.common.yes "是">
+<!ENTITY wmsinspector.common.no "否">
+<!ENTITY wmsinspector.common.close "关闭">
+<!ENTITY wmsinspector.common.options "选项">
+<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.title "Title">
+<!ENTITY wmsinspector.common.server "服务器">
+<!ENTITY wmsinspector.common.service "服务">
+<!ENTITY wmsinspector.common.version "版本">
+<!ENTITY wmsinspector.common.versions "Versions">
+<!ENTITY wmsinspector.common.value "Value">
+<!ENTITY wmsinspector.common.copy "复制">
+<!ENTITY wmsinspector.common.add "Add">
+<!ENTITY wmsinspector.common.delete "Delete">
+<!ENTITY wmsinspector.common.edit "编辑">
+<!ENTITY wmsinspector.common.change "选择">
+<!ENTITY wmsinspector.common.output "输出格式">
+<!ENTITY wmsinspector.common.openinanewtab "在新标签页中打开">
+<!ENTITY wmsinspector.common.editor "编辑器">
+<!ENTITY wmsinspector.common.browser "浏览器">
+<!ENTITY wmsinspector.common.refresh "Refresh">
+<!ENTITY wmsinspector.common.restore "Restore">
+<!ENTITY wmsinspector.common.copyurl "Copy URL">
+<!-- Index page -->
+<!ENTITY wmsinspector.index.welcome "欢迎使用 WMS Inspector">
+<!ENTITY wmsinspector.index.description "点「刷新请求」可检查当前文档是否包含 WMS 请求。">
+<!-- Context menu -->
+<!ENTITY wmsinspector.context.capabilitiesreport "能力报告">
+<!-- Toolbar -->
+<!ENTITY wmsinspector.toolbar.refresh "刷新请求">
+<!ENTITY wmsinspector.toolbar.groupby "分类">
+<!ENTITY wmsinspector.toolbar.requesttype "请求类型">
+<!ENTITY wmsinspector.toolbar.service "服务">
+<!ENTITY wmsinspector.toolbar.capabilities "获取能力">
+<!ENTITY wmsinspector.toolbar.library "Library">
+<!ENTITY wmsinspector.toolbar.options "打开配置选项">
+<!ENTITY wmsinspector.toolbar.openlibrary "Open Library">
+<!-- Tree -->
+<!ENTITY wmsinspector.tree.servicecol "服务\参数 名称">
+<!ENTITY wmsinspector.tree.paramcol "参数值">
+<!-- GetCapabilities dialog -->
+<!ENTITY wmsinspector.getcapabilities.title "获取请求">
+<!ENTITY wmsinspector.getcapabilities.outputHTML "HTML格式">
+<!ENTITY wmsinspector.getcapabilities.outputXML "XML格式">
+<!ENTITY wmsinspector.getcapabilities.openin "打开方式:">
+<!-- EditParameter dialog -->
+<!ENTITY wmsinspector.editparameter.title "编辑参数">
+<!-- Options dialog -->
+<!ENTITY wmsinspector.addparameter.title "Add parameter">
+<!-- Default XSL templates for GetCapabilities reports -->
+<!ENTITY wmsinspector.options.title "选项">
+<!ENTITY wmsinspector.options.general "General">
+<!ENTITY wmsinspector.options.defaultwmsversion "Default WMS version">
+<!ENTITY wmsinspector.options.chooseaneditor "请选择一个编辑器">
+<!ENTITY wmsinspector.options.appearance "外观">
+<!ENTITY wmsinspector.options.hidecontextmenu "隐藏关联菜单">
+<!ENTITY wmsinspector.options.libraryconfirmdelete "Ask before deleting services">
+<!ENTITY wmsinspector.options.servicetypes "Service Types">
+<!ENTITY wmsinspector.options.addservicetype "Add Service Type">
+<!-- Library window -->
+<!ENTITY wmsinspector.library.title "Library">
+<!ENTITY wmsinspector.library.advancedsearch "Advanced search">
+<!ENTITY wmsinspector.library.searchoptions "Search options">
+<!ENTITY wmsinspector.library.tags "Tags">
+<!ENTITY wmsinspector.library.servicetype "Service type">
+<!ENTITY wmsinspector.library.orderby "Order by">
+<!ENTITY wmsinspector.library.creationdate "Creation date">
+<!ENTITY wmsinspector.library.servicetitle "Title">
+<!ENTITY wmsinspector.library.ascending "Ascending">
+<!ENTITY wmsinspector.library.descending "Descending">
+<!ENTITY wmsinspector.library.favoritesfirst "Favorites first">
+<!ENTITY wmsinspector.library.dberror "Error connecting to the database">
+<!ENTITY wmsinspector.library.addservice "Add service">
+<!ENTITY wmsinspector.library.importexport "Import / Export">
+<!ENTITY wmsinspector.library.export "Export">
+<!ENTITY wmsinspector.library.exportall "Export all...">
+<!ENTITY wmsinspector.library.exportselection "Export selection...">
+<!ENTITY wmsinspector.library.import "Import...">
+<!-- AddService dialog -->
+<!ENTITY wmsinspector.addservice.title "Add service to Library">
+<!ENTITY wmsinspector.addservice.url "Service URL">
+<!ENTITY wmsinspector.addservice.tagsinstructions "Enter new tags separated by commas or select existing ones from the list below.">
+<!ENTITY wmsinspector.addservice.favorite "Favorite">
+<!-- AddServiceType dialog -->
+<!ENTITY wmsinspector.addservicetype.title "Add service type">
+<!ENTITY wmsinspector.addservicetype.nameexample "(e.g. WMS)">
+<!ENTITY wmsinspector.addservicetype.versionsinstructions "Enter the supported versions, comma separated">
+<!ENTITY wmsinspector.addservicetype.defaultversion "Default version">
+<!-- Default XSL templates for GetCapabilities reports -->
+<!ENTITY wmsinspector.xsl.reporttitle "能力报告">
+<!ENTITY wmsinspector.xsl.service "服务">
+<!ENTITY wmsinspector.xsl.generalinfo "常规信息">
+<!ENTITY wmsinspector.xsl.version "版本">
+<!ENTITY wmsinspector.xsl.name "名称">
+<!ENTITY wmsinspector.xsl.title "标题">
+<!ENTITY wmsinspector.xsl.onlineresource "在线资源">
+<!ENTITY wmsinspector.xsl.abstract "摘要">
+<!ENTITY wmsinspector.xsl.keywords "关键字">
+<!ENTITY wmsinspector.xsl.contactdetails "联系信息">
+<!ENTITY wmsinspector.xsl.contactperson "联系人">
+<!ENTITY wmsinspector.xsl.contactorganization "单位">
+<!ENTITY wmsinspector.xsl.contactposition "职位">
+<!ENTITY wmsinspector.xsl.contactaddress "地址">
+<!ENTITY wmsinspector.xsl.contacttelephone "电话">
+<!ENTITY wmsinspector.xsl.contactfax "传真">
+<!ENTITY wmsinspector.xsl.contactemail "Email">
+<!ENTITY wmsinspector.xsl.accessconditions "访问条件">
+<!ENTITY wmsinspector.xsl.fees "费用">
+<!ENTITY wmsinspector.xsl.accessconstraints "访问限制">
+<!ENTITY wmsinspector.xsl.layerlimit "层限制">
+<!ENTITY wmsinspector.xsl.maxwidth "最大宽度">
+<!ENTITY wmsinspector.xsl.maxheight "最大高度">
+<!ENTITY wmsinspector.xsl.capabilities "Capabilities">
+<!ENTITY wmsinspector.xsl.availablerequests "可用请求">
+<!ENTITY wmsinspector.xsl.exceptions "例外">
+<!ENTITY wmsinspector.xsl.userdefinedsymbolization "用户自定义符号">
+<!ENTITY wmsinspector.xsl.supportsld "支持 SLD">
+<!ENTITY wmsinspector.xsl.userlayer "支持用户层">
+<!ENTITY wmsinspector.xsl.userstyle "支持用户风格">
+<!ENTITY wmsinspector.xsl.remotewfs "支持远程 WFS">
+<!ENTITY wmsinspector.xsl.layers "层">
+<!ENTITY wmsinspector.xsl.srs "SRS">
+<!ENTITY wmsinspector.xsl.crs "CRS">
+<!ENTITY wmsinspector.xsl.queryable "可查询">
+<!ENTITY wmsinspector.xsl.opaque "不透明">
+<!ENTITY wmsinspector.xsl.legend "图例">
+<!ENTITY wmsinspector.xsl.extent "范围">
+<!ENTITY wmsinspector.xsl.resolution "分辨率">
+<!ENTITY wmsinspector.xsl.scalehint "比例提示">
+<!ENTITY wmsinspector.xsl.maxscale "最大比例">
+<!ENTITY wmsinspector.xsl.minscale "最小比例">
+<!ENTITY wmsinspector.xsl.metadata "元数据">
+<!ENTITY wmsinspector.xsl.attribution "属性">
+<!ENTITY wmsinspector.xsl.logo "Logo">
+<!ENTITY wmsinspector.xsl.undefined "未定义">
+<!ENTITY wmsinspector.xsl.layertitleundefined "层标题未定义">
+<!ENTITY wmsinspector.xsl.mandatoryelement "这是一个强制性元素">
+<!ENTITY wmsinspector.xsl.generatedby "创建者">

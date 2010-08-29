@@ -1,0 +1,140 @@
+<!-- Common -->
+<!ENTITY wmsinspector.common.appname "WMS Inspector">
+<!ENTITY wmsinspector.common.yes "Sim">
+<!ENTITY wmsinspector.common.no "Não">
+<!ENTITY wmsinspector.common.close "Fechar">
+<!ENTITY wmsinspector.common.options "Opções">
+<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.title "Title">
+<!ENTITY wmsinspector.common.server "Servidor">
+<!ENTITY wmsinspector.common.service "Serviço">
+<!ENTITY wmsinspector.common.version "Versão">
+<!ENTITY wmsinspector.common.versions "Versions">
+<!ENTITY wmsinspector.common.value "Value">
+<!ENTITY wmsinspector.common.copy "Copiar">
+<!ENTITY wmsinspector.common.add "Add">
+<!ENTITY wmsinspector.common.delete "Delete">
+<!ENTITY wmsinspector.common.edit "Editar">
+<!ENTITY wmsinspector.common.change "Alterar">
+<!ENTITY wmsinspector.common.output "Saída">
+<!ENTITY wmsinspector.common.openinanewtab "Abrir em um nova aba">
+<!ENTITY wmsinspector.common.editor "Editor">
+<!ENTITY wmsinspector.common.browser "Navegador">
+<!ENTITY wmsinspector.common.refresh "Refresh">
+<!ENTITY wmsinspector.common.restore "Restore">
+<!ENTITY wmsinspector.common.copyurl "Copy URL">
+<!-- Index page -->
+<!ENTITY wmsinspector.index.welcome "Bem-vindo ao WMS Inspector">
+<!ENTITY wmsinspector.index.description "Clique em &quot;Atualizar solicitações&quot; para verificar se o documento atual possui solicitações padrão WMS (Web Map Service).">
+<!-- Context menu -->
+<!ENTITY wmsinspector.context.capabilitiesreport "Relatório de compatibilidade">
+<!-- Toolbar -->
+<!ENTITY wmsinspector.toolbar.refresh "Atualizar solicitações">
+<!ENTITY wmsinspector.toolbar.groupby "Agrupar por">
+<!ENTITY wmsinspector.toolbar.requesttype "Tipos de solicitações">
+<!ENTITY wmsinspector.toolbar.service "Serviço">
+<!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
+<!ENTITY wmsinspector.toolbar.library "Library">
+<!ENTITY wmsinspector.toolbar.options "Abre as opções de configuração">
+<!ENTITY wmsinspector.toolbar.openlibrary "Open Library">
+<!-- Tree -->
+<!ENTITY wmsinspector.tree.servicecol "Serviço \ Nome do Parâmetro">
+<!ENTITY wmsinspector.tree.paramcol "Valor do Parâmetro">
+<!-- GetCapabilities dialog -->
+<!ENTITY wmsinspector.getcapabilities.title "Solicitação GetCapabilities">
+<!ENTITY wmsinspector.getcapabilities.outputHTML "Relatório HTML">
+<!ENTITY wmsinspector.getcapabilities.outputXML "Arquivo original em XML">
+<!ENTITY wmsinspector.getcapabilities.openin "Abrir no:">
+<!-- EditParameter dialog -->
+<!ENTITY wmsinspector.editparameter.title "editar parâmetro">
+<!-- Options dialog -->
+<!ENTITY wmsinspector.addparameter.title "Add parameter">
+<!-- Default XSL templates for GetCapabilities reports -->
+<!ENTITY wmsinspector.options.title "Opções">
+<!ENTITY wmsinspector.options.general "General">
+<!ENTITY wmsinspector.options.defaultwmsversion "Default WMS version">
+<!ENTITY wmsinspector.options.chooseaneditor "Escolha um editor">
+<!ENTITY wmsinspector.options.appearance "Aparência">
+<!ENTITY wmsinspector.options.hidecontextmenu "Desativar o menu de contexto">
+<!ENTITY wmsinspector.options.libraryconfirmdelete "Ask before deleting services">
+<!ENTITY wmsinspector.options.servicetypes "Service Types">
+<!ENTITY wmsinspector.options.addservicetype "Add Service Type">
+<!-- Library window -->
+<!ENTITY wmsinspector.library.title "Library">
+<!ENTITY wmsinspector.library.advancedsearch "Advanced search">
+<!ENTITY wmsinspector.library.searchoptions "Search options">
+<!ENTITY wmsinspector.library.tags "Tags">
+<!ENTITY wmsinspector.library.servicetype "Service type">
+<!ENTITY wmsinspector.library.orderby "Order by">
+<!ENTITY wmsinspector.library.creationdate "Creation date">
+<!ENTITY wmsinspector.library.servicetitle "Title">
+<!ENTITY wmsinspector.library.ascending "Ascending">
+<!ENTITY wmsinspector.library.descending "Descending">
+<!ENTITY wmsinspector.library.favoritesfirst "Favorites first">
+<!ENTITY wmsinspector.library.dberror "Error connecting to the database">
+<!ENTITY wmsinspector.library.addservice "Add service">
+<!ENTITY wmsinspector.library.importexport "Import / Export">
+<!ENTITY wmsinspector.library.export "Export">
+<!ENTITY wmsinspector.library.exportall "Export all...">
+<!ENTITY wmsinspector.library.exportselection "Export selection...">
+<!ENTITY wmsinspector.library.import "Import...">
+<!-- AddService dialog -->
+<!ENTITY wmsinspector.addservice.title "Add service to Library">
+<!ENTITY wmsinspector.addservice.url "Service URL">
+<!ENTITY wmsinspector.addservice.tagsinstructions "Enter new tags separated by commas or select existing ones from the list below.">
+<!ENTITY wmsinspector.addservice.favorite "Favorite">
+<!-- AddServiceType dialog -->
+<!ENTITY wmsinspector.addservicetype.title "Add service type">
+<!ENTITY wmsinspector.addservicetype.nameexample "(e.g. WMS)">
+<!ENTITY wmsinspector.addservicetype.versionsinstructions "Enter the supported versions, comma separated">
+<!ENTITY wmsinspector.addservicetype.defaultversion "Default version">
+<!-- Default XSL templates for GetCapabilities reports -->
+<!ENTITY wmsinspector.xsl.reporttitle "Relatório de capacidades">
+<!ENTITY wmsinspector.xsl.service "Serviço">
+<!ENTITY wmsinspector.xsl.generalinfo "Informação Geral">
+<!ENTITY wmsinspector.xsl.version "Versão">
+<!ENTITY wmsinspector.xsl.name "Nome">
+<!ENTITY wmsinspector.xsl.title "Título">
+<!ENTITY wmsinspector.xsl.onlineresource "Recursos online">
+<!ENTITY wmsinspector.xsl.abstract "Resumo">
+<!ENTITY wmsinspector.xsl.keywords "Palavras-Chave">
+<!ENTITY wmsinspector.xsl.contactdetails "Detalhes para contato">
+<!ENTITY wmsinspector.xsl.contactperson "Pessoa para contato">
+<!ENTITY wmsinspector.xsl.contactorganization "Organização">
+<!ENTITY wmsinspector.xsl.contactposition "Posição">
+<!ENTITY wmsinspector.xsl.contactaddress "Endereço">
+<!ENTITY wmsinspector.xsl.contacttelephone "Telefone">
+<!ENTITY wmsinspector.xsl.contactfax "Fax">
+<!ENTITY wmsinspector.xsl.contactemail "Endereço eletrônico">
+<!ENTITY wmsinspector.xsl.accessconditions "Condições de acesso">
+<!ENTITY wmsinspector.xsl.fees "Taxas">
+<!ENTITY wmsinspector.xsl.accessconstraints "Restrições de acesso">
+<!ENTITY wmsinspector.xsl.layerlimit "Limites de camadas">
+<!ENTITY wmsinspector.xsl.maxwidth "Largura máxima">
+<!ENTITY wmsinspector.xsl.maxheight "Altura máxima">
+<!ENTITY wmsinspector.xsl.capabilities "Capacidades">
+<!ENTITY wmsinspector.xsl.availablerequests "Solicitações disponíveis">
+<!ENTITY wmsinspector.xsl.exceptions "Exceções">
+<!ENTITY wmsinspector.xsl.userdefinedsymbolization "Símbolos definidos pelo usuário">
+<!ENTITY wmsinspector.xsl.supportsld "Suporte a SLD">
+<!ENTITY wmsinspector.xsl.userlayer "Suporte a camadas personalizados">
+<!ENTITY wmsinspector.xsl.userstyle "Suporte a estilos personalizados">
+<!ENTITY wmsinspector.xsl.remotewfs "Suporte a WFS remoto">
+<!ENTITY wmsinspector.xsl.layers "Camadas">
+<!ENTITY wmsinspector.xsl.srs "SRS">
+<!ENTITY wmsinspector.xsl.crs "CRS">
+<!ENTITY wmsinspector.xsl.queryable "Pesquisável (Queryable)">
+<!ENTITY wmsinspector.xsl.opaque "Opaco">
+<!ENTITY wmsinspector.xsl.legend "Legenda">
+<!ENTITY wmsinspector.xsl.extent "Extensão">
+<!ENTITY wmsinspector.xsl.resolution "Resolução">
+<!ENTITY wmsinspector.xsl.scalehint "Escala sugerida">
+<!ENTITY wmsinspector.xsl.maxscale "Escala máxima">
+<!ENTITY wmsinspector.xsl.minscale "Escala mínima">
+<!ENTITY wmsinspector.xsl.metadata "Metadados">
+<!ENTITY wmsinspector.xsl.attribution "Atribuição">
+<!ENTITY wmsinspector.xsl.logo "Logotipo">
+<!ENTITY wmsinspector.xsl.undefined "Indefinida">
+<!ENTITY wmsinspector.xsl.layertitleundefined "Título de camada indefinido">
+<!ENTITY wmsinspector.xsl.mandatoryelement "Este é um elemento obrigatório">
+<!ENTITY wmsinspector.xsl.generatedby "Gerado por">

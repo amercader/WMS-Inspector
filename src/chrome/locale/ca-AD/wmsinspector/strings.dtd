@@ -23,14 +23,11 @@
 <!ENTITY wmsinspector.common.refresh "Actualitza">
 <!ENTITY wmsinspector.common.restore "Restaura">
 <!ENTITY wmsinspector.common.copyurl "Copiar URL">
-
 <!-- Index page -->
 <!ENTITY wmsinspector.index.welcome "Benvinguts al WMS Inspector">
 <!ENTITY wmsinspector.index.description "Feu clic en &quot;Actualitzar crides&quot; per comprovar si el document actual cont&#233; crides a serveis WMS.">
-
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Informe de capacitats">
-
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Actualitzar crides">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar per">
@@ -40,23 +37,18 @@
 <!ENTITY wmsinspector.toolbar.library "Biblioteca">
 <!ENTITY wmsinspector.toolbar.options "Obrir les opcions de configuraci&#243;">
 <!ENTITY wmsinspector.toolbar.openlibrary "Obrir biblioteca">
-
 <!-- Tree -->
 <!ENTITY wmsinspector.tree.servicecol "Servei \ Nom par&#224;metre">
 <!ENTITY wmsinspector.tree.paramcol "Valor par&#224;metre">
-
 <!-- GetCapabilities dialog -->
 <!ENTITY wmsinspector.getcapabilities.title "Crida GetCapabilities">
 <!ENTITY wmsinspector.getcapabilities.outputHTML "Informe HTML">
 <!ENTITY wmsinspector.getcapabilities.outputXML "Arxiu XML original">
 <!ENTITY wmsinspector.getcapabilities.openin "Obrir en:">
-
 <!-- EditParameter dialog -->
 <!ENTITY wmsinspector.editparameter.title "Editar par&#224;metre">
-
 <!-- AddParameter dialog -->
 <!ENTITY wmsinspector.addparameter.title "Afegir par&#224;metre">
-
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Opcions">
 <!ENTITY wmsinspector.options.general "General">
@@ -67,7 +59,6 @@
 <!ENTITY wmsinspector.options.libraryconfirmdelete "Confirma abans d'eliminar serveis">
 <!ENTITY wmsinspector.options.servicetypes "Tipus de serveis">
 <!ENTITY wmsinspector.options.addservicetype "Afegir tipus de servei">
-
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Biblioteca">
 <!ENTITY wmsinspector.library.advancedsearch "Cerca avan&#231;ada">
@@ -87,21 +78,17 @@
 <!ENTITY wmsinspector.library.exportall "Exportar tot...">
 <!ENTITY wmsinspector.library.exportselection "Exportar selecci&#243;...">
 <!ENTITY wmsinspector.library.import "Importar...">
-
 <!-- AddService dialog -->
 <!ENTITY wmsinspector.addservice.title "Afegir servei a la Biblioteca">
 <!ENTITY wmsinspector.addservice.url "URL del servei">
 <!ENTITY wmsinspector.addservice.tagsinstructions "Introdu&#239;u noves etiquetes separades per comes o seleccioneu-ne de les existents a la llista inferior.">
 <!ENTITY wmsinspector.addservice.favorite "Favorit">
-
 <!-- AddServiceType dialog -->
 <!ENTITY wmsinspector.addservicetype.title "Afegir tipus de servei">
 <!ENTITY wmsinspector.addservicetype.nameexample "(p.ex. WMS)">
 <!ENTITY wmsinspector.addservicetype.versionsinstructions "Introdu&#239;u les versions suportades, separades per comes">
 <!ENTITY wmsinspector.addservicetype.defaultversion "Versi&#243; per defecte">
-
 <!-- Default XSL templates for GetCapabilities reports -->
-
 <!ENTITY wmsinspector.xsl.reporttitle "Informe de capacitats">
 <!ENTITY wmsinspector.xsl.service "Servei">
 <!ENTITY wmsinspector.xsl.generalinfo "Dades generals">
@@ -125,7 +112,6 @@
 <!ENTITY wmsinspector.xsl.layerlimit "L&#237;mit de capes">
 <!ENTITY wmsinspector.xsl.maxwidth "Amplada m&#224;xima">
 <!ENTITY wmsinspector.xsl.maxheight "Al&#231;ada m&#224;xima">
-
 <!ENTITY wmsinspector.xsl.capabilities "Capacitats">
 <!ENTITY wmsinspector.xsl.availablerequests "Crides disponibles">
 <!ENTITY wmsinspector.xsl.exceptions "Excepcions">

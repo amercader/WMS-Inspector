@@ -23,14 +23,11 @@
 <!ENTITY wmsinspector.common.refresh "Actualiza">
 <!ENTITY wmsinspector.common.restore "Restaura">
 <!ENTITY wmsinspector.common.copyurl "Copiar URL">
-
 <!-- Index page -->
 <!ENTITY wmsinspector.index.welcome "Bienvenidos al WMS Inspector">
 <!ENTITY wmsinspector.index.description "Haga clic en &quot;Actualizar solicitudes&quot; para comprobar si el documento actual contiene solicitudes a servicios WMS.">
-
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Informe de capacidades">
-
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Actualizar solicitudes">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar por">
@@ -40,23 +37,18 @@
 <!ENTITY wmsinspector.toolbar.library "Biblioteca">
 <!ENTITY wmsinspector.toolbar.options "Abrir las opciones de configuraci&#243;n">
 <!ENTITY wmsinspector.toolbar.openlibrary "Abrir biblioteca">
-
 <!-- Tree -->
 <!ENTITY wmsinspector.tree.servicecol "Servicio \ Nombre par&#225;metro">
 <!ENTITY wmsinspector.tree.paramcol "Valor par&#225;metro">
-
 <!-- GetCapabilities dialog -->
 <!ENTITY wmsinspector.getcapabilities.title "Solicitud GetCapabilities">
 <!ENTITY wmsinspector.getcapabilities.outputHTML "Informe HTML">
 <!ENTITY wmsinspector.getcapabilities.outputXML "Archivo XML original">
 <!ENTITY wmsinspector.getcapabilities.openin "Abrir en:">
-
 <!-- EditParameter dialog -->
 <!ENTITY wmsinspector.editparameter.title "Editar par&#225;metro">
-
 <!-- AddParameter dialog -->
 <!ENTITY wmsinspector.addparameter.title "A&#241;adir par&#225;metro">
-
 <!-- Options dialog -->
 <!ENTITY wmsinspector.options.title "Opciones">
 <!ENTITY wmsinspector.options.general "General">
@@ -67,7 +59,6 @@
 <!ENTITY wmsinspector.options.libraryconfirmdelete "Confirma antes de eliminar servicios">
 <!ENTITY wmsinspector.options.servicetypes "Tipos de servicios">
 <!ENTITY wmsinspector.options.addservicetype "A&#241;adir tipo de servicio">
-
 <!-- Library window -->
 <!ENTITY wmsinspector.library.title "Biblioteca">
 <!ENTITY wmsinspector.library.advancedsearch "Busqueda avanzada">
@@ -87,20 +78,16 @@
 <!ENTITY wmsinspector.library.exportall "Exportar todo...">
 <!ENTITY wmsinspector.library.exportselection "Exportar selecci&#243;n...">
 <!ENTITY wmsinspector.library.import "Importar...">
-
-
 <!-- AddService dialog -->
 <!ENTITY wmsinspector.addservice.title "A&#241;adir servicio a la Biblioteca">
 <!ENTITY wmsinspector.addservice.url "URL del servicio">
 <!ENTITY wmsinspector.addservice.tagsinstructions "Introduzca nuevas etiquetas separadas por comas o seleccione algunas de las existentes en la lista inferior.">
 <!ENTITY wmsinspector.addservice.favorite "Favorito">
-
 <!-- AddServiceType dialog -->
 <!ENTITY wmsinspector.addservicetype.title "A&#241;adir tipo de servicio">
 <!ENTITY wmsinspector.addservicetype.nameexample "(p.ej. WMS)">
 <!ENTITY wmsinspector.addservicetype.versionsinstructions "Introduzca las versiones soportadas, separadas por comas">
 <!ENTITY wmsinspector.addservicetype.defaultversion "Versi&#243;n por defecto">
-
 <!-- Default XSL templates for GetCapabilities reports -->
 <!ENTITY wmsinspector.xsl.reporttitle "Informe de capacidades">
 <!ENTITY wmsinspector.xsl.service "Servicio">
@@ -125,7 +112,6 @@
 <!ENTITY wmsinspector.xsl.layerlimit "L&#237;mite de capas">
 <!ENTITY wmsinspector.xsl.maxwidth "Anchura m&#225;xima">
 <!ENTITY wmsinspector.xsl.maxheight "Altura m&#225;xima">
-
 <!ENTITY wmsinspector.xsl.capabilities "Capacidades">
 <!ENTITY wmsinspector.xsl.availablerequests "Solicitudes disponibles">
 <!ENTITY wmsinspector.xsl.exceptions "Excepciones">
