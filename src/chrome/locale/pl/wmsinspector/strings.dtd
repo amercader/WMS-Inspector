@@ -4,7 +4,7 @@
 <!ENTITY wmsinspector.common.no "Nie">
 <!ENTITY wmsinspector.common.close "Zamknij">
 <!ENTITY wmsinspector.common.options "Opcje">
-<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.name "Name">
 <!ENTITY wmsinspector.common.title "Title">
 <!ENTITY wmsinspector.common.server "Serwer">
 <!ENTITY wmsinspector.common.service "Usługa">

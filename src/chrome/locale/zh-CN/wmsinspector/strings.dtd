@@ -4,7 +4,7 @@
 <!ENTITY wmsinspector.common.no "否">
 <!ENTITY wmsinspector.common.close "关闭">
 <!ENTITY wmsinspector.common.options "选项">
-<!ENTITY wmsinspector.common.name "WMS Inspector">
+<!ENTITY wmsinspector.common.name "Name">
 <!ENTITY wmsinspector.common.title "Title">
 <!ENTITY wmsinspector.common.server "服务器">
 <!ENTITY wmsinspector.common.service "服务">
