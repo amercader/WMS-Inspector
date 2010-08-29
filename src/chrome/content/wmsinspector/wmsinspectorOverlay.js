@@ -541,7 +541,11 @@ WMSInspector.Overlay = {
                             var cellText = t.view.getCellText(t.currentIndex,col);
                             server = cellText.substr(0,cellText.indexOf(" "));
                         }
-                        version = this.prefs.getCharPref("wmsversion");
+                        for (let i=0; i < this.serviceTypes.length; i++){
+                            if (this.serviceTypes[i].name == "WMS"){
+                                version = this.serviceTypes[i].defaultVersion;
+                            }
+                        }
 			
                     } else if (cellValues[1] == "2"){
                         var serviceImage = this.getServiceImage(cellValues[2]);
@@ -597,7 +601,11 @@ WMSInspector.Overlay = {
         }
         //If no version or unsupported, try with default version
         if (!version || !supported){
-            version = WMSInspector.Overlay.prefs.getCharPref("wmsversion");
+            for (let i=0; i < WMSInspector.Overlay.serviceTypes.length; i++){
+                if (WMSInspector.Overlay.serviceTypes[i].name == "WMS"){
+                    version = WMSInspector.Overlay.serviceTypes[i].defaultVersion;
+                }
+            }
         }
 
         var processor = new XSLTProcessor();
