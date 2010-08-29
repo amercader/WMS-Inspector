@@ -11,7 +11,10 @@
         title="&wmsinspector.library.title;"
         onload="WMSInspector.Library.init()"
         onunload="WMSInspector.Library.shutdown();"
-        persist="width height screenX screenY sizemode">
+        persist="width height screenX screenY sizemode"
+        width="580"
+        height="400"
+        >
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
