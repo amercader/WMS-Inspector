@@ -16,9 +16,13 @@ WMSInspector.GetCapabilitiesDialog = {
 
         if (server) document.getElementById("wiTextServer").value = server;
 
-        document.getElementById("wiGetcapabilitiesOutputOptionsBox").setAttribute("collapsed",!document.getElementById("wiGetcapabilitiesOutputXML").checked);
+        var outputPref = this.prefs.getCharPref("getcapabilitiesoutput");
+
+        document.getElementById("wiGetcapabilitiesOutputHTML").checked = (outputPref == "html" || outputPref == "both");
+        document.getElementById("wiGetcapabilitiesOutputXML").checked = (outputPref == "xml" || outputPref == "both");
+        document.getElementById("wiGetcapabilitiesOutputOptionsBox").collapsed = !document.getElementById("wiGetcapabilitiesOutputXML").checked;
         
-        document.getElementById("wiGetcapabilitiesOutputEditor").setAttribute("disabled",this.prefs.getCharPref("editor") == "");
+        document.getElementById("wiGetcapabilitiesOutputEditor").disabled = (this.prefs.getCharPref("editor") == "");
         
         this.setServiceTypesList();
 
@@ -67,9 +71,8 @@ WMSInspector.GetCapabilitiesDialog = {
 
         //Disable HTML output option for non WMS services
         var html =  (selectedType == "WMS");
-        document.getElementById("wiGetcapabilitiesOutputHTML").collapsed = !html;
-        document.getElementById("wiGetcapabilitiesOutputXML").disabled = !html
-        if (html){
+        document.getElementById("wiGetcapabilitiesOutputHTML").disabled = !html
+        if (!html){
             document.getElementById("wiGetcapabilitiesOutputXML").checked = true;
             WMSInspector.GetCapabilitiesDialog.updateOutputRadios();
         }
@@ -78,7 +81,7 @@ WMSInspector.GetCapabilitiesDialog = {
     },
 
     onAccept: function(){
-        var outputHTML = document.getElementById("wiGetcapabilitiesOutputHTML").checked && !document.getElementById("wiGetcapabilitiesOutputHTML").collapsed;
+        var outputHTML = document.getElementById("wiGetcapabilitiesOutputHTML").checked && !document.getElementById("wiGetcapabilitiesOutputHTML").disabled;
         var outputXML = document.getElementById("wiGetcapabilitiesOutputXML").checked;
 
 
@@ -132,6 +135,13 @@ WMSInspector.GetCapabilitiesDialog = {
     },
     
     shutdown: function(){
+
+        var html = document.getElementById("wiGetcapabilitiesOutputHTML").checked;
+        var xml = document.getElementById("wiGetcapabilitiesOutputXML").checked;
+        var value = (html && xml) ? "both" : (xml) ? "xml" : "html";
+        this.prefs.setCharPref("getcapabilitiesoutput",value);
+
+
         this.prefs.removeObserver("", this);
     }
 

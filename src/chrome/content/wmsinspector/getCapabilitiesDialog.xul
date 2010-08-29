@@ -52,8 +52,8 @@
     <groupbox>
         <caption label="&wmsinspector.common.output;"/>
         <vbox flex="1">
-            <checkbox id="wiGetcapabilitiesOutputHTML" label="&wmsinspector.getcapabilities.outputHTML;" persist="checked"/>
-            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" persist="checked" oncommand="WMSInspector.GetCapabilitiesDialog.updateOutputRadios();"/>
+            <checkbox id="wiGetcapabilitiesOutputHTML" label="&wmsinspector.getcapabilities.outputHTML;" />
+            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" oncommand="WMSInspector.GetCapabilitiesDialog.updateOutputRadios();"/>
         </vbox>
             
         <hbox id="wiGetcapabilitiesOutputOptionsBox" style="margin-left: 22px" align="center" >
