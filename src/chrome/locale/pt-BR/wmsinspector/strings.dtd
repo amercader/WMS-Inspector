@@ -4,25 +4,25 @@
 <!ENTITY wmsinspector.common.no "Não">
 <!ENTITY wmsinspector.common.close "Fechar">
 <!ENTITY wmsinspector.common.options "Opções">
-<!ENTITY wmsinspector.common.name "Name">
-<!ENTITY wmsinspector.common.title "Title">
+<!ENTITY wmsinspector.common.name "Nome">
+<!ENTITY wmsinspector.common.title "Título">
 <!ENTITY wmsinspector.common.server "Servidor">
 <!ENTITY wmsinspector.common.service "Serviço">
 <!ENTITY wmsinspector.common.version "Versão">
-<!ENTITY wmsinspector.common.versions "Versions">
-<!ENTITY wmsinspector.common.value "Value">
+<!ENTITY wmsinspector.common.versions "Versão">
+<!ENTITY wmsinspector.common.value "Valor">
 <!ENTITY wmsinspector.common.copy "Copiar">
-<!ENTITY wmsinspector.common.add "Add">
-<!ENTITY wmsinspector.common.delete "Delete">
+<!ENTITY wmsinspector.common.add "Adicionar">
+<!ENTITY wmsinspector.common.delete "Apagar">
 <!ENTITY wmsinspector.common.edit "Editar">
 <!ENTITY wmsinspector.common.change "Alterar">
 <!ENTITY wmsinspector.common.output "Saída">
 <!ENTITY wmsinspector.common.openinanewtab "Abrir em um nova aba">
 <!ENTITY wmsinspector.common.editor "Editor">
 <!ENTITY wmsinspector.common.browser "Navegador">
-<!ENTITY wmsinspector.common.refresh "Refresh">
-<!ENTITY wmsinspector.common.restore "Restore">
-<!ENTITY wmsinspector.common.copyurl "Copy URL">
+<!ENTITY wmsinspector.common.refresh "Renovar">
+<!ENTITY wmsinspector.common.restore "Restaurar">
+<!ENTITY wmsinspector.common.copyurl "Copiar endereço">
 <!-- Index page -->
 <!ENTITY wmsinspector.index.welcome "Bem-vindo ao WMS Inspector">
 <!ENTITY wmsinspector.index.description "Clique em &quot;Atualizar solicitações&quot; para verificar se o documento atual possui solicitações padrão WMS (Web Map Service).">
@@ -34,7 +34,7 @@
 <!ENTITY wmsinspector.toolbar.requesttype "Tipos de solicitações">
 <!ENTITY wmsinspector.toolbar.service "Serviço">
 <!ENTITY wmsinspector.toolbar.capabilities "GetCapabilities">
-<!ENTITY wmsinspector.toolbar.library "Library">
+<!ENTITY wmsinspector.toolbar.library "Biblioteca">
 <!ENTITY wmsinspector.toolbar.options "Abre as opções de configuração">
 <!ENTITY wmsinspector.toolbar.openlibrary "Open Library">
 <!-- Tree -->
@@ -46,48 +46,48 @@
 <!ENTITY wmsinspector.getcapabilities.outputXML "Arquivo original em XML">
 <!ENTITY wmsinspector.getcapabilities.openin "Abrir no:">
 <!-- EditParameter dialog -->
-<!ENTITY wmsinspector.editparameter.title "editar parâmetro">
+<!ENTITY wmsinspector.editparameter.title "Editar parâmetro">
 <!-- Options dialog -->
-<!ENTITY wmsinspector.addparameter.title "Add parameter">
+<!ENTITY wmsinspector.addparameter.title "Adicionar parâmetro">
 <!-- Default XSL templates for GetCapabilities reports -->
 <!ENTITY wmsinspector.options.title "Opções">
-<!ENTITY wmsinspector.options.general "General">
-<!ENTITY wmsinspector.options.defaultwmsversion "Default WMS version">
+<!ENTITY wmsinspector.options.general "Geral">
+<!ENTITY wmsinspector.options.defaultwmsversion "Versão padrão WMS">
 <!ENTITY wmsinspector.options.chooseaneditor "Escolha um editor">
 <!ENTITY wmsinspector.options.appearance "Aparência">
 <!ENTITY wmsinspector.options.hidecontextmenu "Desativar o menu de contexto">
-<!ENTITY wmsinspector.options.libraryconfirmdelete "Ask before deleting services">
-<!ENTITY wmsinspector.options.servicetypes "Service Types">
-<!ENTITY wmsinspector.options.addservicetype "Add Service Type">
+<!ENTITY wmsinspector.options.libraryconfirmdelete "Perguntar antes de apagar serviços">
+<!ENTITY wmsinspector.options.servicetypes "Tipos de Serviços">
+<!ENTITY wmsinspector.options.addservicetype "Adicionar Tipo de Seerviço">
 <!-- Library window -->
-<!ENTITY wmsinspector.library.title "Library">
-<!ENTITY wmsinspector.library.advancedsearch "Advanced search">
-<!ENTITY wmsinspector.library.searchoptions "Search options">
-<!ENTITY wmsinspector.library.tags "Tags">
-<!ENTITY wmsinspector.library.servicetype "Service type">
-<!ENTITY wmsinspector.library.orderby "Order by">
-<!ENTITY wmsinspector.library.creationdate "Creation date">
-<!ENTITY wmsinspector.library.servicetitle "Title">
-<!ENTITY wmsinspector.library.ascending "Ascending">
-<!ENTITY wmsinspector.library.descending "Descending">
-<!ENTITY wmsinspector.library.favoritesfirst "Favorites first">
-<!ENTITY wmsinspector.library.dberror "Error connecting to the database">
-<!ENTITY wmsinspector.library.addservice "Add service">
-<!ENTITY wmsinspector.library.importexport "Import / Export">
-<!ENTITY wmsinspector.library.export "Export">
-<!ENTITY wmsinspector.library.exportall "Export all...">
-<!ENTITY wmsinspector.library.exportselection "Export selection...">
-<!ENTITY wmsinspector.library.import "Import...">
+<!ENTITY wmsinspector.library.title "Biblioteca">
+<!ENTITY wmsinspector.library.advancedsearch "Busca Avançada">
+<!ENTITY wmsinspector.library.searchoptions "Opções de busca">
+<!ENTITY wmsinspector.library.tags "Rótulos">
+<!ENTITY wmsinspector.library.servicetype "Tipo de serviço">
+<!ENTITY wmsinspector.library.orderby "Solicitado por">
+<!ENTITY wmsinspector.library.creationdate "Data de criação">
+<!ENTITY wmsinspector.library.servicetitle "Título">
+<!ENTITY wmsinspector.library.ascending "Subindo">
+<!ENTITY wmsinspector.library.descending "Descendo">
+<!ENTITY wmsinspector.library.favoritesfirst "Favoritos primeiro">
+<!ENTITY wmsinspector.library.dberror "Erro ao conectar ao banco de dados">
+<!ENTITY wmsinspector.library.addservice "Adicionar serviço">
+<!ENTITY wmsinspector.library.importexport "Importar/Exportar">
+<!ENTITY wmsinspector.library.export "Exportar">
+<!ENTITY wmsinspector.library.exportall "Exportar tudo...">
+<!ENTITY wmsinspector.library.exportselection "Exportar seleção...">
+<!ENTITY wmsinspector.library.import "Importar...">
 <!-- AddService dialog -->
-<!ENTITY wmsinspector.addservice.title "Add service to Library">
-<!ENTITY wmsinspector.addservice.url "Service URL">
-<!ENTITY wmsinspector.addservice.tagsinstructions "Enter new tags separated by commas or select existing ones from the list below.">
-<!ENTITY wmsinspector.addservice.favorite "Favorite">
+<!ENTITY wmsinspector.addservice.title "Adicionar serviço à Biblioteca">
+<!ENTITY wmsinspector.addservice.url "Endereço do serviço">
+<!ENTITY wmsinspector.addservice.tagsinstructions "Entre novos termos separados por vírgula ou selecione a partir da lista abaixo.">
+<!ENTITY wmsinspector.addservice.favorite "Favorito">
 <!-- AddServiceType dialog -->
-<!ENTITY wmsinspector.addservicetype.title "Add service type">
-<!ENTITY wmsinspector.addservicetype.nameexample "(e.g. WMS)">
-<!ENTITY wmsinspector.addservicetype.versionsinstructions "Enter the supported versions, comma separated">
-<!ENTITY wmsinspector.addservicetype.defaultversion "Default version">
+<!ENTITY wmsinspector.addservicetype.title "Adicionar tipo de serviço">
+<!ENTITY wmsinspector.addservicetype.nameexample "(por exemplo WMS)">
+<!ENTITY wmsinspector.addservicetype.versionsinstructions "Entre as versões compatíveis, separado por vírgula">
+<!ENTITY wmsinspector.addservicetype.defaultversion "Versão padrão">
 <!-- Default XSL templates for GetCapabilities reports -->
 <!ENTITY wmsinspector.xsl.reporttitle "Relatório de capacidades">
 <!ENTITY wmsinspector.xsl.service "Serviço">
