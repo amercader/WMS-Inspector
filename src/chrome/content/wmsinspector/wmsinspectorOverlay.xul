@@ -39,7 +39,7 @@
             <hbox id="wiMenuContainer">
 
                 <toolbox id="wiMenuToolbox" flex="1" >
-                    <toolbar id="wiMenuToolbar">
+                    <toolbar id="wiMenuToolbar" style="visibility: visible !important;">
                         <toolbarbutton id="wiRefreshButton" label="&wmsinspector.toolbar.refresh;" tooltiptext="&wmsinspector.toolbar.refresh;" oncommand="WMSInspector.Overlay.refreshServiceImages();"/>
                         <toolbarseparator />
                         <toolbaritem align="center">
