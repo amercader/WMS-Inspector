@@ -78,7 +78,11 @@ WMSInspectorService.prototype = {
                                 }
                             }
                         }
-                        if (columns.indexOf("tags") != -1 && record[columns.indexOf("tags")].length) service.tags = record[columns.indexOf("tags")].split(",");
+
+                        if (columns.indexOf("tags") != -1)
+                            if (typeof(record[columns.indexOf("tags")]) != "undefined" && record[columns.indexOf("tags")].length)
+                                service.tags = record[columns.indexOf("tags")].split(",");
+
 
                         if (service.URL) {
                             this.servicesQueue.push(service);
