@@ -294,7 +294,7 @@ WMSInspector.Overlay = {
 
         var treeSel = this.getTreeSelectionAt(event.clientX, event.clientY, "wiTree");
         if (treeSel.row.value != -1 && treeSel.part.value != "twisty"){
-            var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column).split("_");
+            var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column.value).split("_");
             if (event.button == 0){
                 if (cellValues[1] == "2"){
                     var serviceImage = this.getServiceImage(parseInt(cellValues[2]),parseInt(cellValues[3]));
@@ -316,7 +316,7 @@ WMSInspector.Overlay = {
         var treeSel = this.getTreeSelectionAt(event.clientX, event.clientY, "wiTree");
 
         if (treeSel.row.value != -1 && treeSel.part.value != "twisty"){
-            var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column).split("_");
+            var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column.value).split("_");
             if (cellValues[1] == "3"){
                 var col = t.columns.getNamedColumn("wiTreeNameColumn");
                 var cellText = t.view.getCellText(t.currentIndex,col);
@@ -339,7 +339,7 @@ WMSInspector.Overlay = {
         var treeSel = this.getTreeSelectionAt(event.clientX, event.clientY, "wiTree");
 
         if (treeSel.row.value != -1 && treeSel.part.value != "twisty"){
-            var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column).split("_");
+            var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column.value).split("_");
             if (cellValues[1] == "1" && this.currentGroupMode == 1) {
                 t.setAttribute("context","");
                 this.currentNameColumnText = false;
@@ -349,7 +349,7 @@ WMSInspector.Overlay = {
                 var col = t.columns.getNamedColumn("wiTreeNameColumn");
                 this.currentNameColumnText = t.view.getCellText(t.currentIndex,col);
                 this.currentNameColumnValues = t.view.getCellValue(t.currentIndex,col).split("_");
-                var contextMenu = "gtTreeContextMenuURL" + cellValues[1];
+                var contextMenu = (cellValues[1] == "4") ? "gtTreeContextMenuURL3" : "gtTreeContextMenuURL" + cellValues[1];
                 t.setAttribute("context",contextMenu);
             }
         }
