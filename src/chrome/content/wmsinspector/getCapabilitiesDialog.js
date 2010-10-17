@@ -1,5 +1,5 @@
 
-WMSInspector.GetCapabilitiesDialog = {
+var GetCapabilitiesDialog = {
     prefs: null,
 
     serviceTypes:[],
@@ -51,7 +51,7 @@ WMSInspector.GetCapabilitiesDialog = {
 
     setVersionsList: function(){
 
-        var serviceTypes = WMSInspector.GetCapabilitiesDialog.serviceTypes;
+        var serviceTypes = GetCapabilitiesDialog.serviceTypes;
         var selectedType = document.getElementById("wiServiceTypeMenu").selectedItem.value;
 
         for (let i=0; i < serviceTypes.length; i++){
@@ -74,7 +74,7 @@ WMSInspector.GetCapabilitiesDialog = {
         document.getElementById("wiGetcapabilitiesOutputHTML").disabled = !html
         if (!html){
             document.getElementById("wiGetcapabilitiesOutputXML").checked = true;
-            WMSInspector.GetCapabilitiesDialog.updateOutputRadios();
+            GetCapabilitiesDialog.updateOutputRadios();
         }
    
 

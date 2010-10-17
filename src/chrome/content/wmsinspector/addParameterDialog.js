@@ -1,5 +1,5 @@
 
-WMSInspector.AddParameterDialog = {
+var AddParameterDialog = {
     imageId: null,
     paramName: null,
     paramValue: null,

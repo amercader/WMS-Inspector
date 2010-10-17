@@ -1,7 +1,8 @@
+Components.utils.import("resource://wmsinspector/classes.js");
 
-WMSInspector.AddServiceTypeDialog = {
+var AddServiceTypeDialog = {
     
-    serviceTypes: window.opener.WMSInspector.OptionsDialog.serviceTypes,
+    serviceTypes: window.opener.OptionsDialog.serviceTypes,
 
     serviceTypeId: false,
 
@@ -64,20 +65,20 @@ WMSInspector.AddServiceTypeDialog = {
             }
         }
 
-        var serviceType = new WMSInspectorClasses.ServiceType();
+        var serviceType = new Classes.ServiceType();
 
-        serviceType.id = WMSInspector.AddServiceTypeDialog.serviceTypeId;
+        serviceType.id = AddServiceTypeDialog.serviceTypeId;
         serviceType.name = name;
         serviceType.title = title;
         serviceType.defaultVersion = defaultVersion;
         serviceType.versions = versions;
 
-        if (WMSInspector.AddServiceTypeDialog.serviceTypeId){
+        if (AddServiceTypeDialog.serviceTypeId){
             //Update an existing service type
-            window.opener.WMSInspector.OptionsDialog.updateServiceType(serviceType);
+            window.opener.OptionsDialog.updateServiceType(serviceType);
         } else {
             //Add a new service type to the DB
-            window.opener.WMSInspector.OptionsDialog.addServiceType(serviceType);
+            window.opener.OptionsDialog.addServiceType(serviceType);
         }
 
         window.close();

@@ -10,13 +10,12 @@
         id="wiOptionsDialog"
         title="&wmsinspector.options.title;"
         buttons="accept,cancel"
-        onload="WMSInspector.OptionsDialog.init();"
-        ondialogaccept="WMSInspector.OptionsDialog.onAccept();"
+        onload="OptionsDialog.init();"
+        ondialogaccept="OptionsDialog.onAccept();"
         persist="width height"
 >
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/optionsDialog.js"/>
 
 
@@ -48,7 +47,7 @@
                             <label value="&wmsinspector.options.chooseaneditor;" />
                             <hbox>
                                 <textbox id="wiEditorPath" value="" style="width:200px;"/>
-                                <button label="&wmsinspector.common.change;" oncommand="WMSInspector.OptionsDialog.selectEditor();"/>
+                                <button label="&wmsinspector.common.change;" oncommand="OptionsDialog.selectEditor();"/>
                             </hbox>
 
                         </vbox>
@@ -63,7 +62,7 @@
             </tabpanel>
             <tabpanel id="wiServiceTypesTab" orient="vertical">
                 <hbox flex="0">
-                    <button id="wiAddServiceTypeButton" label="Add Service Type" tooltiptext="&wmsinspector.options.addservicetype;" oncommand="WMSInspector.OptionsDialog.openAddServiceTypeDialog()" image="chrome://wmsinspector/skin/icons/add.png" />
+                    <button id="wiAddServiceTypeButton" label="Add Service Type" tooltiptext="&wmsinspector.options.addservicetype;" oncommand="OptionsDialog.openAddServiceTypeDialog()" image="chrome://wmsinspector/skin/icons/add.png" />
                 </hbox>
 
 
@@ -91,11 +90,11 @@
 
                 <menupopup id="wiServiceTypesContextMenu">
                     <menuitem label="&wmsinspector.common.edit;"
-                                  oncommand="WMSInspector.OptionsDialog.doContextMenuAction(1,event);"
+                                  oncommand="OptionsDialog.doContextMenuAction(1,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/edit.png" />
                     <menuitem label="&wmsinspector.common.delete;"
-                                  oncommand="WMSInspector.OptionsDialog.doContextMenuAction(2,event)"
+                                  oncommand="OptionsDialog.doContextMenuAction(2,event)"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/delete.png" />
                 </menupopup>

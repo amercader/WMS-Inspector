@@ -1,6 +1,7 @@
+Components.utils.import("resource://wmsinspector/classes.js");
 
-WMSInspector.AddServiceDialog = {
-    Library : window.opener.WMSInspector.Library,
+var AddServiceDialog = {
+    Library : window.opener.Library,
 
     serviceTypes:[],
     
@@ -12,11 +13,7 @@ WMSInspector.AddServiceDialog = {
         this.prefs = WMSInspector.Utils.getPrefs();
         
         this.serviceTypes= (this.Library.serviceTypes.length) ? this.Library.serviceTypes : window.opener.WMSInspector.Overlay.serviceTypes;
-       /*
-        document.documentElement.getButton("accept").addEventListener(
-            "command",
-            WMSInspector.AddServiceDialog.onAccept, false);
-*/
+
         if (window.arguments) this.serviceId = window.arguments[0];
 
         this.Library.fetchList("tags",document.getElementById("wiAddServiceTagsList"));
@@ -67,7 +64,7 @@ WMSInspector.AddServiceDialog = {
 
     setVersionsList: function(){
         
-        var serviceTypes = WMSInspector.AddServiceDialog.serviceTypes;
+        var serviceTypes = AddServiceDialog.serviceTypes;
         var selectedType = document.getElementById("wiAddServiceTypeMenu").selectedItem.value;
 
         for (let i=0; i < serviceTypes.length; i++){
@@ -158,9 +155,9 @@ WMSInspector.AddServiceDialog = {
             return false;
         }
 
-        var service = new WMSInspectorClasses.Service();
+        var service = new Classes.Service();
 
-        service.id = WMSInspector.AddServiceDialog.serviceId;
+        service.id = AddServiceDialog.serviceId;
         service.title = document.getElementById("wiAddServiceTitle").value;
         service.URL = url;
         service.favorite = (document.getElementById("wiAddServiceFavorite").checked);
@@ -172,14 +169,14 @@ WMSInspector.AddServiceDialog = {
 
         //If the dialog was called from the Library window, refresh the services list after adding or updating
         //the service
-        var callback = (window.opener.name == "wiLibrary") ? WMSInspector.AddServiceDialog.Library.onServiceOperationFinished : null;
+        var callback = (window.opener.name == "wiLibrary") ? AddServiceDialog.Library.onServiceOperationFinished : null;
 
-        if (WMSInspector.AddServiceDialog.serviceId){
+        if (AddServiceDialog.serviceId){
             //Update an existing service
-            WMSInspector.AddServiceDialog.Library.updateService(service,callback);
+            AddServiceDialog.Library.updateService(service,callback);
         } else {
             //Add a new service to Library
-            WMSInspector.AddServiceDialog.Library.addService(service,callback);
+            AddServiceDialog.Library.addService(service,callback);
         }
 
         window.close();

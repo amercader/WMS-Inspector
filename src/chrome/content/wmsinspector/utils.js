@@ -1,7 +1,6 @@
-Components.utils.import("resource://wmsinspector/classes.js");
 
-// WMSInspector namespace
-var WMSInspector =  {};
+//Temporary, until we migrate utils to a module
+if (typeof(WMSInspector) == "undefined") WMSInspector = {};
 
 WMSInspector.Utils = {
 

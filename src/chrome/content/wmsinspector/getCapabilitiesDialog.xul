@@ -9,9 +9,9 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="wiGetCapabilitiesDialog"
         title="&wmsinspector.getcapabilities.title;"
-        onload="WMSInspector.GetCapabilitiesDialog.init();"
-        onunload="WMSInspector.GetCapabilitiesDialog.shutdown();"
-        ondialogaccept="return WMSInspector.GetCapabilitiesDialog.onAccept();"
+        onload="GetCapabilitiesDialog.init();"
+        onunload="GetCapabilitiesDialog.shutdown();"
+        ondialogaccept="return GetCapabilitiesDialog.onAccept();"
         buttons="accept,cancel"
         defaultButton="accept"
         width="380"
@@ -37,7 +37,7 @@
         <caption label="&wmsinspector.common.options;"/>
         <hbox align="center" flex="1">
             <label id="wiServiceTypeMenuLabel" value="&wmsinspector.common.service;" />
-            <menulist id="wiServiceTypeMenu" onselect="WMSInspector.GetCapabilitiesDialog.setVersionsList()">
+            <menulist id="wiServiceTypeMenu" onselect="GetCapabilitiesDialog.setVersionsList()">
                 <menupopup>
                 </menupopup>
             </menulist>
@@ -53,7 +53,7 @@
         <caption label="&wmsinspector.common.output;"/>
         <vbox flex="1">
             <checkbox id="wiGetcapabilitiesOutputHTML" label="&wmsinspector.getcapabilities.outputHTML;" />
-            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" oncommand="WMSInspector.GetCapabilitiesDialog.updateOutputRadios();"/>
+            <checkbox id="wiGetcapabilitiesOutputXML" label="&wmsinspector.getcapabilities.outputXML;" oncommand="GetCapabilitiesDialog.updateOutputRadios();"/>
         </vbox>
             
         <hbox id="wiGetcapabilitiesOutputOptionsBox" style="margin-left: 22px" align="center" >

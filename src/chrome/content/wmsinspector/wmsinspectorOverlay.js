@@ -1,11 +1,9 @@
 
-window.addEventListener("load",  function(){
-    WMSInspector.Overlay.init()
-}, false);
-window.addEventListener("unload", function(){
-    WMSInspector.Overlay.unload()
-}, false);
 
+// WMSInspector namespace
+var WMSInspector =  {};
+
+Components.utils.import("resource://wmsinspector/classes.js",WMSInspector);
 
 WMSInspector.Overlay = {
 	
@@ -905,7 +903,7 @@ WMSInspector.Overlay = {
                     row;
                     row = resultSet.getNextRow()) {
                     
-                    let serviceType = new WMSInspectorClasses.ServiceType();
+                    let serviceType = new WMSInspector.Classes.ServiceType();
                     serviceType.id =  row.getResultByName("id"),
                     serviceType.name = row.getResultByName("name"),
                     serviceType.title = row.getResultByName("title"),
@@ -977,7 +975,7 @@ WMSInspector.Overlay = {
         }
     },
 
-    //serviceType should be a WMSInspectorClasses.ServiceType object
+    //serviceType should be a ServiceType object
     updateServiceType: function(serviceType,callback){
         try{
 
@@ -1152,3 +1150,10 @@ WMSInspector.Overlay = {
     }
 
 }
+
+window.addEventListener("load",  function(){
+    WMSInspector.Overlay.init()
+}, false);
+window.addEventListener("unload", function(){
+    WMSInspector.Overlay.unload()
+}, false);

@@ -1,4 +1,6 @@
-WMSInspector.Library = {
+Components.utils.import("resource://wmsinspector/classes.js");
+
+var Library = {
     
     prefs: null,
 
@@ -40,51 +42,51 @@ WMSInspector.Library = {
         //Add <All> option to service types list
         var typesList = document.getElementById("wiLibraryServiceTypeList");
         typesList.appendItem(WMSInspector.Utils.getString("wi_all"),0);
-        this.fetchList("types",typesList,function (){WMSInspector.Library.onWindowReady()});
+        this.fetchList("types",typesList,function (){Library.onWindowReady()});
 
     },
 
     onWindowReady: function(){
         document.getElementById("wiLibraryTagsList")
-            .addEventListener("command",WMSInspector.Library.refresh,true);
+            .addEventListener("command",Library.refresh,true);
         document.getElementById("wiLibraryServiceTypeList")
-            .addEventListener("select",WMSInspector.Library.refresh,true);
+            .addEventListener("select",Library.refresh,true);
         document.getElementById("wiLibraryOrderBy")
-            .addEventListener("select",WMSInspector.Library.refresh,true);
+            .addEventListener("select",Library.refresh,true);
         document.getElementById("wiLibraryDirection")
-            .addEventListener("select",WMSInspector.Library.refresh,true);
+            .addEventListener("select",Library.refresh,true);
         document.getElementById("wiLibraryFavoritesFirst")
-            .addEventListener("command",WMSInspector.Library.refresh,true);
+            .addEventListener("command",Library.refresh,true);
 
-        WMSInspector.Library.search();
+        Library.search();
     },
     
     setSelectedService: function(element){
-        WMSInspector.Library.selectedService = new WMSInspectorClasses.Service();
-        WMSInspector.Library.selectedService.id = element.serviceId;
-        WMSInspector.Library.selectedService.URL = element.serviceURL;
-        WMSInspector.Library.selectedService.type = element.serviceType;
-        WMSInspector.Library.selectedService.version = element.serviceVersion;
+        Library.selectedService = new Classes.Service();
+        Library.selectedService.id = element.serviceId;
+        Library.selectedService.URL = element.serviceURL;
+        Library.selectedService.type = element.serviceType;
+        Library.selectedService.version = element.serviceVersion;
 
         //Currently, only WMS are supported for HTML reports, so if it is a different type, we disable the context menu entry
         document.getElementById("wiLibraryContextMenuGetCapabilitiesReport").setAttribute("disabled", (element.serviceType != "WMS"));
 
 
-        return WMSInspector.Library.selectedService;
+        return Library.selectedService;
     },
 
     onExportPopUpShowing: function(){
-        document.getElementById("wiLibraryMenuExportSelection").setAttribute("disabled", !(WMSInspector.Library.currentResults.length > 0));
+        document.getElementById("wiLibraryMenuExportSelection").setAttribute("disabled", !(Library.currentResults.length > 0));
     },
 
     onContextMenu: function(event){
-        WMSInspector.Library.setSelectedService(event.target);
+        Library.setSelectedService(event.target);
     },
 
     doContextMenuAction: function(mode,event){
-        if (!WMSInspector.Library.selectedService) return false;
+        if (!Library.selectedService) return false;
 
-        var service = WMSInspector.Library.selectedService;
+        var service = Library.selectedService;
 
         switch (mode){
             case 1:
@@ -95,13 +97,13 @@ WMSInspector.Library = {
                 break;
             case 2:
                 //Edit service
-                WMSInspector.Library.openAddServiceDialog(service.id);
+                Library.openAddServiceDialog(service.id);
                 break;
             case 3:
                 //Delete service
                 var deleteService = true;
 
-                if (WMSInspector.Library.confirmBeforeDelete){
+                if (Library.confirmBeforeDelete){
                     deleteService = false;
                     var check = {
                         value:false
@@ -112,15 +114,15 @@ WMSInspector.Library = {
                         check);
                     if (prompt){
                         if (check.value === true){
-                            WMSInspector.Library.confirmBeforeDelete = false;
+                            Library.confirmBeforeDelete = false;
                             //Save preference
-                            WMSInspector.Library.prefs.setBoolPref("libraryconfirmbeforedelete",false);
+                            Library.prefs.setBoolPref("libraryconfirmbeforedelete",false);
                         }
                         deleteService = true;
                     }
                 }
 
-                if (deleteService) WMSInspector.Library.deleteService(service.id,WMSInspector.Library.onServiceOperationFinished);
+                if (deleteService) Library.deleteService(service.id,Library.onServiceOperationFinished);
 
                 break;
             case 4:
@@ -183,19 +185,19 @@ WMSInspector.Library = {
                         }
                     } catch (error) {
                         this.errorsFound = true;
-                        WMSInspector.Library.exceptionHandler(error);
+                        Library.exceptionHandler(error);
                     }
                 },
 
                 //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
+                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
                     
                         if (type == "types")
                             list.selectedIndex = 0;
@@ -205,13 +207,13 @@ WMSInspector.Library = {
 
                         return true;
                     } catch (error){
-                        WMSInspector.Library.exceptionHandler(error,callback);
+                        Library.exceptionHandler(error,callback);
                     }
                 }
             });
             return true;
         } catch (error){
-            return WMSInspector.Library.exceptionHandler(error,callback);
+            return Library.exceptionHandler(error,callback);
         }
     },
 
@@ -261,13 +263,13 @@ WMSInspector.Library = {
     },
 
     search: function(params){
-        var libraryQuery = new WMSInspector.libraryQuery(params,WMSInspector.Library.build)
+        var libraryQuery = new WMSInspector.libraryQuery(params,Library.build)
         libraryQuery.query();
         
     },
 
     refresh: function(){
-        WMSInspector.Library.searchText(document.getElementById("wiLibrarySearchFilter").value);
+        Library.searchText(document.getElementById("wiLibrarySearchFilter").value);
     },
 
     restore: function(){
@@ -326,13 +328,13 @@ WMSInspector.Library = {
             
         if (!file) return false;
         
-        WMSInspector.Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_exporting"));
+        Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_exporting"));
 
-        var out = WMSInspector.Library.buildExportFile(records);
+        var out = Library.buildExportFile(records);
 
         WMSInspector.IO.write(file, out,"w",true);
 
-        WMSInspector.Library.toggleProgressMeter();
+        Library.toggleProgressMeter();
 
         return true;
 
@@ -380,7 +382,7 @@ WMSInspector.Library = {
         if (!file) return false;
 
 
-        WMSInspector.Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_importing"));
+        Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_importing"));
 
         var contents = WMSInspector.IO.readLineByLine(file);
         
@@ -402,42 +404,42 @@ WMSInspector.Library = {
             WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_anerroroccurred"));
         } else {
             //All went good, refresh the list
-            WMSInspector.Library.search();
+            Library.search();
         }
     },
 
     onServicesImported: function(result){
-        WMSInspector.Library.toggleProgressMeter();
+        Library.toggleProgressMeter();
         
         var msg = (result !== false) ?
         WMSInspector.Utils.getString("wi_library_importprompt").replace("%S",result) :
         WMSInspector.Utils.getString("wi_library_errorsinimport");
 
         WMSInspector.Utils.showAlert(msg);
-        if (result !== false) WMSInspector.Library.search();
+        if (result !== false) Library.search();
         return true;
     },
     
     build: function(results){
 
-        WMSInspector.Library.currentResults = results;
+        Library.currentResults = results;
 
-        WMSInspector.Utils.emptyElement(WMSInspector.Library.list);
+        WMSInspector.Utils.emptyElement(Library.list);
         var numServices = "";
 
         if (results === false || results.length == 0){
-            WMSInspector.Library.list.setAttribute("align","center");
+            Library.list.setAttribute("align","center");
             var label = document.createElement("label");
 
             label.setAttribute("value",(results === false) ? WMSInspector.Utils.getString("wi_library_errorsinquery") : WMSInspector.Utils.getString("wi_library_noservicesfound"));
             label.setAttribute("class","wiLibraryNoServicesFound");
             label.setAttribute("pack","center");
-            WMSInspector.Library.list.appendChild(label);
+            Library.list.appendChild(label);
 
         } else if (results.length){
-            WMSInspector.Library.list.setAttribute("align","stretch");
+            Library.list.setAttribute("align","stretch");
             for (let i=0; i < results.length; i++){
-                WMSInspector.Library.addServiceRow(results[i]);
+                Library.addServiceRow(results[i]);
 
             }
             numServices = (results.length == 1) ? WMSInspector.Utils.getString("wi_library_serviceshown") : WMSInspector.Utils.getString("wi_library_servicesshown").replace("%S",results.length);
@@ -447,7 +449,7 @@ WMSInspector.Library = {
         document.getElementById("wiLibraryNumServices").setAttribute("value",numServices);
     },
 
-    //Service should be a WMSInspectorClasses.Service object
+    //Service should be a Classes.Service object
     addServiceRow: function(service) {
         var item = document.createElement("richlistboxitem");
         item.setAttribute("class","libraryItem");
@@ -480,8 +482,8 @@ WMSInspector.Library = {
         var box = document.getElementById("wiLibraryAdvancedSearch");
         var value = (box.getAttribute("collapsed") == "true");
         box.setAttribute("collapsed",!value);
-        if (value && window.outerWidth < WMSInspector.Library.minWidth)
-            window.resizeTo(WMSInspector.Library.minWidth,window.outerHeight)
+        if (value && window.outerWidth < Library.minWidth)
+            window.resizeTo(Library.minWidth,window.outerHeight)
         document.getElementById("wiLibraryAdvancedSearchLink").setAttribute("value",(value) ? WMSInspector.Utils.getString("wi_library_simplesearch") : WMSInspector.Utils.getString("wi_library_advancedsearch"));
     },
 
@@ -505,7 +507,7 @@ WMSInspector.Library = {
     },
 
     // TODO: move to component
-    //Service should be a WMSInspectorClasses.Service object
+    //Service should be a Classes.Service object
     addService: function(service,callback){
         try{
 
@@ -534,13 +536,13 @@ WMSInspector.Library = {
             statement.executeAsync({
                 //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
+                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         // We need to get the inserted service id, and as it's not safe to rely on
                         // conn.lastInsertRowID, we need to select the record with the previously generated
@@ -560,24 +562,24 @@ WMSInspector.Library = {
 
                             //error is a mozIStorageError object
                             handleError: function(error) {
-                                WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                                Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                             },
 
                             handleCompletion: function(reason) {
                                 try {
                                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                                        return WMSInspector.Library.exceptionHandler("Transaction aborted or canceled",callback);
+                                        return Library.exceptionHandler("Transaction aborted or canceled",callback);
 
 
                                     if (service.tags && service.tags.length) {
-                                        WMSInspector.Library.setTags(this.serviceId,service.tags,callback);
+                                        Library.setTags(this.serviceId,service.tags,callback);
                                     } else {
                                         if (callback) callback(this.serviceId);
                                     }
                             
                                     return true;
                                 } catch (error) {
-                                    WMSInspector.Library.exceptionHandler(error,callback);
+                                    Library.exceptionHandler(error,callback);
                                 }
                             }
                         });
@@ -585,7 +587,7 @@ WMSInspector.Library = {
                         return true;
 
                     } catch (error) {
-                        WMSInspector.Library.exceptionHandler(error,callback);
+                        Library.exceptionHandler(error,callback);
                     }
                 }
             });
@@ -593,12 +595,12 @@ WMSInspector.Library = {
             return true;
 
         } catch (error) {
-            WMSInspector.Library.exceptionHandler(error,callback);
+            Library.exceptionHandler(error,callback);
         }
     },
 
     // TODO: move to component
-    //Service should be a WMSInspectorClasses.Service object
+    //Service should be a Classes.Service object
     updateService: function(service,callback){
         try{
 
@@ -642,30 +644,30 @@ WMSInspector.Library = {
 
                 //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try{
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
+                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         if (service.tags && service.tags.length) {
-                            WMSInspector.Library.setTags(service.id,service.tags,callback);
+                            Library.setTags(service.id,service.tags,callback);
                         } else {
                             if (callback) callback(service.id);
                         }
 
                         return true;
                     } catch (error){
-                        WMSInspector.Library.exceptionHandler(error,callback);
+                        Library.exceptionHandler(error,callback);
                     }
                 }
             });
             
             return true;
         } catch (error) {
-            WMSInspector.Library.exceptionHandler(error,callback);
+            Library.exceptionHandler(error,callback);
         }
     },
 
@@ -692,13 +694,13 @@ WMSInspector.Library = {
 
                 //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try{
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
+                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         //Check if tags exist and insert new ones if not
                         var tagIds = [];
@@ -733,7 +735,7 @@ WMSInspector.Library = {
                                         tagIds.push(WMSInspector.DB.conn.lastInsertRowID);
                                     }
                                 } catch (error) {
-                                    WMSInspector.Library.exceptionHandler(error,callback);
+                                    Library.exceptionHandler(error,callback);
                                 }
                             }
 
@@ -779,32 +781,32 @@ WMSInspector.Library = {
 
                                     //error is a mozIStorageError object
                                     handleError: function(error) {
-                                        WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                                        Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                                     },
 
                                     handleCompletion: function(reason) {
                                         try{
                                             if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                                                return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
+                                                return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                                             if (callback) callback(serviceId);
 
                                             return true;
                                         } catch (error){
-                                            WMSInspector.Library.exceptionHandler(error,callback);
+                                            Library.exceptionHandler(error,callback);
                                         }
                                     }
                                 });
                         }
                         return true;
                     } catch (error) {
-                        WMSInspector.Library.exceptionHandler(error,callback);
+                        Library.exceptionHandler(error,callback);
                     }
                 }
             });
             return true;
         } catch (error) {
-            WMSInspector.Library.exceptionHandler(error,callback);
+            Library.exceptionHandler(error,callback);
         }
     },
 
@@ -824,13 +826,13 @@ WMSInspector.Library = {
 
                 //error is a mozIStorageError object
                 handleError: function(error) {
-                    WMSInspector.Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
                 },
 
                 handleCompletion: function(reason) {
                     try{
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspector.Library.exceptionHandler(new Error("Transaction aborted or canceled"));
+                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
 
                         // The services_after_delete_trigger trigger will deal with the service's tags
 
@@ -838,14 +840,14 @@ WMSInspector.Library = {
                     
                         return true;
                     } catch (error){
-                        WMSInspector.Library.exceptionHandler(error,callback);
+                        Library.exceptionHandler(error,callback);
                     }
                 }
             });
 
             return true;
         } catch (error) {
-            WMSInspector.Library.exceptionHandler(error,callback);
+            Library.exceptionHandler(error,callback);
         }
     },
 
@@ -1011,7 +1013,7 @@ WMSInspector.libraryQuery = function(params,callback){
                             row;
                             row = resultSet.getNextRow()) {
 
-                            let service = new WMSInspectorClasses.Service();
+                            let service = new Classes.Service();
                             service.id = row.getResultByName("id");
                             service.title = row.getResultByName("title");
                             service.URL = row.getResultByName("url");

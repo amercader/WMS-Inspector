@@ -9,8 +9,8 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="wiAddServiceDialog"
         title="&wmsinspector.addservice.title;"
-        onload="WMSInspector.AddServiceDialog.init();"
-        ondialogaccept="return WMSInspector.AddServiceDialog.onAccept();"
+        onload="AddServiceDialog.init();"
+        ondialogaccept="return AddServiceDialog.onAccept();"
         buttons="accept,cancel"
         defaultButton="accept"
         width="380"
@@ -30,7 +30,7 @@
         <textbox id="wiAddServiceTitle" flex="1" />
         <hbox align="center">
             <label value="&wmsinspector.library.servicetype;"/>
-            <menulist id="wiAddServiceTypeMenu" onselect="WMSInspector.AddServiceDialog.setVersionsList()">
+            <menulist id="wiAddServiceTypeMenu" onselect="AddServiceDialog.setVersionsList()">
                 <menupopup>
                 </menupopup>
             </menulist>
@@ -47,7 +47,7 @@
         <caption label="&wmsinspector.library.tags;"/>
         <label class="wiHelper">&wmsinspector.addservice.tagsinstructions;</label>
         <textbox id="wiAddServiceTags" />
-        <listbox id="wiAddServiceTagsList" rows="3" oncommand="WMSInspector.AddServiceDialog.redrawTagTextBox()" >
+        <listbox id="wiAddServiceTagsList" rows="3" oncommand="AddServiceDialog.redrawTagTextBox()" >
 
         </listbox>
         <checkbox id="wiAddServiceFavorite" label="&wmsinspector.addservice.favorite;" />

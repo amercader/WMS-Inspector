@@ -10,12 +10,11 @@
         id="wiAddParameterDialog"
         style="width: 300px; height: 100px;"
         title="&wmsinspector.addparameter.title;"
-        onload="WMSInspector.AddParameterDialog.init();"
-        ondialogaccept="WMSInspector.AddParameterDialog.onAccept();"
+        onload="AddParameterDialog.init();"
+        ondialogaccept="AddParameterDialog.onAccept();"
         buttons="accept,cancel"
         defaultButton="accept">
 
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/addParameterDialog.js"/>
 	
 	

@@ -9,8 +9,8 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
         title="&wmsinspector.library.title;"
-        onload="WMSInspector.Library.init()"
-        onunload="WMSInspector.Library.shutdown();"
+        onload="Library.init()"
+        onunload="Library.shutdown();"
         persist="width height screenX screenY sizemode"
         width="580"
         height="400"
@@ -27,16 +27,16 @@
 
     <hbox id="wiLibraryToolbox">
         <toolbar id="wiLibraryToolbar" >
-            <toolbarbutton id="wiLibraryAddButton" label="&wmsinspector.library.addservice;" tooltiptext="&wmsinspector.library.addservice;" oncommand="WMSInspector.Library.openAddServiceDialog()" />
+            <toolbarbutton id="wiLibraryAddButton" label="&wmsinspector.library.addservice;" tooltiptext="&wmsinspector.library.addservice;" oncommand="Library.openAddServiceDialog()" />
             <toolbarbutton type="menu" label="&wmsinspector.library.importexport;">
                 <menupopup>
-                    <menu id="wiLibraryMenuExport" label="&wmsinspector.library.export;" onpopupshowing="WMSInspector.Library.onExportPopUpShowing()" >
+                    <menu id="wiLibraryMenuExport" label="&wmsinspector.library.export;" onpopupshowing="Library.onExportPopUpShowing()" >
                         <menupopup>
-                            <menuitem id="wiLibraryMenuExportAll" label="&wmsinspector.library.exportall;" oncommand="WMSInspector.Library.exportAll()" />
-                            <menuitem id="wiLibraryMenuExportSelection" label="&wmsinspector.library.exportselection;" oncommand="WMSInspector.Library.exportCurrentSelection()" />
+                            <menuitem id="wiLibraryMenuExportAll" label="&wmsinspector.library.exportall;" oncommand="Library.exportAll()" />
+                            <menuitem id="wiLibraryMenuExportSelection" label="&wmsinspector.library.exportselection;" oncommand="Library.exportCurrentSelection()" />
                         </menupopup>
                     </menu>
-                    <menuitem id="wiLibraryMenuImport" label="&wmsinspector.library.import;" oncommand="WMSInspector.Library.importFromFile()" />
+                    <menuitem id="wiLibraryMenuImport" label="&wmsinspector.library.import;" oncommand="Library.importFromFile()" />
                 </menupopup>
             </toolbarbutton>
             
@@ -46,14 +46,14 @@
         <textbox id="wiLibrarySearchFilter"
                clickSelectsAll="true"
                type="search"
-               oncommand="WMSInspector.Library.searchText(this.value);"
+               oncommand="Library.searchText(this.value);"
                style="width: 300px;">
         </textbox>
 
     </hbox>
     <hbox>
         <spacer flex="1"/>
-        <label id= "wiLibraryAdvancedSearchLink" class="text-link" onclick="WMSInspector.Library.toggleAdvancedSearch();" value="&wmsinspector.library.advancedsearch;" />
+        <label id= "wiLibraryAdvancedSearchLink" class="text-link" onclick="Library.toggleAdvancedSearch();" value="&wmsinspector.library.advancedsearch;" />
     </hbox>
 
     <hbox id="wiLibraryAdvancedSearch" collapsed="true">
@@ -98,7 +98,7 @@
                 </vbox>
                 <spacer flex="1" />
                 <vbox>
-                    <button label="&wmsinspector.common.restore;" icon="clear" oncommand="WMSInspector.Library.restore()" />
+                    <button label="&wmsinspector.common.restore;" icon="clear" oncommand="Library.restore()" />
                 </vbox>
             </hbox>
         </groupbox>
@@ -114,26 +114,26 @@
 
     <menupopup id="wiLibraryContextMenu">
         <menuitem label="&wmsinspector.common.copyurl;"
-                                  oncommand="WMSInspector.Library.doContextMenuAction(1,event);"
+                                  oncommand="Library.doContextMenuAction(1,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/copy.png" />
         <menuseparator/>
         <menuitem label="&wmsinspector.common.edit;"
-                                  oncommand="WMSInspector.Library.doContextMenuAction(2,event);"
+                                  oncommand="Library.doContextMenuAction(2,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/edit.png" />
         <menuitem label="&wmsinspector.common.delete;"
-                                  oncommand="WMSInspector.Library.doContextMenuAction(3,event)"
+                                  oncommand="Library.doContextMenuAction(3,event)"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/delete.png" />
         <menuseparator/>
         <menuitem label="Get Capabilities (HTML report)"
                                   id="wiLibraryContextMenuGetCapabilitiesReport"
-                                  oncommand="WMSInspector.Library.doContextMenuAction(4,event);"
+                                  oncommand="Library.doContextMenuAction(4,event);"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/getcapabilities.png" />
         <menuitem label="Get Capabilities (XML)"
-                                  oncommand="WMSInspector.Library.doContextMenuAction(5,event)"
+                                  oncommand="Library.doContextMenuAction(5,event)"
                                   class="menuitem-iconic"
                                   image="chrome://wmsinspector/skin/icons/getcapabilities.png" />
     </menupopup>

@@ -59,7 +59,7 @@
                         label.setAttribute("class","wiLibraryTag");
                         label.setAttribute("flex",0);
                         label.setAttribute("tooltiptext", WMSInspector.Utils.getString("wi_library_searchservicestagged") + " '" + tags[i] + "'");
-                        label.setAttribute("onclick","WMSInspector.Library.searchTag(this.value);");
+                        label.setAttribute("onclick","Library.searchTag(this.value);");
                         box.appendChild(label);
 
                     }
@@ -70,7 +70,7 @@
         </implementation>
 
         <handlers>
-            <handler event="contextmenu" action="WMSInspector.Library.onContextMenu(event)" />
+            <handler event="contextmenu" action="Library.onContextMenu(event)" />
         </handlers>
     </binding>
 </bindings>

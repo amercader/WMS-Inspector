@@ -1,4 +1,4 @@
-WMSInspector.OptionsDialog = {
+var OptionsDialog = {
     
     prefs: null,
 
@@ -25,8 +25,8 @@ WMSInspector.OptionsDialog = {
 
         WMSInspector.Utils.emptyElement(treeChildren);
 
-        for (let i = 0; i < WMSInspector.OptionsDialog.serviceTypes.length; i++){
-            let serviceType = WMSInspector.OptionsDialog.serviceTypes[i];
+        for (let i = 0; i < OptionsDialog.serviceTypes.length; i++){
+            let serviceType = OptionsDialog.serviceTypes[i];
             let treeItem = document.createElement("treeitem");
             let treeRow = document.createElement("treerow");
 
@@ -100,14 +100,14 @@ WMSInspector.OptionsDialog = {
         switch (mode){
             case 1:
                 //Edit service type
-                WMSInspector.OptionsDialog.openAddServiceTypeDialog(serviceTypeId);
+                OptionsDialog.openAddServiceTypeDialog(serviceTypeId);
                 break;
             case 2:
                 //Delete service type
                 var prompt = WMSInspector.Utils.showConfirm(WMSInspector.Utils.getString("wi_options_confirmdeleteservicetype"));
                 if (prompt){
 
-                    WMSInspector.OptionsDialog.deleteServiceType(serviceTypeId);
+                    OptionsDialog.deleteServiceType(serviceTypeId);
                 }
                 break;
 
@@ -129,8 +129,8 @@ WMSInspector.OptionsDialog = {
     },
 
     refreshServiceTypeTree: function(serviceTypes){
-        WMSInspector.OptionsDialog.serviceTypes = serviceTypes;
-        WMSInspector.OptionsDialog.buildServiceTypesTree();
+        OptionsDialog.serviceTypes = serviceTypes;
+        OptionsDialog.buildServiceTypesTree();
     }
 
 }

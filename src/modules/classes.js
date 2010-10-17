@@ -1,9 +1,9 @@
-var EXPORTED_SYMBOLS = ["WMSInspectorClasses"];
+var EXPORTED_SYMBOLS = ["Classes"];
 
 // WMSInspectorClasses namespace
-var WMSInspectorClasses = {};
+var Classes = {};
 
-WMSInspectorClasses.Service = function(){
+Classes.Service = function(){
     this.id = "";
     this.title = "";
     this.URL = "";
@@ -14,7 +14,7 @@ WMSInspectorClasses.Service = function(){
 }
 
 
-WMSInspectorClasses.ServiceType = function(){
+Classes.ServiceType = function(){
     this.id = "";
     this.name = "";
     this.title = "";
