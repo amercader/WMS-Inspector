@@ -15,12 +15,7 @@
         width="580"
         height="400"
         >
-    <script type="application/x-javascript">
-    //Temporary
-    var WMSInspector ={};
-    </script>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
+
     <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
 
     <hbox id="wiLibraryToolbox">

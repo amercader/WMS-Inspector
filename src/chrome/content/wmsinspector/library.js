@@ -1,5 +1,7 @@
 Components.utils.import("resource://wmsinspector/classes.js");
 Components.utils.import("resource://wmsinspector/utils.js");
+Components.utils.import("resource://wmsinspector/db.js");
+Components.utils.import("resource://wmsinspector/io.js");
 
 var Library = {
     
@@ -28,9 +30,9 @@ var Library = {
 
         this.list = document.getElementById("wiServicesListbox");
 
-        WMSInspector.DB.checkDB();
+        DB.checkDB();
         
-        if (WMSInspector.DB.conn == null){
+        if (DB.conn == null){
             document.getElementById("wiLibraryDBError").setAttribute("style","visibility: visible");
             this.list.setAttribute("style","visibility: collapse");
             return;
@@ -170,7 +172,7 @@ var Library = {
             } else {
                 return false;
             }
-            var statement = WMSInspector.DB.conn.createStatement(sql);
+            var statement = DB.conn.createStatement(sql);
             statement.executeAsync({
                 errorsFound: false,
                 handleResult: function(resultSet) {
@@ -244,7 +246,7 @@ var Library = {
         //Direction
         direction.push( (document.getElementById("wiLibraryDirectionAsc").selected === true) ? "ASC" : "DESC");
 
-        var params = new WMSInspector.libraryQueryParams(
+        var params = new Library.libraryQueryParams(
             text,
             {
                 tags:(tags.length) ? tags : false,
@@ -257,14 +259,14 @@ var Library = {
     },
 
     searchTag: function(tag){
-        var params = new WMSInspector.libraryQueryParams(false,{
+        var params = new Library.libraryQueryParams(false,{
             tags:[tag]
         });
         this.search(params)
     },
 
     search: function(params){
-        var libraryQuery = new WMSInspector.libraryQuery(params,Library.build)
+        var libraryQuery = new Library.libraryQuery(params,Library.build)
         libraryQuery.query();
         
     },
@@ -300,7 +302,7 @@ var Library = {
     },
 
     exportAll: function(){
-        var libraryQuery = new WMSInspector.libraryQuery(null,this.exportToFile);
+        var libraryQuery = new Library.libraryQuery(null,this.exportToFile);
         libraryQuery.query();
 
     },
@@ -315,7 +317,7 @@ var Library = {
         if (records.length == 0) return false;
 
 
-        var file = WMSInspector.IO.pickFile(
+        var file = IO.pickFile(
             Utils.getString("wi_library_exportprompttitle"),
             "save",
             [{
@@ -333,7 +335,7 @@ var Library = {
 
         var out = Library.buildExportFile(records);
 
-        WMSInspector.IO.write(file, out,"w",true);
+        IO.write(file, out,"w",true);
 
         Library.toggleProgressMeter();
 
@@ -368,7 +370,7 @@ var Library = {
     },
 
     importFromFile: function(){
-        var file = WMSInspector.IO.pickFile(
+        var file = IO.pickFile(
             Utils.getString("wi_library_importprompttitle"),
             "open",
             [{
@@ -385,7 +387,7 @@ var Library = {
 
         Library.toggleProgressMeter(Utils.getString("wi_library_importing"));
 
-        var contents = WMSInspector.IO.readLineByLine(file);
+        var contents = IO.readLineByLine(file);
         
         if (!contents){
             Components.utils.reportError("WMS Inspector - Error reading file");
@@ -523,9 +525,9 @@ var Library = {
                    VALUES \n\
                         (:title,:url,:version,:favorite,strftime('%s','now'),:type,:hash)";
 
-            var statement = WMSInspector.DB.conn.createStatement(sql);
+            var statement = DB.conn.createStatement(sql);
 
-            WMSInspector.DB.bindParameters(statement,{
+            DB.bindParameters(statement,{
                 "title": service.title,
                 "url": service.URL,
                 "version": service.version,
@@ -550,8 +552,8 @@ var Library = {
                         // hash. This is temporary until this code is migrated to the component and threaded
 
                         let sql = "SELECT id FROM services WHERE hash = :hash";
-                        let selectStatement = WMSInspector.DB.conn.createStatement(sql);
-                        WMSInspector.DB.bindParameter(selectStatement, "hash", hash);
+                        let selectStatement = DB.conn.createStatement(sql);
+                        DB.bindParameter(selectStatement, "hash", hash);
 
                         selectStatement.executeAsync({
                             serviceId:false,
@@ -637,9 +639,9 @@ var Library = {
             sql += " SET " + sqlUpdate.join(",") + " WHERE id = :id";
             params.id = service.id;
 
-            var statement = WMSInspector.DB.conn.createStatement(sql);
+            var statement = DB.conn.createStatement(sql);
 
-            WMSInspector.DB.bindParameters(statement,params);
+            DB.bindParameters(statement,params);
 
             statement.executeAsync({
 
@@ -687,9 +689,9 @@ var Library = {
 
             //Delete previous tags from service
             var sql = "DELETE FROM rel_services_tags WHERE services_id = :id";
-            var statement = WMSInspector.DB.conn.createStatement(sql);
+            var statement = DB.conn.createStatement(sql);
 
-            WMSInspector.DB.bindParameter(statement, "id", serviceId);
+            DB.bindParameter(statement, "id", serviceId);
 
             statement.executeAsync({
 
@@ -708,9 +710,9 @@ var Library = {
                         for (let i = 0; i < tags.length; i ++){
                             let tagExists = false;
                             let selectSql = "SELECT id FROM tags WHERE title = :tag" + i;
-                            let selectStatement = WMSInspector.DB.conn.createStatement(selectSql);
+                            let selectStatement = DB.conn.createStatement(selectSql);
 
-                            WMSInspector.DB.bindParameter(selectStatement, "tag"+i, tags[i]);
+                            DB.bindParameter(selectStatement, "tag"+i, tags[i]);
                     
                             try {
                             
@@ -726,14 +728,14 @@ var Library = {
                                     if (!tagExists){
                                         //Tag does not exist
                                         let insertSql = "INSERT INTO tags (title) VALUES (:tag" + i+")";
-                                        let insertStatement = WMSInspector.DB.conn.createStatement(insertSql);
+                                        let insertStatement = DB.conn.createStatement(insertSql);
 
-                                        WMSInspector.DB.bindParameter(insertStatement, "tag"+i, tags[i]);
+                                        DB.bindParameter(insertStatement, "tag"+i, tags[i]);
 
                                         insertStatement.execute();
                                 
                                         //Get the id of the last inserted tag
-                                        tagIds.push(WMSInspector.DB.conn.lastInsertRowID);
+                                        tagIds.push(DB.conn.lastInsertRowID);
                                     }
                                 } catch (error) {
                                     Library.exceptionHandler(error,callback);
@@ -747,20 +749,20 @@ var Library = {
                             //Insert records in the services-tags relationship table
                             var statements = [];
 
-                            if (WMSInspector.DB.legacyCode){
+                            if (DB.legacyCode){
                                 for (let i = 0; i < tagIds.length; i ++){
                                     let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";
-                                    let statement = WMSInspector.DB.conn.createStatement(sql);
+                                    let statement = DB.conn.createStatement(sql);
                                     let params = {};
                                     params.serviceid = serviceId;
                                     params["tagid"+i] = tagIds[i];
-                                    WMSInspector.DB.bindParameters(statement,params);
+                                    DB.bindParameters(statement,params);
 
                                     statements.push(statement);
                                 }
                             } else {
                                 let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid)";
-                                let statement = WMSInspector.DB.conn.createStatement(sql);
+                                let statement = DB.conn.createStatement(sql);
                                 let params = statement.newBindingParamsArray();
                                 for (let i = 0; i < tagIds.length; i ++){
                                     bp = params.newBindingParams();
@@ -775,7 +777,7 @@ var Library = {
                             }
 
 
-                            WMSInspector.DB.conn.executeAsync(
+                            DB.conn.executeAsync(
                                 statements,
                                 statements.length,
                                 {
@@ -817,9 +819,9 @@ var Library = {
             if (typeof(id) != "number") return false;
 
             var sql = "DELETE FROM services WHERE id = :id";
-            var statement = WMSInspector.DB.conn.createStatement(sql);
+            var statement = DB.conn.createStatement(sql);
 
-            WMSInspector.DB.bindParameters(statement,{
+            DB.bindParameters(statement,{
                 id:id
             });
 
@@ -855,8 +857,8 @@ var Library = {
     exceptionHandler: function(error,callback){
 
         var msg = "WMSInspector - " + error.message;
-        if (WMSInspector.DB.conn.lastErrorString && WMSInspector.DB.conn.lastErrorString != "not an error")
-            msg += " - " + WMSInspector.DB.conn.lastErrorString;
+        if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
+            msg += " - " + DB.conn.lastErrorString;
         msg += " (line " + error.lineNumber + ")"
         Components.utils.reportError(msg);
 
@@ -866,16 +868,16 @@ var Library = {
 
 }
 
-WMSInspector.libraryQueryParams = function(text,filters,sorts,directions){
+Library.libraryQueryParams = function(text,filters,sorts,directions){
     this.text = text || "";
     this.filters = filters || {};
     this.sorts = sorts || ["favorite","creation_date"];
     this.directions = directions || ["DESC","DESC"];
 }
 
-WMSInspector.libraryQuery = function(params,callback){
+Library.libraryQuery = function(params,callback){
     
-    this.params = params || new WMSInspector.libraryQueryParams();
+    this.params = params || new Library.libraryQueryParams();
     this.callback = callback || null;
 
     this.results = [];
@@ -982,7 +984,7 @@ WMSInspector.libraryQuery = function(params,callback){
 
             //Components.utils.reportError(this.sql);
 
-            var statement = WMSInspector.DB.conn.createStatement(this.sql);
+            var statement = DB.conn.createStatement(this.sql);
             
             if (text || filters.tags || filters.types || filters.ids){
                 var params = {};
@@ -999,7 +1001,7 @@ WMSInspector.libraryQuery = function(params,callback){
                     for (let i = 0; i < filters.ids.length; i++)
                     params["id"+i] = filters.ids[i];
 
-                WMSInspector.DB.bindParameters(statement,params);
+                DB.bindParameters(statement,params);
             }
             
             this.results = [];
@@ -1059,8 +1061,8 @@ WMSInspector.libraryQuery = function(params,callback){
 
     this.exceptionHandler = function(error){
         var msg = "WMSInspector - " + error.message;
-        if (WMSInspector.DB.conn.lastErrorString && WMSInspector.DB.conn.lastErrorString != "not an error")
-            msg += " - " + WMSInspector.DB.conn.lastErrorString;
+        if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
+            msg += " - " + DB.conn.lastErrorString;
         msg += " (line " + error.lineNumber + ")"
         Components.utils.reportError(msg);
 

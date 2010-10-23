@@ -8,8 +8,6 @@
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
     <!--<script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>-->
     <script type="application/x-javascript" src="chrome://wmsinspector/content/requests.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
 

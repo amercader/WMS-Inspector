@@ -1,6 +1,8 @@
 Components.utils.import("resource://wmsinspector/utils.js");
 
-WMSInspector.IO = {
+var EXPORTED_SYMBOLS = ["IO"];
+
+var IO = {
     //Folder name for WMSInspector stuff in Temporary dir
     tempDirName: "wmsinspector",
 
@@ -19,9 +21,9 @@ WMSInspector.IO = {
     fileCounter:0,
 
     externalAppService: Utils.getService("@mozilla.org/uriloader/external-helper-app-service;1", "nsPIExternalAppLauncher"),
-    
+
     directoryService: Utils.getService("@mozilla.org/file/directory_service;1", "nsIProperties"),
-   
+
 
     checkWITmpDir: function(){
         var dir = this.getTmpDir();
@@ -130,7 +132,7 @@ WMSInspector.IO = {
         var data = "";
         var fstream = Utils.getInstance("@mozilla.org/network/file-input-stream;1", "nsIFileInputStream");
         var cstream = Utils.getInstance("@mozilla.org/intl/converter-input-stream;1", "nsIConverterInputStream");
-        
+
         fstream.init(file, -1, 0, 0);
         cstream.init(fstream, "UTF-8", 0, 0);
 
@@ -147,7 +149,7 @@ WMSInspector.IO = {
 
         var fiStream = Utils.getInstance("@mozilla.org/network/file-input-stream;1", "nsIFileInputStream");
         fiStream.init(file, 0x01, 0444, 0);
-        
+
         var charset = "UTF-8";
         var is = Utils.getInstance("@mozilla.org/intl/converter-input-stream;1", "nsIConverterInputStream");
 
@@ -188,7 +190,7 @@ WMSInspector.IO = {
             "folder" : nsIFilePicker.modeGetFolder,
             "multiple" : nsIFilePicker.modeOpenMultiple
         }
-        
+
         if (modes[mode]){
             mode = modes[mode];
         } else {
@@ -223,6 +225,6 @@ WMSInspector.IO = {
         } else {
             return false;
         }
-        
+
     }
 }

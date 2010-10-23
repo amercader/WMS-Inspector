@@ -43,10 +43,10 @@ var AddServiceDialog = {
             document.title = Utils.getString("wi_addservice_editservicetitle");
 
             //Get service details from DB
-            var params = new window.opener.WMSInspector.libraryQueryParams(false,{
+            var params = new window.opener.Library.libraryQueryParams(false,{
                 ids:[this.serviceId]
             });
-            var libraryQuery = new window.opener.WMSInspector.libraryQuery(params,this.fetchDetails)
+            var libraryQuery = new window.opener.Library.libraryQuery(params,this.fetchDetails)
             libraryQuery.query();
 
         }

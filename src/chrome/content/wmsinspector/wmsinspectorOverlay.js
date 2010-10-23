@@ -5,6 +5,8 @@ var WMSInspector =  {};
 
 Components.utils.import("resource://wmsinspector/classes.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/utils.js",WMSInspector);
+Components.utils.import("resource://wmsinspector/db.js",WMSInspector);
+Components.utils.import("resource://wmsinspector/io.js",WMSInspector);
 
 WMSInspector.Overlay = {
 	

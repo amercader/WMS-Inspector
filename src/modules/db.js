@@ -1,6 +1,9 @@
 Components.utils.import("resource://wmsinspector/utils.js");
+Components.utils.import("resource://wmsinspector/io.js");
 
-WMSInspector.DB = {
+var EXPORTED_SYMBOLS = ["DB"];
+
+var DB = {
     //Database file name
     DBName: "wmsinspector.sqlite",
 
@@ -11,21 +14,25 @@ WMSInspector.DB = {
 
     // Some classes used are not supported in Firefox 3.5.
     // Code executed under this condition should be removed when support for Firefox 3.5 is dropped
-    legacyCode: (Utils.compareFirefoxVersions(Application.version,"3.6") < 0),
+    legacyCode: (
+        Utils.compareFirefoxVersions(
+            Utils.getService("@mozilla.org/fuel/application;1","fuelIApplication").version,
+            "3.6")
+        < 0),
 
     storageService: Utils.getService("@mozilla.org/storage/service;1", "mozIStorageService"),
 
     conn: null,
 
     getDBConnection: function(){
-        var file = WMSInspector.IO.getProfileDir();
+        var file = IO.getProfileDir();
         file.append(this.DBName);
 
         return this.storageService.openDatabase(file);
     },
 
     checkDB: function(){
-        var file = WMSInspector.IO.getProfileDir();
+        var file = IO.getProfileDir();
         file.append(this.DBName);
         //DB does not exist, copy the default one to profile dir
         if (!file.exists()){
@@ -48,7 +55,7 @@ WMSInspector.DB = {
                     this.upgradeToV2();
                 }
                 */
-                
+
                 //Set new schemaVersion
                 this.conn.schemaVersion = this.schemaVersion;
             //TODO: message
@@ -111,11 +118,11 @@ WMSInspector.DB = {
 
     restoreDB: function(){
         //Copy default database to profile folder
-        var src = WMSInspector.IO.getDefaultsDir();
-        
+        var src = IO.getDefaultsDir();
+
         if (src){
             src.append(this.DBName);
-            var dest = WMSInspector.IO.getProfileDir();
+            var dest = IO.getProfileDir();
             if (dest){
                 src.copyTo(dest,"");
 
@@ -135,7 +142,7 @@ WMSInspector.DB = {
         params[name] = value;
         return this.bindParameters(statement, params);
     },
-    
+
     /*
      * params - object with key: value pairs of parameters to bind
      */
@@ -146,14 +153,14 @@ WMSInspector.DB = {
 
             for (let name in params)
                 statement.params[name] = params[name];
-            
+
         } else {
             var bpArray = statement.newBindingParamsArray();
             var bp = bpArray.newBindingParams();
 
             for (let name in params)
                 bp.bindByName(name, params[name]);
-                        
+
             bpArray.addParams(bp);
 
             statement.bindParameters(bpArray);
@@ -163,3 +170,4 @@ WMSInspector.DB = {
     }
 
 }
+
