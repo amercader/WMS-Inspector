@@ -1,3 +1,5 @@
+Components.utils.import("resource://wmsinspector/utils.js");
+
 var OptionsDialog = {
     
     prefs: null,
@@ -6,7 +8,7 @@ var OptionsDialog = {
 
     init: function(){
 
-        this.prefs = WMSInspector.Utils.getPrefs();
+        this.prefs = Utils.getPrefs();
         
 
         document.getElementById("wiHideContextMenu").checked = this.prefs.getBoolPref("hidecontextmenu");
@@ -23,7 +25,7 @@ var OptionsDialog = {
 
         var treeChildren = document.getElementById("wiServiceTypesTreeChildren");
 
-        WMSInspector.Utils.emptyElement(treeChildren);
+        Utils.emptyElement(treeChildren);
 
         for (let i = 0; i < OptionsDialog.serviceTypes.length; i++){
             let serviceType = OptionsDialog.serviceTypes[i];
@@ -58,9 +60,9 @@ var OptionsDialog = {
 
     selectEditor: function() {
         var nsIFilePicker = Components.interfaces.nsIFilePicker;
-        var filePicker = WMSInspector.Utils.getInstance("@mozilla.org/filepicker;1",nsIFilePicker)
+        var filePicker = Utils.getInstance("@mozilla.org/filepicker;1",nsIFilePicker)
 
-        filePicker.init(window, WMSInspector.Utils.getString("wi_options_chooseaneditor"), nsIFilePicker.modeOpen);
+        filePicker.init(window, Utils.getString("wi_options_chooseaneditor"), nsIFilePicker.modeOpen);
         filePicker.appendFilters(nsIFilePicker.filterApps);
 
         var res = filePicker.show();
@@ -104,7 +106,7 @@ var OptionsDialog = {
                 break;
             case 2:
                 //Delete service type
-                var prompt = WMSInspector.Utils.showConfirm(WMSInspector.Utils.getString("wi_options_confirmdeleteservicetype"));
+                var prompt = Utils.showConfirm(Utils.getString("wi_options_confirmdeleteservicetype"));
                 if (prompt){
 
                     OptionsDialog.deleteServiceType(serviceTypeId);

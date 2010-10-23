@@ -1,3 +1,5 @@
+Components.utils.import("resource://wmsinspector/utils.js");
+
 WMSInspector.DB = {
     //Database file name
     DBName: "wmsinspector.sqlite",
@@ -9,9 +11,9 @@ WMSInspector.DB = {
 
     // Some classes used are not supported in Firefox 3.5.
     // Code executed under this condition should be removed when support for Firefox 3.5 is dropped
-    legacyCode: (WMSInspector.Utils.compareFirefoxVersions(Application.version,"3.6") < 0),
+    legacyCode: (Utils.compareFirefoxVersions(Application.version,"3.6") < 0),
 
-    storageService: WMSInspector.Utils.getService("@mozilla.org/storage/service;1", "mozIStorageService"),
+    storageService: Utils.getService("@mozilla.org/storage/service;1", "mozIStorageService"),
 
     conn: null,
 

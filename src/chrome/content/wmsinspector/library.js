@@ -1,4 +1,5 @@
 Components.utils.import("resource://wmsinspector/classes.js");
+Components.utils.import("resource://wmsinspector/utils.js");
 
 var Library = {
     
@@ -20,8 +21,8 @@ var Library = {
 
         this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
 
-        this.prefs = WMSInspector.Utils.getPrefs();
-        WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
+        this.prefs = Utils.getPrefs();
+        Utils.setPreferenceObserver(this.prefs,this);
         
         this.confirmBeforeDelete = this.prefs.getBoolPref("libraryconfirmbeforedelete");
 
@@ -41,7 +42,7 @@ var Library = {
         
         //Add <All> option to service types list
         var typesList = document.getElementById("wiLibraryServiceTypeList");
-        typesList.appendItem(WMSInspector.Utils.getString("wi_all"),0);
+        typesList.appendItem(Utils.getString("wi_all"),0);
         this.fetchList("types",typesList,function (){Library.onWindowReady()});
 
     },
@@ -92,7 +93,7 @@ var Library = {
             case 1:
                 //Copy URL
                 var out = service.URL;
-                var clipboardService = WMSInspector.Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
+                var clipboardService = Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
                 if (out && clipboardService) clipboardService.copyString(out);
                 break;
             case 2:
@@ -108,9 +109,9 @@ var Library = {
                     var check = {
                         value:false
                     };
-                    var prompt = WMSInspector.Utils.showConfirm(WMSInspector.Utils.getString("wi_library_confirmdelete"),
+                    var prompt = Utils.showConfirm(Utils.getString("wi_library_confirmdelete"),
                         false,
-                        WMSInspector.Utils.getString("wi_dontaskagain"),
+                        Utils.getString("wi_dontaskagain"),
                         check);
                     if (prompt){
                         if (check.value === true){
@@ -315,7 +316,7 @@ var Library = {
 
 
         var file = WMSInspector.IO.pickFile(
-            WMSInspector.Utils.getString("wi_library_exportprompttitle"),
+            Utils.getString("wi_library_exportprompttitle"),
             "save",
             [{
                 title:"CSV files",
@@ -328,7 +329,7 @@ var Library = {
             
         if (!file) return false;
         
-        Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_exporting"));
+        Library.toggleProgressMeter(Utils.getString("wi_library_exporting"));
 
         var out = Library.buildExportFile(records);
 
@@ -368,7 +369,7 @@ var Library = {
 
     importFromFile: function(){
         var file = WMSInspector.IO.pickFile(
-            WMSInspector.Utils.getString("wi_library_importprompttitle"),
+            Utils.getString("wi_library_importprompttitle"),
             "open",
             [{
                 title:"CSV files",
@@ -382,7 +383,7 @@ var Library = {
         if (!file) return false;
 
 
-        Library.toggleProgressMeter(WMSInspector.Utils.getString("wi_library_importing"));
+        Library.toggleProgressMeter(Utils.getString("wi_library_importing"));
 
         var contents = WMSInspector.IO.readLineByLine(file);
         
@@ -391,7 +392,7 @@ var Library = {
             return false;
         } 
 
-        var wiService = WMSInspector.Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
+        var wiService = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
 
         wiService.importServicesFromCSV(contents,this,this.onServicesImported);
         return true;
@@ -401,7 +402,7 @@ var Library = {
     onServiceOperationFinished: function(result){
         if (result === false){
             //Errors were found
-            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_anerroroccurred"));
+            Utils.showAlert(Utils.getString("wi_anerroroccurred"));
         } else {
             //All went good, refresh the list
             Library.search();
@@ -412,10 +413,10 @@ var Library = {
         Library.toggleProgressMeter();
         
         var msg = (result !== false) ?
-        WMSInspector.Utils.getString("wi_library_importprompt").replace("%S",result) :
-        WMSInspector.Utils.getString("wi_library_errorsinimport");
+        Utils.getString("wi_library_importprompt").replace("%S",result) :
+        Utils.getString("wi_library_errorsinimport");
 
-        WMSInspector.Utils.showAlert(msg);
+        Utils.showAlert(msg);
         if (result !== false) Library.search();
         return true;
     },
@@ -424,14 +425,14 @@ var Library = {
 
         Library.currentResults = results;
 
-        WMSInspector.Utils.emptyElement(Library.list);
+        Utils.emptyElement(Library.list);
         var numServices = "";
 
         if (results === false || results.length == 0){
             Library.list.setAttribute("align","center");
             var label = document.createElement("label");
 
-            label.setAttribute("value",(results === false) ? WMSInspector.Utils.getString("wi_library_errorsinquery") : WMSInspector.Utils.getString("wi_library_noservicesfound"));
+            label.setAttribute("value",(results === false) ? Utils.getString("wi_library_errorsinquery") : Utils.getString("wi_library_noservicesfound"));
             label.setAttribute("class","wiLibraryNoServicesFound");
             label.setAttribute("pack","center");
             Library.list.appendChild(label);
@@ -442,7 +443,7 @@ var Library = {
                 Library.addServiceRow(results[i]);
 
             }
-            numServices = (results.length == 1) ? WMSInspector.Utils.getString("wi_library_serviceshown") : WMSInspector.Utils.getString("wi_library_servicesshown").replace("%S",results.length);
+            numServices = (results.length == 1) ? Utils.getString("wi_library_serviceshown") : Utils.getString("wi_library_servicesshown").replace("%S",results.length);
             
         } 
 
@@ -484,7 +485,7 @@ var Library = {
         box.setAttribute("collapsed",!value);
         if (value && window.outerWidth < Library.minWidth)
             window.resizeTo(Library.minWidth,window.outerHeight)
-        document.getElementById("wiLibraryAdvancedSearchLink").setAttribute("value",(value) ? WMSInspector.Utils.getString("wi_library_simplesearch") : WMSInspector.Utils.getString("wi_library_advancedsearch"));
+        document.getElementById("wiLibraryAdvancedSearchLink").setAttribute("value",(value) ? Utils.getString("wi_library_simplesearch") : Utils.getString("wi_library_advancedsearch"));
     },
 
     toggleProgressMeter: function(msg){
@@ -516,7 +517,7 @@ var Library = {
             // id later on handleCompletion.
             // This is temporary until this code is migrated to the component and threaded
 
-            var hash = WMSInspector.Utils.getHash(service.URL + service.type + new Date().getTime());
+            var hash = Utils.getHash(service.URL + service.type + new Date().getTime());
             var sql = "INSERT INTO services \n\
                         (title,url,version,favorite,creation_date,type,hash) \n\
                    VALUES \n\

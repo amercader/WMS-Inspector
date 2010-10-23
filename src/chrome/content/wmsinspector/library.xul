@@ -15,15 +15,13 @@
         width="580"
         height="400"
         >
-
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <script type="application/x-javascript">
+    //Temporary
+    var WMSInspector ={};
+    </script>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
-
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
-    </stringbundleset>
 
     <hbox id="wiLibraryToolbox">
         <toolbar id="wiLibraryToolbar" >

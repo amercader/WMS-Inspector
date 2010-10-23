@@ -1,3 +1,5 @@
+Components.utils.import("resource://wmsinspector/utils.js");
+
 WMSInspector.IO = {
     //Folder name for WMSInspector stuff in Temporary dir
     tempDirName: "wmsinspector",
@@ -16,9 +18,9 @@ WMSInspector.IO = {
 
     fileCounter:0,
 
-    externalAppService: WMSInspector.Utils.getService("@mozilla.org/uriloader/external-helper-app-service;1", "nsPIExternalAppLauncher"),
+    externalAppService: Utils.getService("@mozilla.org/uriloader/external-helper-app-service;1", "nsPIExternalAppLauncher"),
     
-    directoryService: WMSInspector.Utils.getService("@mozilla.org/file/directory_service;1", "nsIProperties"),
+    directoryService: Utils.getService("@mozilla.org/file/directory_service;1", "nsIProperties"),
    
 
     checkWITmpDir: function(){
@@ -58,7 +60,7 @@ WMSInspector.IO = {
     getDefaultsDir: function(){
         var dir = this.getDir("ProfD");
         if (dir) dir.append("extensions");
-        if (dir) dir.append(WMSInspector.Utils.extensionId);
+        if (dir) dir.append(Utils.extensionId);
         if (dir) dir.append("defaults");
         return dir;
     },
@@ -100,7 +102,7 @@ WMSInspector.IO = {
 
     write: function(file,data,mode,encode){
 
-        var foStream = WMSInspector.Utils.getInstance("@mozilla.org/network/file-output-stream;1", "nsIFileOutputStream");
+        var foStream = Utils.getInstance("@mozilla.org/network/file-output-stream;1", "nsIFileOutputStream");
 
         if (mode == "a"){   //Append
             foStream.init(file, 0x02 | 0x10, this.tempFilesPermissions, 0);
@@ -111,7 +113,7 @@ WMSInspector.IO = {
         if (encode){
             //Convert data to UTF-8
             //TODO: parametrize?
-            var converter = WMSInspector.Utils.getInstance("@mozilla.org/intl/converter-output-stream;1","nsIConverterOutputStream");
+            var converter = Utils.getInstance("@mozilla.org/intl/converter-output-stream;1","nsIConverterOutputStream");
             converter.init(foStream, "UTF-8", 0, 0);
             converter.writeString(data);
             converter.close(); // this closes foStream
@@ -126,8 +128,8 @@ WMSInspector.IO = {
     read: function(file){
 
         var data = "";
-        var fstream = WMSInspector.Utils.getInstance("@mozilla.org/network/file-input-stream;1", "nsIFileInputStream");
-        var cstream = WMSInspector.Utils.getInstance("@mozilla.org/intl/converter-input-stream;1", "nsIConverterInputStream");
+        var fstream = Utils.getInstance("@mozilla.org/network/file-input-stream;1", "nsIFileInputStream");
+        var cstream = Utils.getInstance("@mozilla.org/intl/converter-input-stream;1", "nsIConverterInputStream");
         
         fstream.init(file, -1, 0, 0);
         cstream.init(fstream, "UTF-8", 0, 0);
@@ -143,11 +145,11 @@ WMSInspector.IO = {
 
     readLineByLine: function(file){
 
-        var fiStream = WMSInspector.Utils.getInstance("@mozilla.org/network/file-input-stream;1", "nsIFileInputStream");
+        var fiStream = Utils.getInstance("@mozilla.org/network/file-input-stream;1", "nsIFileInputStream");
         fiStream.init(file, 0x01, 0444, 0);
         
         var charset = "UTF-8";
-        var is = WMSInspector.Utils.getInstance("@mozilla.org/intl/converter-input-stream;1", "nsIConverterInputStream");
+        var is = Utils.getInstance("@mozilla.org/intl/converter-input-stream;1", "nsIConverterInputStream");
 
         is.init(fiStream, charset, 1024, 0xFFFD);
         is.QueryInterface(Components.interfaces.nsIUnicharLineInputStream);
@@ -174,11 +176,11 @@ WMSInspector.IO = {
      * filters: [{title:"XML files",filter:"*.xml"},{title:"XUL files",filter:"*.xul"}]
      */
     pickFile: function(title, mode, filters, defaultExtension, defaultName, defaultFolder, parent){
-        title = title || WMSInspector.Utils.getString("wi_extension_name")
+        title = title || Utils.getString("wi_extension_name")
         parent = parent || window;
 
         var nsIFilePicker = Components.interfaces.nsIFilePicker
-        var fp = WMSInspector.Utils.getInstance("@mozilla.org/filepicker;1", "nsIFilePicker");
+        var fp = Utils.getInstance("@mozilla.org/filepicker;1", "nsIFilePicker");
 
         var modes = {
             "open" : nsIFilePicker.modeOpen,

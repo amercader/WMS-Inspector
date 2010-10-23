@@ -15,15 +15,7 @@
         persist="width height"
 >
 
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/optionsDialog.js"/>
-
-
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
-    </stringbundleset>
-
-
 
     <tabbox>
         <tabs>

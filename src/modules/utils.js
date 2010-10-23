@@ -1,43 +1,52 @@
+var EXPORTED_SYMBOLS = ["Utils"];
 
-//Temporary, until we migrate utils to a module
-if (typeof(WMSInspector) == "undefined") WMSInspector = {};
-
-WMSInspector.Utils = {
+var Utils = {
 
     //Extension id for WMSInspector
     extensionId: "wmsinspector@flentic.net",
-    
+
     //Preferences branch for WMSInspector stuff
     prefBranch: "extensions.wmsinspector.",
 
+    //String bundle for localized strings
+    stringBundle: null,
+
     //String properties
-    getString: function(id){
+    getString: function(name){
         var out = false;
-        if (id) {
-            var stringBundle = document.getElementById("wiStringBundle");
-            if (stringBundle) out = stringBundle.getString(id);
+        if (name) {
+           if (this.stringBundle === null)
+               this.stringBundle = this.getService("@mozilla.org/intl/stringbundle;1", "nsIStringBundleService")
+                          .createBundle("chrome://wmsinspector/locale/wmsinspector.properties");
+           out = this.stringBundle.GetStringFromName(name);
         }
         return out;
     },
-    
+
     getPrefs: function() {
-        return Components.classes["@mozilla.org/preferences-service;1"].
-        getService(Components.interfaces.nsIPrefService).
-        getBranch(this.prefBranch);
+        return this.getService("@mozilla.org/preferences-service;1","nsIPrefService")
+                   .getBranch(this.prefBranch);
     },
 
     setPreferenceObserver: function(prefs,observer){
 
         //This will allow us to use the methods of the nsIPrefBranch2
         prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
-        
+
         //First parameter is preference domain, but we don't need to set it
         //because it has already been set in the getPrefs method
         prefs.addObserver("",observer,false);
-    },    
+    },
+
+    getWindow: function(){
+      return this.getService(
+                "@mozilla.org/appshell/window-mediator;1",
+                "nsIWindowMediator")
+                .getMostRecentWindow('navigator:browser');
+    },
 
     getSelectedBrowser: function(){
-        return window.top.getBrowser().selectedBrowser;
+        return this.getWindow().top.getBrowser().selectedBrowser;
     },
 
 
@@ -168,3 +177,5 @@ WMSInspector.Utils = {
 
 
 }
+
+

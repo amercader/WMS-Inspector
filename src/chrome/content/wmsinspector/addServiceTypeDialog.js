@@ -1,4 +1,5 @@
 Components.utils.import("resource://wmsinspector/classes.js");
+Components.utils.import("resource://wmsinspector/utils.js");
 
 var AddServiceTypeDialog = {
     
@@ -7,7 +8,7 @@ var AddServiceTypeDialog = {
     serviceTypeId: false,
 
     init: function(){
-        this.prefs = WMSInspector.Utils.getPrefs();
+        this.prefs = Utils.getPrefs();
 
         if (window.arguments) this.serviceTypeId = window.arguments[0];
 
@@ -16,7 +17,7 @@ var AddServiceTypeDialog = {
             //Edit an existing service
 
             //Change dialog title
-            document.title = WMSInspector.Utils.getString("wi_addservicetype_editservicetypetitle");
+            document.title = Utils.getString("wi_addservicetype_editservicetypetitle");
 
             //Get service type details
             for (let i = 0; i < this.serviceTypes.length;i++){
@@ -46,10 +47,10 @@ var AddServiceTypeDialog = {
         var name = document.getElementById("wiAddServiceTypeName").value;
         var title = document.getElementById("wiAddServiceTypeTitle").value;
         var defaultVersion = document.getElementById("wiAddServiceTypeDefault").value;
-        var versions = WMSInspector.Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTypeVersions"));
+        var versions = Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTypeVersions"));
 
         if (!name || !title || !defaultVersion || versions.length == 0){
-            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_fillallfields"));
+            Utils.showAlert(Utils.getString("wi_fillallfields"));
             return false;
         } else {
             var exists = false;
@@ -60,7 +61,7 @@ var AddServiceTypeDialog = {
                 }
             }
             if (!exists){
-                WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_addservicetype_defaultversionnotpresent"));
+                Utils.showAlert(Utils.getString("wi_addservicetype_defaultversionnotpresent"));
                 return false;
             }
         }

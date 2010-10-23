@@ -15,11 +15,6 @@
 				buttons="accept,cancel">
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/editParameterDialog.js"/>
-	
-	
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
-    </stringbundleset>
 
     <groupbox>
         <label id="wiParamName" flex="1" />

@@ -16,13 +16,7 @@
         width="380"
         height="220"
 >
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/addServiceTypeDialog.js"/>
-	
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
-    </stringbundleset>
-
 
     <vbox>
         <hbox align="center">

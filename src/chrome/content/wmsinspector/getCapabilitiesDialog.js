@@ -1,3 +1,4 @@
+Components.utils.import("resource://wmsinspector/utils.js");
 
 var GetCapabilitiesDialog = {
     prefs: null,
@@ -5,8 +6,8 @@ var GetCapabilitiesDialog = {
     serviceTypes:[],
 
     init: function(){
-        this.prefs = WMSInspector.Utils.getPrefs();
-        WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
+        this.prefs = Utils.getPrefs();
+        Utils.setPreferenceObserver(this.prefs,this);
      
         var server = (window.arguments) ? window.arguments[0] : false;
         var version = (window.arguments) ? window.arguments[1] : false;
@@ -86,7 +87,7 @@ var GetCapabilitiesDialog = {
 
 
         if(!outputHTML && !outputXML){
-            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_selectoutputformat"));
+            Utils.showAlert(Utils.getString("wi_getcapabilities_selectoutputformat"));
             return false;
         }
 
@@ -94,8 +95,8 @@ var GetCapabilitiesDialog = {
         var service = document.getElementById("wiServiceTypeMenu").selectedItem.getAttribute("label");
         var version = document.getElementById("wiVersionMenu").selectedItem.getAttribute("label");
         
-        if (!WMSInspector.Utils.checkURL(url)){
-            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
+        if (!Utils.checkURL(url)){
+            Utils.showAlert(Utils.getString("wi_getcapabilities_nourl"));
             return false;
 
         } else {

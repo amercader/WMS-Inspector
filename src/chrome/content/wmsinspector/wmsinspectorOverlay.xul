@@ -6,16 +6,12 @@
 
 <overlay id="wiOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
+    <!--<script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>-->
     <script type="application/x-javascript" src="chrome://wmsinspector/content/requests.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/io.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/db.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/library.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
-
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
-    </stringbundleset>
 
     <popup id="contentAreaContextMenu">
         <menu label="&wmsinspector.common.appname;" id="wiContextMenu" insertafter="devToolsSeparator">

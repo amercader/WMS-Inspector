@@ -1,4 +1,5 @@
 Components.utils.import("resource://wmsinspector/classes.js");
+Components.utils.import("resource://wmsinspector/utils.js");
 
 var AddServiceDialog = {
     Library : window.opener.Library,
@@ -10,7 +11,7 @@ var AddServiceDialog = {
     prefs: null,
 
     init: function(){
-        this.prefs = WMSInspector.Utils.getPrefs();
+        this.prefs = Utils.getPrefs();
         
         this.serviceTypes= (this.Library.serviceTypes.length) ? this.Library.serviceTypes : window.opener.WMSInspector.Overlay.serviceTypes;
 
@@ -39,7 +40,7 @@ var AddServiceDialog = {
             //Else, edit an existing service
 
             //Change dialog title
-            document.title = WMSInspector.Utils.getString("wi_addservice_editservicetitle");
+            document.title = Utils.getString("wi_addservice_editservicetitle");
 
             //Get service details from DB
             var params = new window.opener.WMSInspector.libraryQueryParams(false,{
@@ -129,7 +130,7 @@ var AddServiceDialog = {
     },
 
     redrawTagTextBox: function(){
-        var tagsInTextBox = WMSInspector.Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTags"));;
+        var tagsInTextBox = Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTags"));;
 
         var list = document.getElementById("wiAddServiceTagsList");
         
@@ -150,8 +151,8 @@ var AddServiceDialog = {
     
     onAccept: function(){
         var url = document.getElementById("wiAddServiceURL").value;
-        if (!WMSInspector.Utils.checkURL(url)){
-            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_getcapabilities_nourl"));
+        if (!Utils.checkURL(url)){
+            Utils.showAlert(Utils.getString("wi_getcapabilities_nourl"));
             return false;
         }
 
@@ -164,7 +165,7 @@ var AddServiceDialog = {
         service.version = document.getElementById("wiAddServiceVersionMenu").selectedItem.getAttribute("label");
         service.type = document.getElementById("wiAddServiceTypeMenu").selectedItem.getAttribute("value");
 
-        var tags = WMSInspector.Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTags"));
+        var tags = Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTags"));
         if (tags) service.tags = tags;
 
         //If the dialog was called from the Library window, refresh the services list after adding or updating

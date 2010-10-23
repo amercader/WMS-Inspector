@@ -58,7 +58,7 @@
                         label.setAttribute("value",tags[i]);
                         label.setAttribute("class","wiLibraryTag");
                         label.setAttribute("flex",0);
-                        label.setAttribute("tooltiptext", WMSInspector.Utils.getString("wi_library_searchservicestagged") + " '" + tags[i] + "'");
+                        label.setAttribute("tooltiptext", Utils.getString("wi_library_searchservicestagged") + " '" + tags[i] + "'");
                         label.setAttribute("onclick","Library.searchTag(this.value);");
                         box.appendChild(label);
 

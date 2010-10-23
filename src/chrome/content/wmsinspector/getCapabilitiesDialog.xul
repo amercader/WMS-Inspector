@@ -17,16 +17,8 @@
         width="380"
         height="300"
 >
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/utils.js"/>
     <script type="application/x-javascript" src="chrome://wmsinspector/content/getCapabilitiesDialog.js"/>
-    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorReport.js"/>
     
-	
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
-    </stringbundleset>
-
-
     <groupbox>
         <caption label="&wmsinspector.common.server;"/>
         <hbox align="center" flex="1">

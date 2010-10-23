@@ -16,11 +16,6 @@
         defaultButton="accept">
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/addParameterDialog.js"/>
-	
-	
-    <stringbundleset id="stringbundleset">
-        <stringbundle id="wiStringBundle" src="chrome://wmsinspector/locale/wmsinspector.properties"/>
-    </stringbundleset>
 
     <groupbox>
         <label value="&wmsinspector.common.name;" />
