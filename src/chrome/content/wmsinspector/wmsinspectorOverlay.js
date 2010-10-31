@@ -1,5 +1,4 @@
 
-
 // WMSInspector namespace
 var WMSInspector =  {};
 
@@ -7,6 +6,7 @@ Components.utils.import("resource://wmsinspector/classes.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/utils.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/db.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/io.js",WMSInspector);
+Components.utils.import("resource://wmsinspector/requests.js",WMSInspector);
 
 WMSInspector.Overlay = {
 	
@@ -558,11 +558,29 @@ WMSInspector.Overlay = {
             }
         }
 
-        var dialog = window.openDialog("chrome://wmsinspector/content/getCapabilitiesDialog.xul",
+        var params = {
+            inn:{
+                "server":server,
+                "version":version
+            },
+            out:null
+        };
+        
+        window.openDialog(
+            "chrome://wmsinspector/content/getCapabilitiesDialog.xul",
             "wiGetCapabilitiesDialog",
-            "chrome,centerscreen",
-            server,version);
-        dialog.focus();
+            "chrome, dialog, modal,centerscreen, resizable=yes",
+            params).focus();
+            
+        if (params.out) {
+            var url = this.getGetCapabilitiesURL(params.out.url,params.out.service,params.out.version);
+            if (params.out.outputHTML){
+                this.requestGetCapabilities(url);
+            }
+            if (params.out.outputXML){
+                this.requestDocument(url,params.out.outputEditor);
+            }
+        }
     },
 
     showGetCapabilitiesReportVersion: function(xhr){
@@ -672,14 +690,17 @@ WMSInspector.Overlay = {
     },
 
     requestGetCapabilities: function(url){
-        var request = new WMSInspector.GET(url,
+        new WMSInspector.Requests.GET(
+            url,
             this.showGetCapabilitiesReportVersion,
-            this.onRequestError);
-        request.send();
+            this.onRequestError
+        ).send();
+        
     },
 
     requestDocument: function(url,outputEditor){
-        var request = new WMSInspector.GET(url,
+        new WMSInspector.Requests.GET(
+            url,
             function(xhr){
                 var file = WMSInspector.Overlay.saveResponseToFile(xhr);
                 if (outputEditor){
@@ -689,8 +710,8 @@ WMSInspector.Overlay = {
 
                 }
             },
-            this.onRequestError);
-        request.send();
+            this.onRequestError
+        ).send();
     },
 
     saveResponseToFile: function(xhr){

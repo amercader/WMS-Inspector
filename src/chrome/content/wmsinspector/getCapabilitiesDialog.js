@@ -8,9 +8,12 @@ var GetCapabilitiesDialog = {
     init: function(){
         this.prefs = Utils.getPrefs();
         Utils.setPreferenceObserver(this.prefs,this);
+
+        var params = (window.arguments[0]) ? window.arguments[0].inn : false;
+
      
-        var server = (window.arguments) ? window.arguments[0] : false;
-        var version = (window.arguments) ? window.arguments[1] : false;
+        var server = (params) ? params.server : false;
+        var version = (version) ? params.version : false;
    
 
         this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
@@ -100,18 +103,18 @@ var GetCapabilitiesDialog = {
             return false;
 
         } else {
+            
+            var outputEditor = (document.getElementById("wiGetcapabilitiesOutputEditor").selected);
 
-            url = window.opener.WMSInspector.Overlay.getGetCapabilitiesURL(url,service,version);
-            
-            if (outputXML){
-                var outputEditor = (document.getElementById("wiGetcapabilitiesOutputEditor").selected);
-                window.opener.WMSInspector.Overlay.requestDocument(url,outputEditor);
+            window.arguments[0].out = {
+                "url":url,
+                "service":service,
+                "version":version,
+                "outputHTML":outputHTML,
+                "outputXML":outputXML,
+                "outputEditor":outputEditor
             }
-            if (outputHTML){
-                window.opener.WMSInspector.Overlay.requestGetCapabilities(url);
-            }
-            
-            window.close();
+
             return true;
         }
     },
