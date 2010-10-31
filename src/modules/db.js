@@ -10,7 +10,7 @@ var DB = {
     // This is the latest schema version, it must match the one defined in the
     // default database (PRAGMA user_version). It must be updated at any schema
     // change and a corresponding upgradeToVXX method must be added.
-    schemaVersion: 1,
+    schemaVersion: 2,
 
     // Some classes used are not supported in Firefox 3.5.
     // Code executed under this condition should be removed when support for Firefox 3.5 is dropped
@@ -49,47 +49,62 @@ var DB = {
                 this.restoreDB();
             } else if (this.conn.schemaVersion < this.schemaVersion) {
                 //Upgrade schema version if necessary
-                /*
-                 * TODO: Implement when necessary
+
                 if (this.conn.schemaVersion < 2){
                     this.upgradeToV2();
                 }
-                */
-
-                //Set new schemaVersion
-                this.conn.schemaVersion = this.schemaVersion;
-            //TODO: message
 
             }
-
         }
     },
 
-    /*
- *
- * Dummy method to test DB upgrades
     upgradeToV2: function(){
         try{
 
-            this.conn.createTable("test_table","id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title VARCHAR(45) NOT NULL");
+            var columns = "\"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n\
+                        \"title\" VARCHAR(200) COLLATE NOCASE,\n\
+                        \"url\" VARCHAR(300) NOT NULL COLLATE NOCASE,\n\
+                        \"favorite\" INTEGER,\n\
+                        \"creation_date\" INTEGER NOT NULL,\n\
+                        \"update_date\" INTEGER,\n\
+                        \"type\" VARCHAR(10) NOT NULL DEFAULT \"WMS\" COLLATE NOCASE,\n\
+                        \"version\" VARCHAR(10)";
 
-            var statement = this.conn.createStatement("INSERT INTO test_table (title) VALUES (:title)");
-            var params = statement.newBindingParamsArray();
-            var bp;
-            for (var i = 0; i < 10; i++) {
-              bp = params.newBindingParams();
-              bp.bindByName("title", "Test record " + i);
-              params.addParams(bp);
-            }
-            statement.bindParameters(params);
+            this.conn.createTable("services_backup",columns);
 
-            var statements = [
-                statement,
-                this.conn.createStatement("ALTER TABLE services ADD COLUMN test_id NOT NULL DEFAULT 1"),
-                this.conn.createStatement("ALTER TABLE tags ADD COLUMN test_col DEFAULT 4 NOT NULL")
+            var statements1 = [
+                this.conn.createStatement("INSERT INTO services_backup SELECT id,title,url,favorite,creation_date,update_date,type,version FROM services"),
+                this.conn.createStatement("DROP TABLE services")
             ];
 
-            this.conn.executeAsync(statements,statements.length,this.transactionCallback);
+            this.conn.executeAsync(statements1,statements1.length,
+            {
+                handleResult: function(resultSet) {
+                //No results should be returned during an upgrade transaction
+                },
+
+                handleError: function(error) {
+                    Components.utils.reportError("WMSInspector - Error during database upgrade: " + error.message);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
+                        Components.utils.reportError("WMSInspector - DB upgrade transaction aborted or canceled");
+                    } else {
+                        DB.conn.createTable("services",columns);
+
+                        var statements2 = [
+                            DB.conn.createStatement("INSERT INTO services SELECT id,title,url,favorite,creation_date,update_date,type,version FROM services_backup"),
+                            DB.conn.createStatement("DROP TABLE services_backup"),
+                            DB.conn.createStatement("CREATE TRIGGER services_after_delete_trigger AFTER DELETE ON services FOR EACH ROW WHEN OLD.id IS NOT NULL BEGIN DELETE FROM rel_services_tags WHERE services_id = OLD.id; END;")
+                        ];
+
+                        DB.conn.executeAsync(statements2,statements2.length,DB.upgradeCallback);
+
+                    }
+                }
+            }
+            );
 
         } catch (e) {
             Components.utils.reportError(this.conn.lastErrorString);
@@ -99,20 +114,26 @@ var DB = {
         return true;
 
     },
-*/
+
     upgradeCallback: {
         handleResult: function(resultSet) {
         //No results should be returned during an upgrade transaction
         },
 
         handleError: function(error) {
-            //print("Error: " + aError.message);
             Components.utils.reportError("WMSInspector - Error during database upgrade: " + error.message);
         },
 
         handleCompletion: function(reason) {
-            if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+            if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
                 Components.utils.reportError("WMSInspector - DB upgrade transaction aborted or canceled");
+            }else{
+
+                //Set new schemaVersion
+                DB.conn.schemaVersion = DB.schemaVersion;
+
+                Components.utils.reportError("WMSInspector - DB schema upgraded to version " + DB.schemaVersion);
+            }
         }
     },
 
