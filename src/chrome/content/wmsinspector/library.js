@@ -4,7 +4,7 @@ Components.utils.import("resource://wmsinspector/db.js");
 Components.utils.import("resource://wmsinspector/io.js");
 
 var Library = {
-    
+
     prefs: null,
 
     list: null,
@@ -19,19 +19,24 @@ var Library = {
 
     minWidth: 760,
 
+    wis: null,
+
     init: function(){
+
+        // Get a WMSInspector service instance
+        this.wis = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
 
         this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
 
         this.prefs = Utils.getPrefs();
         Utils.setPreferenceObserver(this.prefs,this);
-        
+
         this.confirmBeforeDelete = this.prefs.getBoolPref("libraryconfirmbeforedelete");
 
         this.list = document.getElementById("wiServicesListbox");
 
         DB.checkDB();
-        
+
         if (DB.conn == null){
             document.getElementById("wiLibraryDBError").setAttribute("style","visibility: visible");
             this.list.setAttribute("style","visibility: collapse");
@@ -41,7 +46,7 @@ var Library = {
         //Fetch lists with values from DB
         //When the last list is fetched, call the default query (all services)
         this.fetchList("tags",document.getElementById("wiLibraryTagsList"));
-        
+
         //Add <All> option to service types list
         var typesList = document.getElementById("wiLibraryServiceTypeList");
         typesList.appendItem(Utils.getString("wi_all"),0);
@@ -63,7 +68,7 @@ var Library = {
 
         Library.search();
     },
-    
+
     setSelectedService: function(element){
         Library.selectedService = new Classes.Service();
         Library.selectedService.id = element.serviceId;
@@ -125,12 +130,13 @@ var Library = {
                     }
                 }
 
-                if (deleteService) Library.deleteService(service.id,Library.onServiceOperationFinished);
+                //if (deleteService) Library.deleteService(service.id,Library.onServiceOperationFinished);
+                if (deleteService) Library.wis.deleteService(service.id,Library.onServiceOperationFinished);
 
                 break;
             case 4:
             case 5:
-                // GetCapabilities request 
+                // GetCapabilities request
                 // Currently, for HTML reports only WMS are supported
 
                 let url = window.opener.WMSInspector.Overlay.getGetCapabilitiesURL(service.URL,service.type,service.version);
@@ -139,9 +145,9 @@ var Library = {
                 } else if (mode == 5){
                     window.opener.WMSInspector.Overlay.requestDocument(url);
                 }
-                
+
                 break;
-            
+
                 // GetCapabilities request (HTML report)
 
                 break;
@@ -159,7 +165,7 @@ var Library = {
     shutdown: function(){
         this.prefs.removeObserver("", this);
     },
-    
+
     fetchList: function(type,list,callback){
         try{
             if (!type || !list) return false;
@@ -180,7 +186,7 @@ var Library = {
                         for (let row = resultSet.getNextRow();
                             row;
                             row = resultSet.getNextRow()) {
-                            
+
                             let name = row.getResultByName("name");
                             let element = list.appendItem(name,name);
                             if (type == "tags")
@@ -201,7 +207,7 @@ var Library = {
                     try {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
                             return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
-                    
+
                         if (type == "types")
                             list.selectedIndex = 0;
 
@@ -268,7 +274,7 @@ var Library = {
     search: function(params){
         var libraryQuery = new Library.libraryQuery(params,Library.build)
         libraryQuery.query();
-        
+
     },
 
     refresh: function(){
@@ -278,7 +284,7 @@ var Library = {
     restore: function(){
         //Clear filter text
         document.getElementById("wiLibrarySearchFilter").value = "";
-        
+
         //Tags
         var list = document.getElementById("wiLibraryTagsList");
         for (let i = 0; i < list.getRowCount(); i++)
@@ -328,9 +334,9 @@ var Library = {
             "wmsinspector.csv",
             null,
             window);
-            
+
         if (!file) return false;
-        
+
         Library.toggleProgressMeter(Utils.getString("wi_library_exporting"));
 
         var out = Library.buildExportFile(records);
@@ -365,7 +371,7 @@ var Library = {
             out += line.join(separator) + "\n";
 
         }
-        
+
         return out;
     },
 
@@ -381,27 +387,28 @@ var Library = {
             false,
             null,
             window);
-            
+
         if (!file) return false;
 
 
         Library.toggleProgressMeter(Utils.getString("wi_library_importing"));
 
         var contents = IO.readLineByLine(file);
-        
+
         if (!contents){
             Components.utils.reportError("WMS Inspector - Error reading file");
             return false;
-        } 
+        }
 
-        var wiService = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
+        var separator = this.prefs.getCharPref("exportseparator");
 
-        wiService.importServicesFromCSV(contents,this,this.onServicesImported);
+        Library.wis.importServicesFromCSV(contents,separator,this,this.onServicesImported);
         return true;
 
     },
 
     onServiceOperationFinished: function(result){
+        Components.utils.reportError("NEW del");
         if (result === false){
             //Errors were found
             Utils.showAlert(Utils.getString("wi_anerroroccurred"));
@@ -413,7 +420,7 @@ var Library = {
 
     onServicesImported: function(result){
         Library.toggleProgressMeter();
-        
+
         var msg = (result !== false) ?
         Utils.getString("wi_library_importprompt").replace("%S",result) :
         Utils.getString("wi_library_errorsinimport");
@@ -422,7 +429,7 @@ var Library = {
         if (result !== false) Library.search();
         return true;
     },
-    
+
     build: function(results){
 
         Library.currentResults = results;
@@ -446,8 +453,8 @@ var Library = {
 
             }
             numServices = (results.length == 1) ? Utils.getString("wi_library_serviceshown") : Utils.getString("wi_library_servicesshown").replace("%S",results.length);
-            
-        } 
+
+        }
 
         document.getElementById("wiLibraryNumServices").setAttribute("value",numServices);
     },
@@ -456,7 +463,7 @@ var Library = {
     addServiceRow: function(service) {
         var item = document.createElement("richlistboxitem");
         item.setAttribute("class","libraryItem");
-        
+
         /*
          * Custom properties can be defined to avoid querying the DB when performing
          * actions over the service (copy, getcapabilities...)
@@ -470,7 +477,7 @@ var Library = {
         item.setAttribute("type", service.type);
         item.setAttribute("URL", service.URL);
         item.setAttribute("context", "wiLibraryContextMenu");
-        
+
         //Without the timeout, the created item methods are not found
         setTimeout(function(){
             if (service.tags) item.addTags(service.tags);
@@ -479,7 +486,7 @@ var Library = {
 
         this.list.appendChild(item);
     },
-    
+
     toggleAdvancedSearch: function(){
 
         var box = document.getElementById("wiLibraryAdvancedSearch");
@@ -500,359 +507,25 @@ var Library = {
 
     openAddServiceDialog: function(id) {
 
-        var dialog = window.openDialog(
+        var params = { inn: { id: id }, out: false };
+
+        window.openDialog(
             "chrome://wmsinspector/content/addServiceDialog.xul",
             "wiAddServiceDialog",
-            "chrome,centerscreen",
-            id // If a service id provided, dialog will be shown in edit mode
-            );
-        dialog.focus();
-    },
+            "chrome,centerscreen,modal,dialog",
+            params // If a service id provided, dialog will be shown in edit mode
+            ).focus();
 
-    // TODO: move to component
-    //Service should be a Classes.Service object
-    addService: function(service,callback){
-        try{
-
-            // In asynchronous calls, it is not safe to rely on conn.lastInsertRowID,
-            // so we build a unique hash to identify the record and be able to get its
-            // id later on handleCompletion.
-            // This is temporary until this code is migrated to the component and threaded
-
-            var hash = Utils.getHash(service.URL + service.type + new Date().getTime());
-            var sql = "INSERT INTO services \n\
-                        (title,url,version,favorite,creation_date,type,hash) \n\
-                   VALUES \n\
-                        (:title,:url,:version,:favorite,strftime('%s','now'),:type,:hash)";
-
-            var statement = DB.conn.createStatement(sql);
-
-            DB.bindParameters(statement,{
-                "title": service.title,
-                "url": service.URL,
-                "version": service.version,
-                "favorite": (service.favorite) ? "1" : "0",
-                "type": service.type,
-                "hash": hash
-            });
-
-            statement.executeAsync({
-                //error is a mozIStorageError object
-                handleError: function(error) {
-                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                },
-
-                handleCompletion: function(reason) {
-                    try {
-                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
-
-                        // We need to get the inserted service id, and as it's not safe to rely on
-                        // conn.lastInsertRowID, we need to select the record with the previously generated
-                        // hash. This is temporary until this code is migrated to the component and threaded
-
-                        let sql = "SELECT id FROM services WHERE hash = :hash";
-                        let selectStatement = DB.conn.createStatement(sql);
-                        DB.bindParameter(selectStatement, "hash", hash);
-
-                        selectStatement.executeAsync({
-                            serviceId:false,
-
-                            handleResult: function(resultSet) {
-                                let row = resultSet.getNextRow();
-                                this.serviceId = row.getResultByName("id");
-                            },
-
-                            //error is a mozIStorageError object
-                            handleError: function(error) {
-                                Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                            },
-
-                            handleCompletion: function(reason) {
-                                try {
-                                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                                        return Library.exceptionHandler("Transaction aborted or canceled",callback);
-
-
-                                    if (service.tags && service.tags.length) {
-                                        Library.setTags(this.serviceId,service.tags,callback);
-                                    } else {
-                                        if (callback) callback(this.serviceId);
-                                    }
-                            
-                                    return true;
-                                } catch (error) {
-                                    Library.exceptionHandler(error,callback);
-                                }
-                            }
-                        });
-
-                        return true;
-
-                    } catch (error) {
-                        Library.exceptionHandler(error,callback);
-                    }
-                }
-            });
-
-            return true;
-
-        } catch (error) {
-            Library.exceptionHandler(error,callback);
+        if (params.out.service){
+            if (params.out.service.id){
+                this.wis.updateService(params.out.service,this.onServiceOperationFinished);
+            } else {
+                this.wis.addService(params.out.service,this.onServiceOperationFinished);
+            }
         }
+
     },
 
-    // TODO: move to component
-    //Service should be a Classes.Service object
-    updateService: function(service,callback){
-        try{
-
-            //We will only update properties defined in the service object provided
-            var sql = "UPDATE services";
-            var sqlUpdate = [];
-            var params = {};
-            if (service.title) {
-                sqlUpdate.push(" title = :title");
-                params.title = service.title
-            }
-            if (service.URL) {
-                sqlUpdate.push(" url = :url");
-                params.url = service.URL
-            }
-            if (service.version) {
-                sqlUpdate.push(" version = :version");
-                params.version = service.version
-            }
-            if (service.type) {
-                sqlUpdate.push(" type = :type");
-                params.type = service.type
-            }
-            if (typeof(service.favorite) == "boolean") {
-                sqlUpdate.push(" favorite = :favorite");
-                params.favorite = (service.favorite) ? "1" :"0";
-            }
-
-            if (sqlUpdate.length == 0) return false;
-
-            sqlUpdate.push(" update_date = strftime('%s','now')");
-
-            sql += " SET " + sqlUpdate.join(",") + " WHERE id = :id";
-            params.id = service.id;
-
-            var statement = DB.conn.createStatement(sql);
-
-            DB.bindParameters(statement,params);
-
-            statement.executeAsync({
-
-                //error is a mozIStorageError object
-                handleError: function(error) {
-                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                },
-
-                handleCompletion: function(reason) {
-                    try{
-                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
-
-                        if (service.tags && service.tags.length) {
-                            Library.setTags(service.id,service.tags,callback);
-                        } else {
-                            if (callback) callback(service.id);
-                        }
-
-                        return true;
-                    } catch (error){
-                        Library.exceptionHandler(error,callback);
-                    }
-                }
-            });
-            
-            return true;
-        } catch (error) {
-            Library.exceptionHandler(error,callback);
-        }
-    },
-
-    /*
-     * 1 - Delete previous tags from service
-     * 2 - For each tag, check if exists
-     *      - If exists, save the id
-     *      - If not, insert tag and get new id
-     * 3 - Insert records in rel_services_tag table
-     */
-    // TODO: move to component
-    setTags: function(serviceId,tags,callback){
-
-        try {
-            if (typeof(serviceId) != "number" || tags.length < 0) return false;
-
-            //Delete previous tags from service
-            var sql = "DELETE FROM rel_services_tags WHERE services_id = :id";
-            var statement = DB.conn.createStatement(sql);
-
-            DB.bindParameter(statement, "id", serviceId);
-
-            statement.executeAsync({
-
-                //error is a mozIStorageError object
-                handleError: function(error) {
-                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                },
-
-                handleCompletion: function(reason) {
-                    try{
-                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
-
-                        //Check if tags exist and insert new ones if not
-                        var tagIds = [];
-                        for (let i = 0; i < tags.length; i ++){
-                            let tagExists = false;
-                            let selectSql = "SELECT id FROM tags WHERE title = :tag" + i;
-                            let selectStatement = DB.conn.createStatement(selectSql);
-
-                            DB.bindParameter(selectStatement, "tag"+i, tags[i]);
-                    
-                            try {
-                            
-                                while (selectStatement.step()) {
-                                    //Tag already exists
-                                    tagExists = true;
-                                    tagIds.push(selectStatement.row.id)
-                                }
-                            }
-                            finally {
-                                try{
-                                    selectStatement.reset();
-                                    if (!tagExists){
-                                        //Tag does not exist
-                                        let insertSql = "INSERT INTO tags (title) VALUES (:tag" + i+")";
-                                        let insertStatement = DB.conn.createStatement(insertSql);
-
-                                        DB.bindParameter(insertStatement, "tag"+i, tags[i]);
-
-                                        insertStatement.execute();
-                                
-                                        //Get the id of the last inserted tag
-                                        tagIds.push(DB.conn.lastInsertRowID);
-                                    }
-                                } catch (error) {
-                                    Library.exceptionHandler(error,callback);
-                                }
-                            }
-
-                        
-                        }
-
-                        if (tagIds.length){
-                            //Insert records in the services-tags relationship table
-                            var statements = [];
-
-                            if (DB.legacyCode){
-                                for (let i = 0; i < tagIds.length; i ++){
-                                    let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid" + i + ")";
-                                    let statement = DB.conn.createStatement(sql);
-                                    let params = {};
-                                    params.serviceid = serviceId;
-                                    params["tagid"+i] = tagIds[i];
-                                    DB.bindParameters(statement,params);
-
-                                    statements.push(statement);
-                                }
-                            } else {
-                                let sql = "INSERT INTO rel_services_tags (services_id,tags_id) VALUES (:serviceid,:tagid)";
-                                let statement = DB.conn.createStatement(sql);
-                                let params = statement.newBindingParamsArray();
-                                for (let i = 0; i < tagIds.length; i ++){
-                                    bp = params.newBindingParams();
-                                    bp.bindByName("serviceid", serviceId);
-                                    bp.bindByName("tagid", tagIds[i]);
-                                    params.addParams(bp);
-                                }
-                                statement.bindParameters(params);
-
-                                statements.push(statement);
-
-                            }
-
-
-                            DB.conn.executeAsync(
-                                statements,
-                                statements.length,
-                                {
-
-                                    //error is a mozIStorageError object
-                                    handleError: function(error) {
-                                        Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                                    },
-
-                                    handleCompletion: function(reason) {
-                                        try{
-                                            if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                                                return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
-
-                                            if (callback) callback(serviceId);
-
-                                            return true;
-                                        } catch (error){
-                                            Library.exceptionHandler(error,callback);
-                                        }
-                                    }
-                                });
-                        }
-                        return true;
-                    } catch (error) {
-                        Library.exceptionHandler(error,callback);
-                    }
-                }
-            });
-            return true;
-        } catch (error) {
-            Library.exceptionHandler(error,callback);
-        }
-    },
-
-    // TODO: move to component
-    deleteService: function(id,callback){
-        try{
-            if (typeof(id) != "number") return false;
-
-            var sql = "DELETE FROM services WHERE id = :id";
-            var statement = DB.conn.createStatement(sql);
-
-            DB.bindParameters(statement,{
-                id:id
-            });
-
-            statement.executeAsync({
-
-                //error is a mozIStorageError object
-                handleError: function(error) {
-                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                },
-
-                handleCompletion: function(reason) {
-                    try{
-                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
-
-                        // The services_after_delete_trigger trigger will deal with the service's tags
-
-                        if (callback) callback();
-                    
-                        return true;
-                    } catch (error){
-                        Library.exceptionHandler(error,callback);
-                    }
-                }
-            });
-
-            return true;
-        } catch (error) {
-            Library.exceptionHandler(error,callback);
-        }
-    },
 
     exceptionHandler: function(error,callback){
 
@@ -876,7 +549,7 @@ Library.libraryQueryParams = function(text,filters,sorts,directions){
 }
 
 Library.libraryQuery = function(params,callback){
-    
+
     this.params = params || new Library.libraryQueryParams();
     this.callback = callback || null;
 
@@ -895,7 +568,7 @@ Library.libraryQuery = function(params,callback){
         var directions = this.params.directions;
 
         this.sql = "";
-        
+
         this.sql += "SELECT s.id AS id,s.title AS title,s.url AS url,s.favorite AS favorite,s.type AS type,s.version AS version,s.tags AS tags";
 
         if (filters.tags){
@@ -904,11 +577,11 @@ Library.libraryQuery = function(params,callback){
         } else {
             this.sql += " FROM v_services s";
         }
-        
+
         var sqlWhere = "";
         if (text)
             sqlWhere = "(s.title LIKE :text OR s.url LIKE :text OR s.tags LIKE :text)";
-        
+
 
         if (filters){
             var sqlFilters = [];
@@ -948,12 +621,12 @@ Library.libraryQuery = function(params,callback){
 
 
         if (sqlWhere.length) this.sql += " WHERE " + sqlWhere;
-        
+
         if (filters.tags) this.sql += " GROUP BY s.id";
 
         if (sorts.length){
             var sqlSort = "";
-            
+
             for (let i = 0; i < sorts.length; i++){
                 if (this.allowedValue(allowedSorts,sorts[i])){
                     sqlSort += (sqlSort.length) ? "," : " ";
@@ -985,7 +658,7 @@ Library.libraryQuery = function(params,callback){
             //Components.utils.reportError(this.sql);
 
             var statement = DB.conn.createStatement(this.sql);
-            
+
             if (text || filters.tags || filters.types || filters.ids){
                 var params = {};
                 if (text) params.text = "%" + text + "%";
@@ -1003,11 +676,11 @@ Library.libraryQuery = function(params,callback){
 
                 DB.bindParameters(statement,params);
             }
-            
+
             this.results = [];
-               
+
             var self = this;
-       
+
             statement.executeAsync({
                 errorsFound: false,
                 handleResult: function(resultSet) {
@@ -1025,7 +698,7 @@ Library.libraryQuery = function(params,callback){
                             service.version = row.getResultByName("version");
                             let tags = row.getResultByName("tags");
                             if (tags) service.tags = tags.split(",").sort();
-                        
+
 
                             self.results.push(service);
                         }
@@ -1044,9 +717,9 @@ Library.libraryQuery = function(params,callback){
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
                         return self.exceptionHandler(new Error("Transaction aborted or canceled"));
 
-                    if (self.callback) 
+                    if (self.callback)
                         self.callback((this.errorsFound) ? false : self.results);
-                    
+
                     return true;
                 }
             });

@@ -27,6 +27,10 @@ WMSInspector.Overlay = {
     serviceTypes: [],
 
     init: function(){
+
+        // Get a WMSInspector service instance
+        this.wis = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
+
         //Set preferences object
         this.prefs = WMSInspector.Utils.getPrefs();
 
@@ -903,16 +907,25 @@ WMSInspector.Overlay = {
         }
     },
 
-    openAddServiceDialog: function(id,url,version){
-        var dialog = window.openDialog(
+    openAddServiceDialog: function(id,url,version) {
+
+        var params = { inn: { "id": id,"url":url,"version":version }, out: false };
+
+        window.openDialog(
             "chrome://wmsinspector/content/addServiceDialog.xul",
             "wiAddServiceDialog",
-            "chrome,centerscreen",
-            id, // If a service id provided, dialog will show in edit mode
-            url,
-            version
-            );
-        dialog.focus();
+            "chrome,centerscreen,modal,dialog",
+            params // If a service id provided, dialog will be shown in edit mode
+            ).focus();
+
+        if (params.out.service){
+            if (params.out.service.id){
+                this.wis.updateService(params.out.service,this.onServiceOperationFinished);
+            } else {
+                this.wis.addService(params.out.service,this.onServiceOperationFinished);
+            }
+        }
+
     },
 
     getServiceTypes: function(callback){

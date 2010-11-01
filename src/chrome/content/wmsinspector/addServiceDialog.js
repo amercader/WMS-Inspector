@@ -15,7 +15,16 @@ var AddServiceDialog = {
         
         this.serviceTypes= (this.Library.serviceTypes.length) ? this.Library.serviceTypes : window.opener.WMSInspector.Overlay.serviceTypes;
 
-        if (window.arguments) this.serviceId = window.arguments[0];
+        var params = (window.arguments[0]) ? window.arguments[0].inn : false;
+
+        var url, version = false;
+
+        if (params){
+            if (params.id) this.serviceId = params.id;
+            url = (params.url) ? params.url : false;
+            version = (params.version) ? params.version : false;
+
+        }
 
         this.Library.fetchList("tags",document.getElementById("wiAddServiceTagsList"));
         this.setServiceTypesList();
@@ -23,8 +32,7 @@ var AddServiceDialog = {
         if (!this.serviceId){
             //If no id provided, open dialog in add mode
 
-            if (window.arguments[1]) document.getElementById("wiAddServiceURL").value = window.arguments[1];
-            var version = window.arguments[2];
+            if (url) document.getElementById("wiAddServiceURL").value = url;
             if (version){
                 var versionsList = document.getElementById("wiAddServiceVersionMenu");
                 for (let i=0; i < versionsList.itemCount; i++){
@@ -43,10 +51,10 @@ var AddServiceDialog = {
             document.title = Utils.getString("wi_addservice_editservicetitle");
 
             //Get service details from DB
-            var params = new window.opener.Library.libraryQueryParams(false,{
+            var queryParams = new window.opener.Library.libraryQueryParams(false,{
                 ids:[this.serviceId]
             });
-            var libraryQuery = new window.opener.Library.libraryQuery(params,this.fetchDetails)
+            var libraryQuery = new window.opener.Library.libraryQuery(queryParams,this.fetchDetails)
             libraryQuery.query();
 
         }
@@ -168,19 +176,8 @@ var AddServiceDialog = {
         var tags = Utils.getValuesFromCSVTextbox(document.getElementById("wiAddServiceTags"));
         if (tags) service.tags = tags;
 
-        //If the dialog was called from the Library window, refresh the services list after adding or updating
-        //the service
-        var callback = (window.opener.name == "wiLibrary") ? AddServiceDialog.Library.onServiceOperationFinished : null;
+        window.arguments[0].out = {"service": service};
 
-        if (AddServiceDialog.serviceId){
-            //Update an existing service
-            AddServiceDialog.Library.updateService(service,callback);
-        } else {
-            //Add a new service to Library
-            AddServiceDialog.Library.addService(service,callback);
-        }
-
-        window.close();
         return true;
 
     }
