@@ -6,17 +6,17 @@ var GetCapabilitiesDialog = {
     serviceTypes:[],
 
     init: function(){
+
+        // Get a WMSInspector service instance
+        this.wis = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
+
         this.prefs = Utils.getPrefs();
         Utils.setPreferenceObserver(this.prefs,this);
 
         var params = (window.arguments[0]) ? window.arguments[0].inn : false;
-
      
         var server = (params) ? params.server : false;
         var version = (version) ? params.version : false;
-   
-
-        this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
 
         if (server) document.getElementById("wiTextServer").value = server;
 
@@ -28,7 +28,20 @@ var GetCapabilitiesDialog = {
         
         document.getElementById("wiGetcapabilitiesOutputEditor").disabled = (this.prefs.getCharPref("editor") == "");
         
-        this.setServiceTypesList();
+
+        //Get the service types and versions from the DB.
+        this.wis.getServiceTypes(function(results){
+            if (results){
+                GetCapabilitiesDialog.serviceTypes = results;
+
+                var typesList = document.getElementById("wiServiceTypeMenu");
+
+                for (let i = 0;i<results.length;i++)
+                    typesList.appendItem(results[i].name,results[i].name);
+                typesList.selectedIndex = 0;
+
+            }
+        });
 
         if (version){
             var versionsList = document.getElementById("wiVersionMenu");
@@ -42,17 +55,7 @@ var GetCapabilitiesDialog = {
         }
 
     },
-
-    setServiceTypesList: function(){
-
-        var serviceTypesList = document.getElementById("wiServiceTypeMenu");
-        for (let i=0; i < this.serviceTypes.length; i++){
-            serviceTypesList.appendItem(this.serviceTypes[i].name,this.serviceTypes[i].name);
-        }
-        serviceTypesList.selectedIndex = 0;
-
-    },
-
+    
     setVersionsList: function(){
 
         var serviceTypes = GetCapabilitiesDialog.serviceTypes;

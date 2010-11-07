@@ -26,8 +26,6 @@ var Library = {
         // Get a WMSInspector service instance
         this.wis = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
 
-        this.serviceTypes = window.opener.WMSInspector.Overlay.serviceTypes;
-
         this.prefs = Utils.getPrefs();
         Utils.setPreferenceObserver(this.prefs,this);
 
@@ -44,13 +42,26 @@ var Library = {
         }
 
         //Fetch lists with values from DB
-        //When the last list is fetched, call the default query (all services)
         this.fetchList("tags",document.getElementById("wiLibraryTagsList"));
 
-        //Add <All> option to service types list
-        var typesList = document.getElementById("wiLibraryServiceTypeList");
-        typesList.appendItem(Utils.getString("wi_all"),0);
-        this.fetchList("types",typesList,function (){Library.onWindowReady()});
+        //Get the service types and versions from the DB.
+        this.wis.getServiceTypes(function(results){
+            if (results){
+                Library.serviceTypes = results;
+
+                var typesList = document.getElementById("wiLibraryServiceTypeList");
+
+                typesList.appendItem(Utils.getString("wi_all"),0);
+                for (let i = 0;i<results.length;i++)
+                    typesList.appendItem(results[i].name,results[i].name);
+                typesList.selectedIndex = 0;
+
+                Library.onWindowReady()
+            }
+        });
+
+
+        //this.fetchList("types",typesList,function (){Library.onWindowReady()});
 
     },
 
@@ -402,13 +413,13 @@ var Library = {
 
         var separator = this.prefs.getCharPref("exportseparator");
 
-        Library.wis.importServicesFromCSV(contents,separator,this,this.onServicesImported);
+        Library.wis.importServicesFromCSV(contents,separator,this.onServicesImported);
+        
         return true;
 
     },
 
     onServiceOperationFinished: function(result){
-        Components.utils.reportError("NEW del");
         if (result === false){
             //Errors were found
             Utils.showAlert(Utils.getString("wi_anerroroccurred"));

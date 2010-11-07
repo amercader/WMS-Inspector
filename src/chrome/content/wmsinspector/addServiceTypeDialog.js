@@ -2,30 +2,23 @@ Components.utils.import("resource://wmsinspector/classes.js");
 Components.utils.import("resource://wmsinspector/utils.js");
 
 var AddServiceTypeDialog = {
-    
-    serviceTypes: window.opener.OptionsDialog.serviceTypes,
 
-    serviceTypeId: false,
+    prefs: null,
+
+    serviceType: false,
 
     init: function(){
         this.prefs = Utils.getPrefs();
 
-        if (window.arguments) this.serviceTypeId = window.arguments[0];
+        if (window.arguments[0]) this.serviceType = window.arguments[0].inn.serviceType;
 
-        if (this.serviceTypeId !== false){
-
+        if (this.serviceType !== false){
+            
             //Edit an existing service
+            this.fetchDetails(this.serviceType);
 
             //Change dialog title
             document.title = Utils.getString("wi_addservicetype_editservicetypetitle");
-
-            //Get service type details
-            for (let i = 0; i < this.serviceTypes.length;i++){
-                if (this.serviceTypes[i].id == this.serviceTypeId) {
-                  this.fetchDetails(this.serviceTypes[i]) ;
-                  break;
-                }
-            }
 
         }
 
@@ -68,21 +61,14 @@ var AddServiceTypeDialog = {
 
         var serviceType = new Classes.ServiceType();
 
-        serviceType.id = AddServiceTypeDialog.serviceTypeId;
+        serviceType.id = (AddServiceTypeDialog.serviceType) ? AddServiceTypeDialog.serviceType.id : null;
         serviceType.name = name;
         serviceType.title = title;
         serviceType.defaultVersion = defaultVersion;
         serviceType.versions = versions;
 
-        if (AddServiceTypeDialog.serviceTypeId){
-            //Update an existing service type
-            window.opener.OptionsDialog.updateServiceType(serviceType);
-        } else {
-            //Add a new service type to the DB
-            window.opener.OptionsDialog.addServiceType(serviceType);
-        }
+        window.arguments[0].out = {"serviceType": serviceType};
 
-        window.close();
         return true;
 
     }

@@ -4,9 +4,12 @@ var OptionsDialog = {
     
     prefs: null,
 
-    serviceTypes: window.opener.WMSInspector.Overlay.serviceTypes,
+    serviceTypes: [],
 
     init: function(){
+
+        // Get a WMSInspector service instance
+        this.wis = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
 
         this.prefs = Utils.getPrefs();
         
@@ -17,8 +20,16 @@ var OptionsDialog = {
 
         document.getElementById("wiLibraryConfirmBeforeDelete").checked = this.prefs.getBoolPref("libraryconfirmbeforedelete");
 
-        //Build service types tree
-        this.buildServiceTypesTree();
+        //Get the service types and versions from the DB.
+        this.wis.getServiceTypes(function(results){
+            if (results){
+                OptionsDialog.serviceTypes = results;
+
+                //Build service types tree
+                OptionsDialog.buildServiceTypesTree();
+            }
+        });
+
     },
 
     buildServiceTypesTree: function(){
@@ -85,13 +96,38 @@ var OptionsDialog = {
     },
 
     openAddServiceTypeDialog: function(id){
-        var dialog = window.openDialog(
+
+        var serviceType = null;
+        if (id){
+            //Get service type details
+            for (let i = 0; i < this.serviceTypes.length;i++){
+                if (this.serviceTypes[i].id == id) {
+                    serviceType = this.serviceTypes[i];
+                    break;
+                }
+            }
+        }
+        var params = {
+            inn: {
+                "serviceType": serviceType
+            },
+            out: false
+        };
+
+        window.openDialog(
             "chrome://wmsinspector/content/addServiceTypeDialog.xul",
             "wiAddServiceTypeDialog",
-            "chrome,centerscreen",
-            id // If a service type id provided, dialog will be shown in edit mode
-            );
-        dialog.focus();
+            "chrome,centerscreen,modal,dialog",
+            params // If a service type id provided, dialog will be shown in edit mode
+            ).focus();
+
+        if (params.out.serviceType){
+            if (params.out.serviceType.id){
+                this.wis.updateServiceType(params.out.serviceType,this.refreshServiceTypeTree);
+            } else {
+                this.wis.addServiceType(params.out.serviceType,this.refreshServiceTypeTree);
+            }
+        }
     },
     
     doContextMenuAction: function(mode,event){
@@ -108,32 +144,21 @@ var OptionsDialog = {
                 //Delete service type
                 var prompt = Utils.showConfirm(Utils.getString("wi_options_confirmdeleteservicetype"));
                 if (prompt){
-
-                    OptionsDialog.deleteServiceType(serviceTypeId);
+                    OptionsDialog.wis.deleteServiceType(serviceTypeId,this.refreshServiceTypeTree);
                 }
                 break;
-
         }
         return true;
     },
 
-    addServiceType: function(serviceType){
-        window.opener.WMSInspector.Overlay.addServiceType(serviceType,this.refreshServiceTypeTree);
-    },
-
-    updateServiceType: function(serviceType){
-        window.opener.WMSInspector.Overlay.updateServiceType(serviceType,this.refreshServiceTypeTree);
-    },
-
-    deleteServiceType: function(serviceTypeId){
-
-        window.opener.WMSInspector.Overlay.deleteServiceType(serviceTypeId,this.refreshServiceTypeTree);
-    },
-
-    refreshServiceTypeTree: function(serviceTypes){
-        OptionsDialog.serviceTypes = serviceTypes;
-        OptionsDialog.buildServiceTypesTree();
+    refreshServiceTypeTree: function(){
+        // Refresh the service types array and the tree
+        OptionsDialog.wis.getServiceTypes(function(results){
+            if (results){
+                OptionsDialog.serviceTypes = results;
+                OptionsDialog.buildServiceTypesTree();
+            }
+        });
     }
-
 }
 
