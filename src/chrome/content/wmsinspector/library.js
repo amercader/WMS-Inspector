@@ -41,10 +41,18 @@ var Library = {
             return;
         }
 
-        //Fetch lists with values from DB
-        this.fetchList("tags",document.getElementById("wiLibraryTagsList"));
+        //Get tags from DB
+        this.wis.getTags(function(tags){
+            if (tags){
+                var tagsList = document.getElementById("wiLibraryTagsList");
+                for (let i = 0; i < tags.length; i++){
+                    let element = tagsList.appendItem(tags[i],tags[i]);
+                    element.setAttribute("type", "checkbox");
+                }
+            }
+        });
 
-        //Get the service types and versions from the DB.
+        //Get the service types and versions from the DB and call onWindowReady
         this.wis.getServiceTypes(function(results){
             if (results){
                 Library.serviceTypes = results;
@@ -175,66 +183,6 @@ var Library = {
 
     shutdown: function(){
         this.prefs.removeObserver("", this);
-    },
-
-    fetchList: function(type,list,callback){
-        try{
-            if (!type || !list) return false;
-
-            var sql;
-            if (type == "tags"){
-                sql = "SELECT title AS name FROM tags ORDER BY title";
-            } else if (type == "types"){
-                sql = "SELECT name FROM service_types";
-            } else {
-                return false;
-            }
-            var statement = DB.conn.createStatement(sql);
-            statement.executeAsync({
-                errorsFound: false,
-                handleResult: function(resultSet) {
-                    try{
-                        for (let row = resultSet.getNextRow();
-                            row;
-                            row = resultSet.getNextRow()) {
-
-                            let name = row.getResultByName("name");
-                            let element = list.appendItem(name,name);
-                            if (type == "tags")
-                                element.setAttribute("type", "checkbox");
-                        }
-                    } catch (error) {
-                        this.errorsFound = true;
-                        Library.exceptionHandler(error);
-                    }
-                },
-
-                //error is a mozIStorageError object
-                handleError: function(error) {
-                    Library.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                },
-
-                handleCompletion: function(reason) {
-                    try {
-                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return Library.exceptionHandler(new Error("Transaction aborted or canceled"));
-
-                        if (type == "types")
-                            list.selectedIndex = 0;
-
-                        if (callback)
-                            callback(!this.errorsFound);
-
-                        return true;
-                    } catch (error){
-                        Library.exceptionHandler(error,callback);
-                    }
-                }
-            });
-            return true;
-        } catch (error){
-            return Library.exceptionHandler(error,callback);
-        }
     },
 
     searchText: function(text){
@@ -535,19 +483,6 @@ var Library = {
             }
         }
 
-    },
-
-
-    exceptionHandler: function(error,callback){
-
-        var msg = "WMSInspector - " + error.message;
-        if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
-            msg += " - " + DB.conn.lastErrorString;
-        msg += " (line " + error.lineNumber + ")"
-        Components.utils.reportError(msg);
-
-        if (callback) callback(false);
-        return false;
     }
 
 }

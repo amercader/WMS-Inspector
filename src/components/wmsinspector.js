@@ -67,8 +67,6 @@ WMSInspectorService.prototype = {
             );
     },
 
-    // library holds a reference to WMSInspector Library. Maybe we can avoid using it
-    // when all the db related functions (add, delete...) are migrated to the component
     importServicesFromCSV: function(contents,separator,callback){
         WMSInspectorServicePrivate.launchThreadedProcess(
             "_importServicesFromCSV",
@@ -78,6 +76,14 @@ WMSInspectorService.prototype = {
             },
             callback
             );
+    },
+
+    getTags: function(callback){
+        WMSInspectorServicePrivate._getTags(
+        {
+            "callback":callback
+        }
+        );
     },
 
     getServiceTypes: function(callback){
@@ -428,89 +434,91 @@ WMSInspectorServicePrivate = {
             var self = this;
 
             // We need to get the service types list
-            this._getServiceTypes({callback: function(serviceTypes){
-                for (let i = 0; i < contents.length;i++){
-                    if (contents[i].length > 0){
+            this._getServiceTypes({
+                callback: function(serviceTypes){
+                    for (let i = 0; i < contents.length;i++){
+                        if (contents[i].length > 0){
 
-                        let record = self.parseCSV(contents[i],separator)[0];
+                            let record = self.parseCSV(contents[i],separator)[0];
 
-                        if (record.length){
+                            if (record.length){
 
-                            let service = new Classes.Service();
+                                let service = new Classes.Service();
 
-                            if (columns.indexOf("title") != -1) service.title = record[columns.indexOf("title")];
-                            if (columns.indexOf("URL") != -1) service.URL = record[columns.indexOf("URL")];
-                            if (columns.indexOf("favorite") != -1) service.favorite = (record[columns.indexOf("favorite")] == "1");
+                                if (columns.indexOf("title") != -1) service.title = record[columns.indexOf("title")];
+                                if (columns.indexOf("URL") != -1) service.URL = record[columns.indexOf("URL")];
+                                if (columns.indexOf("favorite") != -1) service.favorite = (record[columns.indexOf("favorite")] == "1");
 
-                            if (columns.indexOf("type") != -1) service.type = record[columns.indexOf("type")];
-                            if (columns.indexOf("version") != -1) {
-                                service.version = record[columns.indexOf("version")];
-                            } else {
-                                for (let i=0; i < serviceTypes.length; i++){
-                                    if (serviceTypes[i].name == service.type){
-                                        service.version = serviceTypes[i].defaultVersion;
-                                        break;
+                                if (columns.indexOf("type") != -1) service.type = record[columns.indexOf("type")];
+                                if (columns.indexOf("version") != -1) {
+                                    service.version = record[columns.indexOf("version")];
+                                } else {
+                                    for (let i=0; i < serviceTypes.length; i++){
+                                        if (serviceTypes[i].name == service.type){
+                                            service.version = serviceTypes[i].defaultVersion;
+                                            break;
+                                        }
                                     }
                                 }
-                            }
 
-                            if (columns.indexOf("tags") != -1)
-                                if (typeof(record[columns.indexOf("tags")]) != "undefined" && record[columns.indexOf("tags")].length)
-                                    service.tags = record[columns.indexOf("tags")].split(",");
+                                if (columns.indexOf("tags") != -1)
+                                    if (typeof(record[columns.indexOf("tags")]) != "undefined" && record[columns.indexOf("tags")].length)
+                                        service.tags = record[columns.indexOf("tags")].split(",");
 
 
-                            if (service.URL) {
-                                self.servicesQueue.push(service);
+                                if (service.URL) {
+                                    self.servicesQueue.push(service);
+                                }
                             }
                         }
                     }
+                    self.servicesProcessed = 0;
+                    self.addServicesIncrementally();
                 }
-                self.servicesProcessed = 0;
-                self.addServicesIncrementally();
-            }})
+            })
 
 
 
-            return true;
-        } catch (error){
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
-        }
-    },
+        return true;
+    } catch (error){
+        return this.exceptionHandler(error,this.onThreadedProcessFinished);
+    }
+},
 
-    addServicesIncrementally: function(){
-        try{
-            if (this.servicesQueue.length){
-                var service = this.servicesQueue.shift();
-                var parent = this;
+addServicesIncrementally: function(){
+    try{
+        if (this.servicesQueue.length){
+            var service = this.servicesQueue.shift();
+            var parent = this;
 
-                var add = parent._addService({
-                    "service":service,
-                    "callback":function(id){
-                        if (id !== false){
-                            parent.servicesProcessed++;
-                            parent.addServicesIncrementally();
-                        }
-                        else {
-                            parent.onThreadedProcessFinished(false);
-                        }
-
+            var add = parent._addService({
+                "service":service,
+                "callback":function(id){
+                    if (id !== false){
+                        parent.servicesProcessed++;
+                        parent.addServicesIncrementally();
                     }
-                });
-                if (!add) this.onThreadedProcessFinished(false);
-                return false;
-            } else {
-                //this.onServicesInserted(this.servicesProcessed);
-                this.onThreadedProcessFinished(this.servicesProcessed);
-                return true;
+                    else {
+                        parent.onThreadedProcessFinished(false);
+                    }
 
-            }
-        } catch (error){
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
+                }
+            });
+            if (!add) this.onThreadedProcessFinished(false);
+            return false;
+        } else {
+            //this.onServicesInserted(this.servicesProcessed);
+            this.onThreadedProcessFinished(this.servicesProcessed);
+            return true;
+
         }
-    },
+    } catch (error){
+        return this.exceptionHandler(error,this.onThreadedProcessFinished);
+    }
+},
 
-    _getServiceTypes: function(args){
-        try{
+_getServiceTypes: function(args){
+    try{
 
 
         var callback = args.callback;
@@ -539,17 +547,17 @@ WMSInspectorServicePrivate = {
                     }
                 } catch (error) {
                     this.errorsFound = true;
-                    WMSInspectorServicePrivate.exceptionHandler(error);
+                    WMSInspectorServicePrivate.exceptionHandler(error,callback);
                 }
             },
 
             handleError: function(error) {
-                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
             },
 
             handleCompletion: function(reason) {
                 if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                    return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+                    return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
 
                 if (callback) 
                     callback((this.errorsFound ? false : results));
@@ -558,289 +566,335 @@ WMSInspectorServicePrivate = {
             }
         });
         return true;
-                } catch (error){
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
-        }
-    },
+    } catch (error){
+        return this.exceptionHandler(error,callback);
+    }
+},
 
-    _addServiceType: function(args){
-        try{
-            var serviceType = args.serviceType;
-            var callback = args.callback;
-            
-            var sql = "INSERT INTO service_types (name,title) VALUES (:name,:title)";
+_getTags: function(args){
+    try{
 
-            var statement = DB.conn.createStatement(sql);
+        var callback = args.callback;
 
-            DB.bindParameters(statement,{
-                "name":serviceType.name,
-                "title": serviceType.title
-            });
+        var sql = "SELECT title FROM tags ORDER BY title";
 
-            statement.execute();
+        var statement = DB.conn.createStatement(sql);
 
-            serviceType.id = DB.conn.lastInsertRowID;
+        var results = [];
 
-            this._setServiceTypeVersions(serviceType,callback);
-
-            return serviceType;
-
-        } catch (error) {
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
-        }
-    },
-
-    _updateServiceType: function(args){
-        try{
-            var serviceType = args.serviceType;
-            var callback = args.callback;
-            
-            //We will only update properties defined in the serviceType object provided
-            var sql = "UPDATE service_types";
-            var sqlUpdate = [];
-            var params = {};
-            if (serviceType.name) {
-                sqlUpdate.push(" name = :name");
-                params.name = serviceType.name
-            }
-            if (serviceType.title) {
-                sqlUpdate.push(" title = :title");
-                params.title = serviceType.title
-            }
-
-            if (sqlUpdate.length == 0) {
-                if (serviceType.versions && serviceType.versions.length) {
-                    return this._setServiceTypeVersions(serviceType,callback);
-                } else {
-                    //Nothing to update
-                    if (callback) callback(false);
-                    return false;
+        statement.executeAsync({
+            errorsFound: false,
+            handleResult: function(resultSet) {
+                try{
+                    for (let row = resultSet.getNextRow();
+                        row;
+                        row = resultSet.getNextRow()) {
+                        results.push(row.getResultByName("title"));
+                    }
+                } catch (error) {
+                    this.errorsFound = true;
+                    WMSInspectorServicePrivate.exceptionHandler(error,callback);
                 }
+            },
+
+            handleError: function(error) {
+                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+            },
+
+            handleCompletion: function(reason) {
+                if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                    return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
+
+                if (callback)
+                    callback((this.errorsFound ? false : results));
+
+                return true;
             }
+        });
+        return true;
+    } catch (error){
+        return this.exceptionHandler(error,callback);
+    }
+},
 
-            sql += " SET " + sqlUpdate.join(",") + " WHERE id = :id";
-            params.id = serviceType.id;
+_addServiceType: function(args){
+    try{
+        var serviceType = args.serviceType;
+        var callback = args.callback;
+            
+        var sql = "INSERT INTO service_types (name,title) VALUES (:name,:title)";
 
-            var statement = DB.conn.createStatement(sql);
+        var statement = DB.conn.createStatement(sql);
 
-            DB.bindParameters(statement,params);
+        DB.bindParameters(statement,{
+            "name":serviceType.name,
+            "title": serviceType.title
+        });
 
-            statement.execute();
+        statement.execute();
 
+        serviceType.id = DB.conn.lastInsertRowID;
+
+        this._setServiceTypeVersions(serviceType,callback);
+
+        return serviceType;
+
+    } catch (error) {
+        return this.exceptionHandler(error,this.onThreadedProcessFinished);
+    }
+},
+
+_updateServiceType: function(args){
+    try{
+        var serviceType = args.serviceType;
+        var callback = args.callback;
+            
+        //We will only update properties defined in the serviceType object provided
+        var sql = "UPDATE service_types";
+        var sqlUpdate = [];
+        var params = {};
+        if (serviceType.name) {
+            sqlUpdate.push(" name = :name");
+            params.name = serviceType.name
+        }
+        if (serviceType.title) {
+            sqlUpdate.push(" title = :title");
+            params.title = serviceType.title
+        }
+
+        if (sqlUpdate.length == 0) {
             if (serviceType.versions && serviceType.versions.length) {
                 return this._setServiceTypeVersions(serviceType,callback);
             } else {
-                if (callback) callback(serviceType);
+                //Nothing to update
+                if (callback) callback(false);
+                return false;
             }
-
-            return serviceType;
-
-        } catch (error) {
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
         }
-    },
 
-    _setServiceTypeVersions: function(serviceType,callback){
-        try{
-            //Delete previous versions from service type
-            var sql = "DELETE FROM versions WHERE service_types_id = :id";
-            var statement = DB.conn.createStatement(sql);
+        sql += " SET " + sqlUpdate.join(",") + " WHERE id = :id";
+        params.id = serviceType.id;
 
-            DB.bindParameter(statement, "id", serviceType.id);
+        var statement = DB.conn.createStatement(sql);
 
-            statement.execute();
+        DB.bindParameters(statement,params);
 
-            var statements = [];
+        statement.execute();
 
-            if (DB.legacyCode){
-                for (let i = 0; i < serviceType.versions.length; i ++){
-                    let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name" + i + ",:isdefault" + i + ")";
-                    let statement = DB.conn.createStatement(sql);
-                    let params = {};
-                    params.servicetypeid = serviceType.id;
-                    params["name"+i] = serviceType.versions[i];
-                    params["isdefault"+i] = (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0;
-                    DB.bindParameters(statement,params);
+        if (serviceType.versions && serviceType.versions.length) {
+            return this._setServiceTypeVersions(serviceType,callback);
+        } else {
+            if (callback) callback(serviceType);
+        }
 
-                    statements.push(statement);
-                }
-            } else {
-                let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name,:isdefault)";
+        return serviceType;
+
+    } catch (error) {
+        return this.exceptionHandler(error,this.onThreadedProcessFinished);
+    }
+},
+
+_setServiceTypeVersions: function(serviceType,callback){
+    try{
+        //Delete previous versions from service type
+        var sql = "DELETE FROM versions WHERE service_types_id = :id";
+        var statement = DB.conn.createStatement(sql);
+
+        DB.bindParameter(statement, "id", serviceType.id);
+
+        statement.execute();
+
+        var statements = [];
+
+        if (DB.legacyCode){
+            for (let i = 0; i < serviceType.versions.length; i ++){
+                let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name" + i + ",:isdefault" + i + ")";
                 let statement = DB.conn.createStatement(sql);
-                let params = statement.newBindingParamsArray();
-                for (let i = 0; i < serviceType.versions.length; i ++){
-                    bp = params.newBindingParams();
-                    bp.bindByName("servicetypeid", serviceType.id);
-                    bp.bindByName("name", serviceType.versions[i]);
-                    bp.bindByName("isdefault", (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0);
-                    params.addParams(bp);
-                }
-                statement.bindParameters(params);
+                let params = {};
+                params.servicetypeid = serviceType.id;
+                params["name"+i] = serviceType.versions[i];
+                params["isdefault"+i] = (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0;
+                DB.bindParameters(statement,params);
 
                 statements.push(statement);
-
             }
+        } else {
+            let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name,:isdefault)";
+            let statement = DB.conn.createStatement(sql);
+            let params = statement.newBindingParamsArray();
+            for (let i = 0; i < serviceType.versions.length; i ++){
+                bp = params.newBindingParams();
+                bp.bindByName("servicetypeid", serviceType.id);
+                bp.bindByName("name", serviceType.versions[i]);
+                bp.bindByName("isdefault", (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0);
+                params.addParams(bp);
+            }
+            statement.bindParameters(params);
 
+            statements.push(statement);
 
-            DB.conn.executeAsync(
-                statements,
-                statements.length,
-                {
-                    handleError: function(error) {
-                        WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),WMSInspectorServicePrivate.onThreadedProcessFinished);
-                    },
-
-                    handleCompletion: function(reason) {
-                        if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),WMSInspectorServicePrivate.onThreadedProcessFinished);
-
-                        if (callback) callback(serviceType);
-                        return true;
-                    }
-                });
-            return true;
-                
-        } catch (error) {
-            this.exceptionHandler(error,this.onThreadedProcessFinished);
         }
-    },
 
-    _deleteServiceType: function(args){
-        try{
-            var id = args.id;
-            var callback = args.callback;
-            
-            var sql = "DELETE FROM service_types WHERE id = :id";
-            var statement = DB.conn.createStatement(sql);
 
-            DB.bindParameters(statement,{
-                id:id
+        DB.conn.executeAsync(
+            statements,
+            statements.length,
+            {
+                handleError: function(error) {
+                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                        return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+
+                    if (callback) callback(serviceType);
+                    return true;
+                }
             });
+        return true;
+                
+    } catch (error) {
+        this.exceptionHandler(error,this.onThreadedProcessFinished);
+    }
+},
+
+_deleteServiceType: function(args){
+    try{
+        var id = args.id;
+        var callback = args.callback;
+            
+        var sql = "DELETE FROM service_types WHERE id = :id";
+        var statement = DB.conn.createStatement(sql);
+
+        DB.bindParameters(statement,{
+            id:id
+        });
             
 
-            statement.execute();
+        statement.execute();
 
-            // The service_types_after_delete_trigger trigger will deal with the service type's versions
+        // The service_types_after_delete_trigger trigger will deal with the service type's versions
 
-            if (callback) callback(true);
+        if (callback) callback(true);
 
-            return true;
-        } catch (error) {
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
-        }
-    },
+        return true;
+    } catch (error) {
+        return this.exceptionHandler(error,this.onThreadedProcessFinished);
+    }
+},
 
-    exceptionHandler: function(error,callback){
+exceptionHandler: function(error,callback){
 
-        var msg = "WMSInspector - " + error.message;
-        if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
-            msg += " - " + DB.conn.lastErrorString;
-        msg += " (line " + error.lineNumber + ")"
-        Components.utils.reportError(msg);
+    var msg = "WMSInspector - " + error.message;
+    if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
+        msg += " - " + DB.conn.lastErrorString;
+    msg += " (line " + error.lineNumber + ")"
+    Components.utils.reportError(msg);
 
-        if (callback) callback(false);
-        return false;
+    if (callback) callback(false);
+    return false;
 
-    },
+},
 
-    // See the following for details
-    // http://www.bennadel.com/blog/504-Ask-Ben-Parsing-CSV-Strings-With-Javascript-Exec-Regular-Expression-Command.htm
-    parseCSV: function(string, delimiter){
+// See the following for details
+// http://www.bennadel.com/blog/504-Ask-Ben-Parsing-CSV-Strings-With-Javascript-Exec-Regular-Expression-Command.htm
+parseCSV: function(string, delimiter){
 
-        delimiter = delimiter || ",";
+    delimiter = delimiter || ",";
 
-        var pattern = new RegExp(
-            (
-                // Delimiters.
-                "(\\" + delimiter + "|\\r?\\n|\\r|^)" +
-                // Quoted fields.
-                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
-                // Standard fields.
-                "([^\"\\" + delimiter + "\\r\\n]*))"
-                ),"gi"
-            );
+    var pattern = new RegExp(
+        (
+            // Delimiters.
+            "(\\" + delimiter + "|\\r?\\n|\\r|^)" +
+            // Quoted fields.
+            "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+            // Standard fields.
+            "([^\"\\" + delimiter + "\\r\\n]*))"
+            ),"gi"
+        );
 
-        var data = [[]];
-        var matches = null;
-        var matchedValue = "";
+    var data = [[]];
+    var matches = null;
+    var matchedValue = "";
 
-        while (matches = pattern.exec( string )){
+    while (matches = pattern.exec( string )){
 
-            var matchedDelimiter = matches[1];
+        var matchedDelimiter = matches[1];
 
-            if (matchedDelimiter.length && (matchedDelimiter != delimiter)){
-                data.push( [] );
-            }
-
-            if (matches[2]){
-                matchedValue = matches[2].replace(new RegExp( "\"\"", "g" ),"\"");
-            } else {
-                matchedValue = matches[3];
-            }
-
-            data[ data.length - 1 ].push( matchedValue );
+        if (matchedDelimiter.length && (matchedDelimiter != delimiter)){
+            data.push( [] );
         }
 
-        return data ;
+        if (matches[2]){
+            matchedValue = matches[2].replace(new RegExp( "\"\"", "g" ),"\"");
+        } else {
+            matchedValue = matches[3];
+        }
 
-    },
+        data[ data.length - 1 ].push( matchedValue );
+    }
 
-    /*
+    return data ;
+
+},
+
+/*
      *  Threads stuff classes
      */
 
 
-    workingThreadHandler: function(threadID, context, process, params) {
-        this.threadID = threadID;
-        this.context = context;
+workingThreadHandler: function(threadID, context, process, params) {
+    this.threadID = threadID;
+    this.context = context;
 
-        this.run = function() {
-            try {
-                // This is where the working thread does its processing work.
+    this.run = function() {
+        try {
+            // This is where the working thread does its processing work.
 
-                this.context[process](params);
+            this.context[process](params);
 
-            // The processing function is responsible of calling back to the main
-            // thread to let it know it has finished.
+        // The processing function is responsible of calling back to the main
+        // thread to let it know it has finished.
 
-            }
-            catch(err) {
-                Components.utils.reportError(err);
-            }
         }
-
-        this.QueryInterface =  function(iid) {
-            if (iid.equals(Components.interfaces.nsIRunnable) ||
-                iid.equals(Components.interfaces.nsISupports)) {
-                return this;
-            }
-            throw Components.results.NS_ERROR_NO_INTERFACE;
-        }
-    },
-
-    mainThreadHandler: function(threadID, callback, result) {
-        this.threadID = threadID;
-        this.result = result;
-        this.run = function() {
-            try {
-
-                // This is where we react to the completion of the working thread.
-                if (callback) callback(result);
-
-            }
-            catch(err) {
-                Components.utils.reportError(err);
-            }
-        };
-
-        this.QueryInterface = function(iid) {
-            if (iid.equals(Components.interfaces.nsIRunnable) ||
-                iid.equals(Components.interfaces.nsISupports)) {
-                return this;
-            }
-            throw Components.results.NS_ERROR_NO_INTERFACE;
+        catch(err) {
+            Components.utils.reportError(err);
         }
     }
+
+    this.QueryInterface =  function(iid) {
+        if (iid.equals(Components.interfaces.nsIRunnable) ||
+            iid.equals(Components.interfaces.nsISupports)) {
+            return this;
+        }
+        throw Components.results.NS_ERROR_NO_INTERFACE;
+    }
+},
+
+mainThreadHandler: function(threadID, callback, result) {
+    this.threadID = threadID;
+    this.result = result;
+    this.run = function() {
+        try {
+
+            // This is where we react to the completion of the working thread.
+            if (callback) callback(result);
+
+        }
+        catch(err) {
+            Components.utils.reportError(err);
+        }
+    };
+
+    this.QueryInterface = function(iid) {
+        if (iid.equals(Components.interfaces.nsIRunnable) ||
+            iid.equals(Components.interfaces.nsISupports)) {
+            return this;
+        }
+        throw Components.results.NS_ERROR_NO_INTERFACE;
+    }
+}
 
 };
 

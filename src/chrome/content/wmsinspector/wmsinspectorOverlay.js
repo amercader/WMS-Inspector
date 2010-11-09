@@ -26,10 +26,12 @@ WMSInspector.Overlay = {
 
     serviceTypes: [],
 
+    wis: null,
+
     init: function(){
 
         // Get a WMSInspector service instance
-        this.wis = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
+        this.wis = WMSInspector.Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
 
         //Set preferences object
         this.prefs = WMSInspector.Utils.getPrefs();

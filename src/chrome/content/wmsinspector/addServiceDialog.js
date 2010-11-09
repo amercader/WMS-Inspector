@@ -2,7 +2,6 @@ Components.utils.import("resource://wmsinspector/classes.js");
 Components.utils.import("resource://wmsinspector/utils.js");
 
 var AddServiceDialog = {
-    Library : window.opener.Library,
 
     serviceTypes:[],
     
@@ -30,7 +29,16 @@ var AddServiceDialog = {
 
         }
 
-        this.Library.fetchList("tags",document.getElementById("wiAddServiceTagsList"));
+        //Get tags from DB
+        this.wis.getTags(function(tags){
+            if (tags){
+                var tagsList = document.getElementById("wiAddServiceTagsList");
+                for (let i = 0; i < tags.length; i++){
+                    let element = tagsList.appendItem(tags[i],tags[i]);
+                    element.setAttribute("type", "checkbox");
+                }
+            }
+        });
 
         //Get the service types and versions from the DB.
         this.wis.getServiceTypes(function(results){
