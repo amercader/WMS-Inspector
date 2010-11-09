@@ -14,7 +14,7 @@ var AddServiceDialog = {
     init: function(){
 
         // Get a WMSInspector service instance
-        this.wis = Utils.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
+        this.wis = Utils.getWMSInspectorService();
 
         this.prefs = Utils.getPrefs();
 

@@ -59,6 +59,10 @@ var Utils = {
         return this.getSelectedBrowser().contentDocument;
     },
 
+    getWMSInspectorService: function(){
+        return this.getService("@wmsinspector.flentic.net/wmsinspector-service;1").wrappedJSObject;
+    },
+
     getService: function(className, interfaceName) {
         var c = Components.classes[className];
         if (!c) return null;
