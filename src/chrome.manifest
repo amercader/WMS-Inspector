@@ -14,3 +14,6 @@ locale wmsinspector pt-BR chrome/locale/pt-BR/wmsinspector/
 locale wmsinspector fr chrome/locale/fr/wmsinspector/
 locale wmsinspector pl chrome/locale/pl/wmsinspector/
 locale wmsinspector zh-CN chrome/locale/zh-CN/wmsinspector/
+
+component {A5A55BC0-AC5B-11DF-960B-7039DFD72085} components/wmsinspector.js
+contract @wmsinspector.flentic.net/wmsinspector-service;1 {A5A55BC0-AC5B-11DF-960B-7039DFD72085}
