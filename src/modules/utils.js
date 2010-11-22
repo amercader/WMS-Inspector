@@ -126,36 +126,6 @@ var Utils = {
         return comparator.compare(a,b);
     },
 
-    // https://developer.mozilla.org/en/nsICryptoHash#Computing_the_Hash_of_a_String
-    getHash: function(string,algorithm){
-
-        var converter = this.getInstance("@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter")
-        converter.charset = "UTF-8";
-        // result is an out parameter,
-        // result.value will contain the array length
-        var result = {};
-        // data is an array of bytes
-        var data = converter.convertToByteArray(string, result);
-
-        var ch = this.getInstance("@mozilla.org/security/hash;1","nsICryptoHash");
-
-        algorithm = algorithm || ch.MD5;
-        ch.init(algorithm);
-        ch.update(data, data.length);
-        var hash = ch.finish(false);
-
-        // return the two-digit hexadecimal code for a byte
-        function toHexString(charCode) {
-            return ("0" + charCode.toString(16)).slice(-2);
-        }
-
-        // convert the binary hash data to a hex string.
-        var s = [toHexString(hash.charCodeAt(i)) for (i in hash)].join("");
-
-        return s;
-
-    },
-
     emptyElement: function(element){
         if (element.firstChild)
             while(element.firstChild) element.removeChild(element.firstChild);
@@ -177,8 +147,6 @@ var Utils = {
         }
         return tags;
     }
-
-
 
 }
 
