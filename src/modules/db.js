@@ -12,13 +12,11 @@ var DB = {
     // change and a corresponding upgradeToVXX method must be added.
     schemaVersion: 2,
 
+
+
     // Some classes used are not supported in Firefox 3.5.
     // Code executed under this condition should be removed when support for Firefox 3.5 is dropped
-    legacyCode: (
-        Utils.compareFirefoxVersions(
-            Utils.getService("@mozilla.org/fuel/application;1","fuelIApplication").version,
-            "3.6")
-        < 0),
+    legacyCode: (Utils.compareFirefoxVersions(Utils.currentFirefoxVersion,"3.6")< 0),
 
     storageService: Utils.getService("@mozilla.org/storage/service;1", "mozIStorageService"),
 
@@ -34,6 +32,7 @@ var DB = {
     checkDB: function(){
         var file = IO.getProfileDir();
         file.append(this.DBName);
+
         //DB does not exist, copy the default one to profile dir
         if (!file.exists()){
             this.restoreDB();

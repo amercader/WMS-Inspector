@@ -5,6 +5,13 @@ var Utils = {
     //Extension id for WMSInspector
     extensionId: "wmsinspector@flentic.net",
 
+    // Extension current Version
+    // (We can not use this.getService, as it's not yet defined)
+    currentFirefoxVersion: Components.classes["@mozilla.org/fuel/application;1"]
+    .getService(Components.interfaces.fuelIApplication)
+    .version,
+
+
     //Preferences branch for WMSInspector stuff
     prefBranch: "extensions.wmsinspector.",
 
@@ -15,17 +22,17 @@ var Utils = {
     getString: function(name){
         var out = false;
         if (name) {
-           if (this.stringBundle === null)
-               this.stringBundle = this.getService("@mozilla.org/intl/stringbundle;1", "nsIStringBundleService")
-                          .createBundle("chrome://wmsinspector/locale/wmsinspector.properties");
-           out = this.stringBundle.GetStringFromName(name);
+            if (this.stringBundle === null)
+                this.stringBundle = this.getService("@mozilla.org/intl/stringbundle;1", "nsIStringBundleService")
+                .createBundle("chrome://wmsinspector/locale/wmsinspector.properties");
+            out = this.stringBundle.GetStringFromName(name);
         }
         return out;
     },
 
     getPrefs: function() {
         return this.getService("@mozilla.org/preferences-service;1","nsIPrefService")
-                   .getBranch(this.prefBranch);
+        .getBranch(this.prefBranch);
     },
 
     setPreferenceObserver: function(prefs,observer){
@@ -39,10 +46,10 @@ var Utils = {
     },
 
     getWindow: function(){
-      return this.getService(
-                "@mozilla.org/appshell/window-mediator;1",
-                "nsIWindowMediator")
-                .getMostRecentWindow('navigator:browser');
+        return this.getService(
+            "@mozilla.org/appshell/window-mediator;1",
+            "nsIWindowMediator")
+        .getMostRecentWindow('navigator:browser');
     },
 
     getSelectedBrowser: function(){
@@ -96,6 +103,7 @@ var Utils = {
             return this.showPrompt("confirm", text, title);
         }
     },
+
     // Helper functions showAlert and showConfirm should be used instead of this one
     // See https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIPromptService
     showPrompt: function(type,text,title,checkText,check){
@@ -117,13 +125,44 @@ var Utils = {
             Components.utils.reportError(error);
         }
     },
+
     checkURL: function(URL){
         if (URL.length == 0) return false;
         return (URL.toLowerCase().substr(0,5) === "http:" || URL.toLowerCase().substr(0,6) === "https:");
     },
+
     compareFirefoxVersions:function(a,b){
         var comparator = this.getService("@mozilla.org/xpcom/version-comparator;1","nsIVersionComparator");
         return comparator.compare(a,b);
+    },
+
+    getExtensionVersion:function(callback){
+        var version = null;
+        try{
+            // Get an instance of the addon manager, depending on the Firefox version
+            // This should be removed when support for FF 3.6 is dropped
+            if (this.compareFirefoxVersions(this.currentFirefoxVersion,"4.0b")< 0){
+                // FF 3.6
+                version = this.getService("@mozilla.org/extensions/manager;1", "nsIExtensionManager")
+                                           .getItemForID(this.extensionId)
+                                           .version;
+                callback(version);
+            } else {
+                // FF 4.x
+                // Starting on Firefox 4.0, Addon related functions are asynchronous
+                Components.utils.import("resource://gre/modules/AddonManager.jsm");
+                AddonManager.getAddonByID(this.extensionId,function(addon){
+                    callback(addon.version)
+                });
+                
+            }
+        } catch (e){
+            Components.utils.reportError(e);
+        }
+
+        return false;
+
+
     },
 
     emptyElement: function(element){

@@ -30,6 +30,22 @@ WMSInspector.Overlay = {
 
     init: function(){
 
+        // Check if first run or upgrade actions must be performed.
+        // Set up operations will be performed asynchronously on the
+        // onReady method
+        this.checkForUpgrades();
+
+    },
+
+    unload: function(){
+        this.prefs.removeObserver("", this);
+        if (WMSInspector.DB.conn){
+            WMSInspector.DB.conn.close();
+        }
+    },
+
+    onReady: function(){
+
         // Get a WMSInspector service instance
         this.wis = WMSInspector.Utils.getWMSInspectorService();
 
@@ -38,73 +54,64 @@ WMSInspector.Overlay = {
 
         //Set preferences observer
         WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
-        
+
         //Check if tmp dir exists
         WMSInspector.IO.checkWITmpDir();
 
-        //Check if profile dir exists
-        //WMSInspector.IO.checkWIProfileDir();
-
-        //Check if first run or upgrade actions must be performed
-        this.checkForUpgrades();
-        
         //Show/Hide Context menu
         document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
 
-        //Get the service types and versions from the DB.
         this.wis.getServiceTypes(function(results){
             if (results)
                 WMSInspector.Overlay.serviceTypes = results;
         });
 
-
-    },
-	
-    unload: function(){
-        this.prefs.removeObserver("", this);
-        if (WMSInspector.DB.conn){
-            WMSInspector.DB.conn.close();
-        }
     },
 
     checkForUpgrades: function(){
         var installedVersion = -1;
         var firstRun = true;
-        
-        var extensionManager = WMSInspector.Utils.getService("@mozilla.org/extensions/manager;1", "nsIExtensionManager");
-        var currentVersion = extensionManager.getItemForID(WMSInspector.Utils.extensionId).version;
-        
-        try {
-            installedVersion = this.prefs.getCharPref("version");
-            firstRun = this.prefs.getBoolPref("firstrun");
-        } catch(e){
 
-        } finally {
-            if (firstRun){
-                this.prefs.setBoolPref("firstrun",false);
-                this.prefs.setCharPref("version",currentVersion);
+        // Starting from Firefox 4.0, Addon related functions are asynchronous
+        WMSInspector.Utils.getExtensionVersion(
+            function(currentVersion){
 
-                //Code to be executed only when the extension is first installed
+                try {
+                    installedVersion = this.prefs.getCharPref("version");
+                    firstRun = this.prefs.getBoolPref("firstrun");
+                } catch(e){
 
-                //Copy an empty database to the profile directory
-                WMSInspector.DB.restoreDB();
+                } finally {
+                    if (firstRun){
+                        this.prefs.setBoolPref("firstrun",false);
+                        this.prefs.setCharPref("version",currentVersion);
 
-            } else if (installedVersion != currentVersion && !firstRun) {
-                this.prefs.setCharPref("version",currentVersion);
+                        //Code to be executed only when the extension is first installed
 
-                //Code to be executed when the extension is upgraded
+                        //Copy an empty database to the profile directory
+                        WMSInspector.DB.restoreDB();
 
-                //Check if the database schema needs to be updated
-                WMSInspector.DB.checkDB();
+                    } else if (installedVersion != currentVersion && !firstRun) {
+                        this.prefs.setCharPref("version",currentVersion);
 
-            } else {
-                // No first run nor upgrade
+                        //Code to be executed when the extension is upgraded
 
-                //This will set up the DB connection
-                WMSInspector.DB.checkDB();
+                        //Check if the database schema needs to be updated
+                        WMSInspector.DB.checkDB();
+
+                    } else {
+                        // No first run nor upgrade
+
+                        //This will set up the DB connection
+                        WMSInspector.DB.checkDB();
+                    }
+
+                    // The overlay is ready to load
+                    WMSInspector.Overlay.onReady();
+
+                }
             }
-
-        }
+        );
     },
 
 
@@ -211,7 +218,8 @@ WMSInspector.Overlay = {
                 }
                 tChMain.appendChild(tIItem);
             }
-        } else {
+        }
+        else {
             var tI = document.createElement("treeitem");
             var tR = document.createElement("treerow");
             var tCe = document.createElement("treecell");
@@ -702,7 +710,7 @@ WMSInspector.Overlay = {
             url,
             this.showGetCapabilitiesReportVersion,
             this.onRequestError
-        ).send();
+            ).send();
         
     },
 
@@ -719,7 +727,7 @@ WMSInspector.Overlay = {
                 }
             },
             this.onRequestError
-        ).send();
+            ).send();
     },
 
     saveResponseToFile: function(xhr){
@@ -913,7 +921,14 @@ WMSInspector.Overlay = {
 
     openAddServiceDialog: function(id,url,version) {
 
-        var params = { inn: { "id": id,"url":url,"version":version }, out: false };
+        var params = {
+            inn: {
+                "id": id,
+                "url":url,
+                "version":version
+            },
+            out: false
+        };
 
         window.openDialog(
             "chrome://wmsinspector/content/addServiceDialog.xul",
