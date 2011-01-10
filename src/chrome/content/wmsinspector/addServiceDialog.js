@@ -132,7 +132,7 @@ var AddServiceDialog = {
             }
         }
 
-        if (service.tags.length){
+        if (service.tags && service.tags.length){
             list = document.getElementById("wiAddServiceTagsList");
             for (let i=0; i < list.getRowCount(); i++){
                 let item = list.getItemAtIndex(i);

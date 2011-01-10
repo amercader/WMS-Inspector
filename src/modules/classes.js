@@ -11,7 +11,7 @@ var Classes = {
         this.version = "";
         this.favorite = false;
         this.type = "WMS";
-        this.tags = [];
+        this.tags = null;
     },
 
     ServiceType: function(){

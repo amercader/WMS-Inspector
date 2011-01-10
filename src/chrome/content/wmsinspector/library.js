@@ -324,7 +324,7 @@ var Library = {
             "\"" + service.type + "\"",
             "\"" + service.version + "\"",
             (service.favorite) ? "1" : "0",
-            "\"" + service.tags.join(",") + "\"",
+            (service.tags && service.tags.length) ? "\"" + service.tags.join(",") + "\"" : "\"\"",
             ];
 
             out += line.join(separator) + "\n";
