@@ -52,42 +52,15 @@ WMSInspectorService.prototype = {
     },
 
     addServiceType: function(serviceType,callback){
-        WMSInspectorServicePrivate.launchThreadedProcess(
-            "_addServiceType",
-            {
-                "serviceType":serviceType,
-                "callback":function(result){
-                    WMSInspectorServicePrivate.onThreadedProcessFinished(result)
-                }
-            },
-            callback
-            );
+        return WMSInspectorServicePrivate._addServiceType(serviceType,callback);
     },
 
     updateServiceType: function(serviceType,callback){
-        WMSInspectorServicePrivate.launchThreadedProcess(
-            "_updateServiceType",
-            {
-                "serviceType":serviceType,
-                "callback":function(result){
-                    WMSInspectorServicePrivate.onThreadedProcessFinished(result)
-                }
-            },
-            callback
-            );
+        return WMSInspectorServicePrivate._updateServiceType(serviceType,callback);
     },
 
     deleteServiceType: function(id,callback){
-        WMSInspectorServicePrivate.launchThreadedProcess(
-            "_deleteServiceType",
-            {
-                "id":id,
-                "callback":function(result){
-                    WMSInspectorServicePrivate.onThreadedProcessFinished(result)
-                }
-            },
-            callback
-            );
+        return WMSInspectorServicePrivate._deleteServiceType(id,callback);
     }
 
 
@@ -105,28 +78,8 @@ WMSInspectorServicePrivate = {
 
     lastTagId: null,
 
-    launchThreadedProcess: function(process,params,callback){
-        var background = Components.classes["@mozilla.org/thread-manager;1"].getService().newThread(0);
-        this.operationCallback = callback;
-        background.dispatch(
-            new this.workingThreadHandler(
-                1,
-                this,
-                process,
-                params
-                ),
-            Components.interfaces.nsIThread.DISPATCH_NORMAL);
-    },
+    lastServiceTypeId: null,
 
-    onThreadedProcessFinished: function(result){
-        var mainThread = Components.classes["@mozilla.org/thread-manager;1"].getService().mainThread;
-
-        mainThread.dispatch(
-            new this.mainThreadHandler(
-                1, this.operationCallback, result
-                ),
-            Components.interfaces.nsIThread.DISPATCH_NORMAL);
-    },
 
     _getLastServiceId: function(callback){
         return this._getLastId("services",callback);
@@ -136,8 +89,12 @@ WMSInspectorServicePrivate = {
         return this._getLastId("tags",callback);
     },
 
+    _getLastServiceTypeId: function(callback){
+        return this._getLastId("service_types",callback);
+    },
+
     _getLastId: function(table,callback){
-        if (table != "services" && table != "tags") return false;
+        if (table != "services" && table != "tags" && table != "service_types") return false;
 
         var sql = "SELECT max(id) AS id FROM " + table;
         var statement = DB.conn.createStatement(sql);
@@ -149,13 +106,13 @@ WMSInspectorServicePrivate = {
             },
 
             handleError: function(error) {
-                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
             },
 
             handleCompletion: function(reason) {
                 try{
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                        return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+                        return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
 
                     if (this.id === null){
                         // Still no records in the table
@@ -166,6 +123,8 @@ WMSInspectorServicePrivate = {
                         WMSInspectorServicePrivate.lastServiceId = this.id;
                     } else if (table == "tags"){
                         WMSInspectorServicePrivate.lastTagId = this.id;
+                    } else if (table == "service_types"){
+                        WMSInspectorServicePrivate.lastServiceTypeId = this.id;
                     }
 
                     if (callback) callback(this.id);
@@ -640,7 +599,7 @@ WMSInspectorServicePrivate = {
                 },
 
                 handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
                 },
 
                 handleCompletion: function(reason) {
@@ -684,7 +643,7 @@ WMSInspectorServicePrivate = {
                 },
 
                 handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
                 },
 
                 handleCompletion: function(reason) {
@@ -703,37 +662,53 @@ WMSInspectorServicePrivate = {
         }
     },
 
-    _addServiceType: function(args){
+    _addServiceType: function(serviceType,callback){
         try{
-            var serviceType = args.serviceType;
-            var callback = args.callback;
 
-            var sql = "INSERT INTO service_types (name,title) VALUES (:name,:title)";
+            if (this.lastServiceTypeId === null){
+                this._getLastServiceTypeId(function(){
+                    WMSInspectorServicePrivate._addServiceType(serviceType,callback)
+                });
+                return null;
+            }
+
+            this.lastServiceTypeId++;
+            serviceType.id = this.lastServiceTypeId;
+
+            var sql = "INSERT INTO service_types (id,name,title) VALUES (:id,:name,:title)";
 
             var statement = DB.conn.createStatement(sql);
 
             DB.bindParameters(statement,{
+                "id":serviceType.id,
                 "name":serviceType.name,
                 "title": serviceType.title
             });
 
-            statement.execute();
+            statement.executeAsync({
+                handleError: function(error) {
+                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
+                },
 
-            serviceType.id = DB.conn.lastInsertRowID;
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                        return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
 
-            this._setServiceTypeVersions(serviceType,callback);
+                    WMSInspectorServicePrivate._setServiceTypeVersions(serviceType,callback);
 
-            return serviceType;
+                    return true;
+                }
+            });
+
+            return true;
 
         } catch (error) {
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
+            return this.exceptionHandler(error,callback);
         }
     },
 
-    _updateServiceType: function(args){
+    _updateServiceType: function(serviceType,callback){
         try{
-            var serviceType = args.serviceType;
-            var callback = args.callback;
 
             //We will only update properties defined in the serviceType object provided
             var sql = "UPDATE service_types";
@@ -749,7 +724,7 @@ WMSInspectorServicePrivate = {
             }
 
             if (sqlUpdate.length == 0) {
-                if (serviceType.versions && serviceType.versions.length) {
+                if (serviceType.versions !== null) {
                     return this._setServiceTypeVersions(serviceType,callback);
                 } else {
                     //Nothing to update
@@ -765,108 +740,107 @@ WMSInspectorServicePrivate = {
 
             DB.bindParameters(statement,params);
 
-            statement.execute();
+            statement.executeAsync({
+                handleError: function(error) {
+                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
+                },
 
-            if (serviceType.versions && serviceType.versions.length) {
-                return this._setServiceTypeVersions(serviceType,callback);
-            } else {
-                if (callback) callback(serviceType);
-            }
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                        return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
 
-            return serviceType;
+                    WMSInspectorServicePrivate._setServiceTypeVersions(serviceType,callback);
+
+                    return true;
+                }
+            });
+
+            return true;
 
         } catch (error) {
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
+            return this.exceptionHandler(error,callback);
         }
     },
 
     _setServiceTypeVersions: function(serviceType,callback){
         try{
-            //Delete previous versions from service type
-            var sql = "DELETE FROM versions WHERE service_types_id = :id";
-            var statement = DB.conn.createStatement(sql);
-
-            DB.bindParameter(statement, "id", serviceType.id);
-
-            statement.execute();
 
             var statements = [];
 
-            if (DB.legacyCode){
-                for (let i = 0; i < serviceType.versions.length; i ++){
-                    let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name" + i + ",:isdefault" + i + ")";
-                    let statement = DB.conn.createStatement(sql);
-                    let params = {};
-                    params.servicetypeid = serviceType.id;
-                    params["name"+i] = serviceType.versions[i];
-                    params["isdefault"+i] = (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0;
-                    DB.bindParameters(statement,params);
+            //Delete previous versions from service type
+            var sql = "DELETE FROM versions WHERE service_types_id = :id";
+            var deleteStatement = DB.conn.createStatement(sql);
 
-                    statements.push(statement);
-                }
-            } else {
-                let sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name,:isdefault)";
-                let statement = DB.conn.createStatement(sql);
-                let params = statement.newBindingParamsArray();
-                for (let i = 0; i < serviceType.versions.length; i ++){
-                    bp = params.newBindingParams();
-                    bp.bindByName("servicetypeid", serviceType.id);
-                    bp.bindByName("name", serviceType.versions[i]);
-                    bp.bindByName("isdefault", (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0);
-                    params.addParams(bp);
-                }
-                statement.bindParameters(params);
+            DB.bindParameter(deleteStatement, "id", serviceType.id);
 
-                statements.push(statement);
+            statements.push(deleteStatement);
 
+            sql = "INSERT INTO versions (service_types_id,name,isdefault) VALUES (:servicetypeid,:name,:isdefault)";
+            var insertStatement = DB.conn.createStatement(sql);
+            var params = insertStatement.newBindingParamsArray();
+            for (let i = 0; i < serviceType.versions.length; i ++){
+                let bp = params.newBindingParams();
+                bp.bindByName("servicetypeid", serviceType.id);
+                bp.bindByName("name", serviceType.versions[i]);
+                bp.bindByName("isdefault", (serviceType.versions[i] == serviceType.defaultVersion) ? 1 : 0);
+                params.addParams(bp);
             }
+            insertStatement.bindParameters(params);
 
+            statements.push(insertStatement);
 
             DB.conn.executeAsync(
                 statements,
                 statements.length,
                 {
                     handleError: function(error) {
-                        WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+                        WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
                     },
 
                     handleCompletion: function(reason) {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),WMSInspectorServicePrivate.onThreadedProcessFinished);
+                            return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
 
-                        if (callback) callback(serviceType);
+                        if (callback) callback(serviceType.id);
                         return true;
                     }
                 });
             return true;
 
         } catch (error) {
-            this.exceptionHandler(error,this.onThreadedProcessFinished);
+            return this.exceptionHandler(error,callback);
         }
     },
 
-    _deleteServiceType: function(args){
+    _deleteServiceType: function(id,callback){
         try{
-            var id = args.id;
-            var callback = args.callback;
-
+ 
             var sql = "DELETE FROM service_types WHERE id = :id";
             var statement = DB.conn.createStatement(sql);
 
-            DB.bindParameters(statement,{
-                id:id
+            DB.bindParameter(statement,"id",id);
+
+            statement.executeAsync({
+                handleError: function(error) {
+                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
+                },
+
+                handleCompletion: function(reason) {
+                    if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
+                        return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
+
+                    // The service_types_after_delete_trigger trigger will deal with the service type's versions
+
+                    if (callback) callback(true);
+
+                    return true;
+                }
             });
 
-
-            statement.execute();
-
-            // The service_types_after_delete_trigger trigger will deal with the service type's versions
-
-            if (callback) callback(true);
-
             return true;
+
         } catch (error) {
-            return this.exceptionHandler(error,this.onThreadedProcessFinished);
+            return this.exceptionHandler(error,callback);
         }
     },
 
@@ -923,65 +897,7 @@ WMSInspectorServicePrivate = {
 
         return data ;
 
-    },
-
-    /*
-         *  Threads stuff classes
-         */
-
-
-    workingThreadHandler: function(threadID, context, process, params) {
-        this.threadID = threadID;
-        this.context = context;
-
-        this.run = function() {
-            try {
-                // This is where the working thread does its processing work.
-
-                this.context[process](params);
-
-            // The processing function is responsible of calling back to the main
-            // thread to let it know it has finished.
-
-            }
-            catch(err) {
-                Components.utils.reportError(err);
-            }
-        }
-
-        this.QueryInterface =  function(iid) {
-            if (iid.equals(Components.interfaces.nsIRunnable) ||
-                iid.equals(Components.interfaces.nsISupports)) {
-                return this;
-            }
-            throw Components.results.NS_ERROR_NO_INTERFACE;
-        }
-    },
-
-    mainThreadHandler: function(threadID, callback, result) {
-        this.threadID = threadID;
-        this.result = result;
-        this.run = function() {
-            try {
-
-                // This is where we react to the completion of the working thread.
-                if (callback) callback(result);
-
-            }
-            catch(err) {
-                Components.utils.reportError(err);
-            }
-        };
-
-        this.QueryInterface = function(iid) {
-            if (iid.equals(Components.interfaces.nsIRunnable) ||
-                iid.equals(Components.interfaces.nsISupports)) {
-                return this;
-            }
-            throw Components.results.NS_ERROR_NO_INTERFACE;
-        }
     }
-
 };
 
 var components = [WMSInspectorService];
