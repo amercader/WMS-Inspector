@@ -105,9 +105,7 @@ WMSInspectorServicePrivate = {
                 this.id = row.getResultByName("id");
             },
 
-            handleError: function(error) {
-                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-            },
+            handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
             handleCompletion: function(reason) {
                 try{
@@ -169,9 +167,7 @@ WMSInspectorServicePrivate = {
             });
 
             statement.executeAsync({
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     try{
@@ -255,15 +251,13 @@ WMSInspectorServicePrivate = {
 
             statement.executeAsync({
 
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     try{
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
                             return WMSInspectorServicePrivate.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
-                        
+
                         // If service.tags is null, the current tags won't be
                         // modified. If service.tags is an empty array, the current
                         // service tags will be deleted
@@ -300,9 +294,7 @@ WMSInspectorServicePrivate = {
 
             statement.executeAsync({
 
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     try{
@@ -344,9 +336,8 @@ WMSInspectorServicePrivate = {
             DB.bindParameter(statement, "id", serviceId);
 
             statement.executeAsync({
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                },
+
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     try{
@@ -390,9 +381,8 @@ WMSInspectorServicePrivate = {
                                     WMSInspectorServicePrivate.exceptionHandler(error);
                                 }
                             },
-                            handleError: function(error) {
-                                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                            },
+
+                            handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                             handleCompletion: function(reason) {
                                 try{
@@ -435,9 +425,7 @@ WMSInspectorServicePrivate = {
                                         statements,
                                         statements.length,
                                         {
-                                            handleError: function(error) {
-                                                WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
-                                            },
+                                            handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                                             handleCompletion: function(reason) {
                                                 try{
@@ -598,9 +586,7 @@ WMSInspectorServicePrivate = {
                     }
                 },
 
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
@@ -642,9 +628,7 @@ WMSInspectorServicePrivate = {
                     }
                 },
 
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
@@ -686,9 +670,7 @@ WMSInspectorServicePrivate = {
             });
 
             statement.executeAsync({
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
@@ -741,9 +723,7 @@ WMSInspectorServicePrivate = {
             DB.bindParameters(statement,params);
 
             statement.executeAsync({
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
@@ -793,9 +773,7 @@ WMSInspectorServicePrivate = {
                 statements,
                 statements.length,
                 {
-                    handleError: function(error) {
-                        WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                    },
+                    handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                     handleCompletion: function(reason) {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
@@ -814,16 +792,14 @@ WMSInspectorServicePrivate = {
 
     _deleteServiceType: function(id,callback){
         try{
- 
+
             var sql = "DELETE FROM service_types WHERE id = :id";
             var statement = DB.conn.createStatement(sql);
 
             DB.bindParameter(statement,"id",id);
 
             statement.executeAsync({
-                handleError: function(error) {
-                    WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
-                },
+                handleError: WMSInspectorServicePrivate.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
@@ -842,6 +818,10 @@ WMSInspectorServicePrivate = {
         } catch (error) {
             return this.exceptionHandler(error,callback);
         }
+    },
+
+    executionErrorHandler: function(error) {
+        return this.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
     },
 
     exceptionHandler: function(error,callback){
