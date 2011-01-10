@@ -12,7 +12,7 @@ var AddServiceTypeDialog = {
 
         if (window.arguments[0]) this.serviceType = window.arguments[0].inn.serviceType;
 
-        if (this.serviceType !== false){
+        if (this.serviceType !== null){
             
             //Edit an existing service
             this.fetchDetails(this.serviceType);
