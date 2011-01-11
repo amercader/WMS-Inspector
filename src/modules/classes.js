@@ -136,8 +136,6 @@ var Classes = {
                 var text = this.params.text;
                 var filters = this.params.filters;
 
-                //Components.utils.reportError(this.sql);
-
                 var statement = DB.conn.createStatement(this.sql);
 
                 if (text || filters.tags || filters.types || filters.ids){

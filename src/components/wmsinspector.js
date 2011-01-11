@@ -532,11 +532,9 @@ WMSInspectorServicePrivate = {
             if (this.servicesQueue.length){
                 var service = this.servicesQueue.shift();
                 var parent = this;
-                Components.utils.reportError("Calling addservice: "+service.URL);
                 var add = parent._addService(
                             service,
                             function(id){
-                                Components.utils.reportError("In callaback: "+id+" "+typeof(id));
                                 if (id !== false){
                                     parent.servicesProcessed++;
                                     parent._addServicesIncrementally();
