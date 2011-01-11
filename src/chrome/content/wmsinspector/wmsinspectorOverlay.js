@@ -946,7 +946,17 @@ WMSInspector.Overlay = {
         }
 
     },
-
+    
+    onServiceOperationFinished: function(result){
+        if (result === false){
+            //Errors were found
+            WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_anerroroccurred"));
+        } else {
+            //All went good, if the library window is open, refresh the list
+            if (WMSInspector.Overlay.libraryWindow)
+                WMSInspector.Overlay.libraryWindow.Library.search();
+        }
+    }
 
 
 }
