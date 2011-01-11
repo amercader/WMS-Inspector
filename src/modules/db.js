@@ -13,10 +13,10 @@ var DB = {
     schemaVersion: 2,
 
 
-
-    // Some classes used are not supported in Firefox 3.5.
-    // Code executed under this condition should be removed when support for Firefox 3.5 is dropped
-    legacyCode: (Utils.compareFirefoxVersions(Utils.currentFirefoxVersion,"3.6")< 0),
+    // Unused in this version.
+    // This should only be used if backwards incompatible code must be supported
+    // e.g. legacyCode: (Utils.compareFirefoxVersions(Utils.currentFirefoxVersion,"3.6")< 0),
+    legacyCode: false,
 
     storageService: Utils.getService("@mozilla.org/storage/service;1", "mozIStorageService"),
 
@@ -158,33 +158,22 @@ var DB = {
     },
 
     bindParameter: function(statement,name,value){
-        var params = {}
-        params[name] = value;
-        return this.bindParameters(statement, params);
+        statement.params[name] = value;
     },
 
     /*
      * params - object with key: value pairs of parameters to bind
      */
     bindParameters: function(statement,params){
-        if (this.legacyCode){
-            // Asyncronous parameters binding is not supported in Firefox 3.5
-            // This code should be removed when support for Firefox 3.5 is dropped
+        var bpArray = statement.newBindingParamsArray();
+        var bp = bpArray.newBindingParams();
 
-            for (let name in params)
-                statement.params[name] = params[name];
+        for (let name in params)
+            bp.bindByName(name, params[name]);
 
-        } else {
-            var bpArray = statement.newBindingParamsArray();
-            var bp = bpArray.newBindingParams();
+        bpArray.addParams(bp);
 
-            for (let name in params)
-                bp.bindByName(name, params[name]);
-
-            bpArray.addParams(bp);
-
-            statement.bindParameters(bpArray);
-        }
+        statement.bindParameters(bpArray);
 
         return statement;
     }
