@@ -181,7 +181,7 @@ WMSInspectorServicePrivate = {
                         if (service.tags && service.tags.length) {
                             return WMSInspectorServicePrivate._setTags(WMSInspectorServicePrivate.lastServiceId,service.tags,callback);
                         } else {
-                            if (callback) callback(this.serviceId);
+                            if (callback) callback(WMSInspectorServicePrivate.lastServiceId);
                         }
 
                         return true;
@@ -322,11 +322,14 @@ WMSInspectorServicePrivate = {
     _setTags: function(serviceId,tags,callback){
 
         try {
+
+            if (tags === null) return null;
+
             if (this.lastTagId === null){
                 this._getLastTagId(function(){
                     WMSInspectorServicePrivate._setTags(serviceId,tags,callback)
                 });
-                return false;
+                return null;
             }
 
             //Delete previous tags from service
@@ -475,12 +478,12 @@ WMSInspectorServicePrivate = {
             var self = this;
 
             // We need to get the service types list
-            this._getServiceTypes({
-                callback: function(serviceTypes){
+            this._getServiceTypes(
+                function(serviceTypes){
                     for (let i = 0; i < contents.length;i++){
                         if (contents[i].length > 0){
 
-                            let record = self.parseCSV(contents[i],separator)[0];
+                            let record = self._parseCSV(contents[i],separator)[0];
 
                             if (record.length){
 
@@ -514,9 +517,9 @@ WMSInspectorServicePrivate = {
                         }
                     }
                     self.servicesProcessed = 0;
-                    self.addServicesIncrementally();
+                    self._addServicesIncrementally();
                 }
-            })
+            )
 
             return true;
         } catch (error){
@@ -524,25 +527,24 @@ WMSInspectorServicePrivate = {
         }
     },
 
-    addServicesIncrementally: function(){
+    _addServicesIncrementally: function(){
         try{
             if (this.servicesQueue.length){
                 var service = this.servicesQueue.shift();
                 var parent = this;
-
-                var add = parent._addService({
-                    "service":service,
-                    "callback":function(id){
-                        if (id !== false){
-                            parent.servicesProcessed++;
-                            parent.addServicesIncrementally();
-                        }
-                        else {
-                            if (parent.operationCallback) parent.operationCallback(false);
-                        }
-
-                    }
-                });
+                Components.utils.reportError("Calling addservice: "+service.URL);
+                var add = parent._addService(
+                            service,
+                            function(id){
+                                Components.utils.reportError("In callaback: "+id+" "+typeof(id));
+                                if (id !== false){
+                                    parent.servicesProcessed++;
+                                    parent._addServicesIncrementally();
+                                } else {
+                                    if (parent.operationCallback) parent.operationCallback(false);
+                                }
+                            }
+                        );
                 if (add === false && this.operationCallback) this.operationCallback(false);
                 return false;
             } else {
@@ -821,7 +823,7 @@ WMSInspectorServicePrivate = {
     },
 
     executionErrorHandler: function(error) {
-        return this.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
+        return WMSInspectorServicePrivate.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
     },
 
     exceptionHandler: function(error,callback){
@@ -839,7 +841,7 @@ WMSInspectorServicePrivate = {
 
     // See the following for details
     // http://www.bennadel.com/blog/504-Ask-Ben-Parsing-CSV-Strings-With-Javascript-Exec-Regular-Expression-Command.htm
-    parseCSV: function(string, delimiter){
+    _parseCSV: function(string, delimiter){
 
         delimiter = delimiter || ",";
 
