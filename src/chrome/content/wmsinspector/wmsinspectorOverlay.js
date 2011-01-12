@@ -30,6 +30,12 @@ WMSInspector.Overlay = {
 
     init: function(){
 
+        //Set preferences object
+        this.prefs = WMSInspector.Utils.getPrefs();
+
+        //Set preferences observer
+        WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
+
         // Check if first run or upgrade actions must be performed.
         // Set up operations will be performed asynchronously on the
         // onReady method
@@ -48,12 +54,6 @@ WMSInspector.Overlay = {
 
         // Get a WMSInspector service instance
         this.wis = WMSInspector.Utils.getWMSInspectorService();
-
-        //Set preferences object
-        this.prefs = WMSInspector.Utils.getPrefs();
-
-        //Set preferences observer
-        WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
 
         //Check if tmp dir exists
         WMSInspector.IO.checkWITmpDir();
@@ -75,16 +75,16 @@ WMSInspector.Overlay = {
         // Starting from Firefox 4.0, Addon related functions are asynchronous
         WMSInspector.Utils.getExtensionVersion(
             function(currentVersion){
-
+                var prefs = WMSInspector.Overlay.prefs;
                 try {
-                    installedVersion = this.prefs.getCharPref("version");
-                    firstRun = this.prefs.getBoolPref("firstrun");
+                    installedVersion = prefs.getCharPref("version");
+                    firstRun = prefs.getBoolPref("firstrun");
                 } catch(e){
 
                 } finally {
                     if (firstRun){
-                        this.prefs.setBoolPref("firstrun",false);
-                        this.prefs.setCharPref("version",currentVersion);
+                        prefs.setBoolPref("firstrun",false);
+                        prefs.setCharPref("version",currentVersion);
 
                         //Code to be executed only when the extension is first installed
 
@@ -92,7 +92,7 @@ WMSInspector.Overlay = {
                         WMSInspector.DB.restoreDB();
 
                     } else if (installedVersion != currentVersion && !firstRun) {
-                        this.prefs.setCharPref("version",currentVersion);
+                        prefs.setCharPref("version",currentVersion);
 
                         //Code to be executed when the extension is upgraded
 
