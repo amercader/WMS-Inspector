@@ -47,7 +47,14 @@ WMSInspector.Overlay = {
     unload: function(){
         this.prefs.removeObserver("", this);
         if (WMSInspector.DB.conn){
-            WMSInspector.DB.conn.close();
+            if (WMSInspector.Utils.compareFirefoxVersions(WMSInspector.Utils.currentFirefoxVersion,"4.0b")< 0){
+                // FF 3.6
+                WMSInspector.DB.conn.close();
+            } else {
+                // FF 4.0
+                WMSInspector.DB.conn.asyncClose();
+            }
+            
         }
     },
 
