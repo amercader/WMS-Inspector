@@ -1,5 +1,6 @@
 Components.utils.import("resource://wmsinspector/utils.js");
 Components.utils.import("resource://wmsinspector/io.js");
+Components.utils.import("resource://wmsinspector/log.js");
 
 var EXPORTED_SYMBOLS = ["DB"];
 
@@ -72,8 +73,8 @@ var DB = {
             this.conn.createTable("services_backup",columns);
 
             var statements1 = [
-                this.conn.createStatement("INSERT INTO services_backup SELECT id,title,url,favorite,creation_date,update_date,type,version FROM services"),
-                this.conn.createStatement("DROP TABLE services")
+            this.conn.createStatement("INSERT INTO services_backup SELECT id,title,url,favorite,creation_date,update_date,type,version FROM services"),
+            this.conn.createStatement("DROP TABLE services")
             ];
 
             this.conn.executeAsync(statements1,statements1.length,
@@ -82,32 +83,30 @@ var DB = {
                 //No results should be returned during an upgrade transaction
                 },
 
-                handleError: function(error) {
-                    Components.utils.reportError("WMSInspector - Error during database upgrade: " + error.message);
-                },
+                handleError: DB.executionErrorHandler,
 
                 handleCompletion: function(reason) {
                     if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                        Components.utils.reportError("WMSInspector - DB upgrade transaction aborted or canceled");
+                        return DB.exceptionHandler(new Error("Database upgrade transaction aborted or canceled"));
                     } else {
                         DB.conn.createTable("services",columns);
 
                         var statements2 = [
-                            DB.conn.createStatement("INSERT INTO services SELECT id,title,url,favorite,creation_date,update_date,type,version FROM services_backup"),
-                            DB.conn.createStatement("DROP TABLE services_backup"),
-                            DB.conn.createStatement("CREATE TRIGGER services_after_delete_trigger AFTER DELETE ON services FOR EACH ROW WHEN OLD.id IS NOT NULL BEGIN DELETE FROM rel_services_tags WHERE services_id = OLD.id; END;")
+                        DB.conn.createStatement("INSERT INTO services SELECT id,title,url,favorite,creation_date,update_date,type,version FROM services_backup"),
+                        DB.conn.createStatement("DROP TABLE services_backup"),
+                        DB.conn.createStatement("CREATE TRIGGER services_after_delete_trigger AFTER DELETE ON services FOR EACH ROW WHEN OLD.id IS NOT NULL BEGIN DELETE FROM rel_services_tags WHERE services_id = OLD.id; END;")
                         ];
 
                         DB.conn.executeAsync(statements2,statements2.length,DB.upgradeCallback);
 
+                        return true;
                     }
                 }
             }
             );
 
-        } catch (e) {
-            Components.utils.reportError(this.conn.lastErrorString);
-            return false;
+        } catch (error) {
+            DB.exceptionHandler(error);
         }
 
         return true;
@@ -119,42 +118,63 @@ var DB = {
         //No results should be returned during an upgrade transaction
         },
 
-        handleError: function(error) {
-            Components.utils.reportError("WMSInspector - Error during database upgrade: " + error.message);
-        },
+        handleError: this.executionErrorHandler,
 
         handleCompletion: function(reason) {
             if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED){
-                Components.utils.reportError("WMSInspector - DB upgrade transaction aborted or canceled");
+                return DB.exceptionHandler(new Error("Database upgrade transaction aborted or canceled"));
             }else{
 
                 //Set new schemaVersion
                 DB.conn.schemaVersion = DB.schemaVersion;
 
-                Components.utils.reportError("WMSInspector - DB schema upgraded to version " + DB.schemaVersion);
+                Log.info("Database schema successfully upgraded to version " + DB.schemaVersion);
+
+                return true;
             }
         }
     },
 
-    restoreDB: function(){
-        //Copy default database to profile folder
-        var src = IO.getDefaultsDir();
+    executionErrorHandler: function(error) {
+        return DB.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
+    },
 
-        if (src){
-            src.append(this.DBName);
-            var dest = IO.getProfileDir();
-            if (dest){
-                src.copyTo(dest,"");
+    exceptionHandler: function(error,callback){
+        Log.error(error);
+        if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
+            Log.error(DB.conn.lastErrorString);
 
-                //Open DB connection
-                this.conn = this.getDBConnection();
-
-                return true;
-            }
-
-
-        }
+        if (callback) callback(false);
         return false;
+    },
+
+    restoreDB: function(){
+        try{
+            //Copy default database to profile folder
+            var src = IO.getDefaultsDir();
+
+            if (src){
+                src.append(this.DBName);
+                var dest = IO.getProfileDir();
+                if (dest){
+                    try {
+                        src.copyTo(dest,"");
+                    } catch (error) {
+                        Log.error(error);
+                        return false;
+                    }
+                    //Open DB connection
+                    this.conn = this.getDBConnection();
+
+                    Log.info("New database successfully restored (Schema version " + this.conn.schemaVersion);
+
+                    return true;
+                }
+            }
+            return false;
+        } catch (error){
+            Log.error(error);
+        }
     },
 
     bindParameter: function(statement,name,value){

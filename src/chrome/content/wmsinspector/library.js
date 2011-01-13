@@ -2,6 +2,7 @@ Components.utils.import("resource://wmsinspector/classes.js");
 Components.utils.import("resource://wmsinspector/utils.js");
 Components.utils.import("resource://wmsinspector/db.js");
 Components.utils.import("resource://wmsinspector/io.js");
+Components.utils.import("resource://wmsinspector/log.js");
 
 var Library = {
 
@@ -355,7 +356,7 @@ var Library = {
         var contents = IO.readLineByLine(file);
 
         if (!contents){
-            Components.utils.reportError("WMS Inspector - Error reading file");
+            Log.warn("Error reading file (" + file.path + ")")
             return false;
         }
 

@@ -5,7 +5,7 @@ Components.utils.import("resource://wmsinspector/log4moz.js");
 var EXPORTED_SYMBOLS = ["Log"];
 
 const LOG_FILE_NAME = "wmsinspector.log.txt";
-const DEFAULT_LEVEL = "All";
+const DEFAULT_LEVEL = "Info";
 
 var logger = function(){
 

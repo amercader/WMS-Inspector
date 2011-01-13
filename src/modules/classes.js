@@ -1,4 +1,5 @@
 Components.utils.import("resource://wmsinspector/db.js");
+Components.utils.import("resource://wmsinspector/log.js");
 
 var EXPORTED_SYMBOLS = ["Classes"];
 
@@ -189,12 +190,12 @@ var Classes = {
 
                     //error is a mozIStorageError object
                     handleError: function(error) {
-                        self.exceptionHandler(new Error(error.message +" [" + error.result +"]"),callback);
+                        self.exceptionHandler(new Error(error.message +" [" + error.result +"]"));
                     },
 
                     handleCompletion: function(reason) {
                         if (reason != Components.interfaces.mozIStorageStatementCallback.REASON_FINISHED)
-                            return self.exceptionHandler(new Error("Transaction aborted or canceled"));
+                            return self.exceptionHandler(new Error("Transaction aborted or canceled"),callback);
 
                         if (self.callback)
                             self.callback((this.errorsFound) ? false : self.results);
@@ -210,17 +211,15 @@ var Classes = {
 
         },
 
-
-        this.exceptionHandler = function(error){
-            var msg = "WMSInspector - " + error.message;
+        this.exceptionHandler = function(error,callback){
+            Log.error(error);
             if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
-                msg += " - " + DB.conn.lastErrorString;
-            msg += " (line " + error.lineNumber + ")"
-            Components.utils.reportError(msg);
+                Log.error(DB.conn.lastErrorString);
 
-            if (this.callback) this.callback(false);
+            if (callback) callback(false);
             return false;
         }
+
 
     }
 

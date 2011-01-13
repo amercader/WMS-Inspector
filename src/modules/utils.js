@@ -1,3 +1,4 @@
+
 var EXPORTED_SYMBOLS = ["Utils"];
 
 var Utils = {
@@ -43,6 +44,7 @@ var Utils = {
         //First parameter is preference domain, but we don't need to set it
         //because it has already been set in the getPrefs method
         prefs.addObserver("",observer,false);
+
     },
 
     getWindow: function(){
@@ -122,7 +124,7 @@ var Utils = {
             }
             return prompt;
         } catch (error){
-            Components.utils.reportError(error);
+            return null;
         }
     },
 
@@ -156,8 +158,8 @@ var Utils = {
                 });
                 
             }
-        } catch (e){
-            Components.utils.reportError(e);
+        } catch (error){
+            return error;
         }
 
         return false;

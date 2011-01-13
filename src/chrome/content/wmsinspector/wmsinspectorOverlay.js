@@ -7,6 +7,7 @@ Components.utils.import("resource://wmsinspector/utils.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/db.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/io.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/requests.js",WMSInspector);
+Components.utils.import("resource://wmsinspector/log.js",WMSInspector);
 
 WMSInspector.Overlay = {
 	
@@ -65,7 +66,6 @@ WMSInspector.Overlay = {
             if (results)
                 WMSInspector.Overlay.serviceTypes = results;
         });
-
     },
 
     checkForUpgrades: function(){
@@ -79,14 +79,15 @@ WMSInspector.Overlay = {
                 try {
                     installedVersion = prefs.getCharPref("version");
                     firstRun = prefs.getBoolPref("firstrun");
-                } catch(e){
-
+                } catch(error){
+                    WMSInspector.Log.error(error);
                 } finally {
                     if (firstRun){
                         prefs.setBoolPref("firstrun",false);
                         prefs.setCharPref("version",currentVersion);
 
                         //Code to be executed only when the extension is first installed
+                        WMSInspector.Log.info("First run (version " + currentVersion + ")");
 
                         //Copy an empty database to the profile directory
                         WMSInspector.DB.restoreDB();
@@ -95,6 +96,7 @@ WMSInspector.Overlay = {
                         prefs.setCharPref("version",currentVersion);
 
                         //Code to be executed when the extension is upgraded
+                        WMSInspector.Log.info("Upgrading from version " + installedVersion + " to " + currentVersion);
 
                         //Check if the database schema needs to be updated
                         WMSInspector.DB.checkDB();
@@ -106,7 +108,7 @@ WMSInspector.Overlay = {
                         WMSInspector.DB.checkDB();
                     }
 
-                    // The overlay is ready to load
+                    // The overlay is ready to be loaded
                     WMSInspector.Overlay.onReady();
 
                 }
@@ -166,7 +168,6 @@ WMSInspector.Overlay = {
         var serviceImage;
         var serviceImageParam;
 
-		
 
         t = document.getElementById("wiTree");
         tChMain = document.getElementById("wiTreeChildren");

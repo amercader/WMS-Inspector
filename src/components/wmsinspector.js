@@ -11,6 +11,12 @@ function WMSInspectorService() {
     // http://groups.google.com/group/mozilla.dev.apps.firefox/browse_thread/thread/e178d41afa2ccc87
     Components.utils.import("resource://wmsinspector/classes.js");
     Components.utils.import("resource://wmsinspector/db.js");
+    Components.utils.import("resource://wmsinspector/log.js");
+
+    //Check DB connection
+    if (DB.conn === null){
+        Log.error("Database connection not set");
+    }
 
 }
 
@@ -826,11 +832,9 @@ WMSInspectorServicePrivate = {
 
     exceptionHandler: function(error,callback){
 
-        var msg = "WMSInspector - " + error.message;
-        if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
-            msg += " - " + DB.conn.lastErrorString;
-        msg += " (line " + error.lineNumber + ")"
-        Components.utils.reportError(msg);
+        Log.error(error);
+        if (DB.conn && DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
+            Log.error(DB.conn.lastErrorString);
 
         if (callback) callback(false);
         return false;
