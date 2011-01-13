@@ -76,7 +76,7 @@ WMSInspector.ServiceImages = {
 	
     //TODO: parametrize
     isServiceImage: function(imgsrc){
-        return (imgsrc.indexOf("SERVICE=WMS") != -1);
+        return (imgsrc.match(/REQUEST=GetMap|REQUEST=GetLegendGraphic/i));
     }
 
 }
