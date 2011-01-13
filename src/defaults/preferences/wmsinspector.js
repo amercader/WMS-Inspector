@@ -4,3 +4,5 @@ pref("extensions.wmsinspector.getcapabilitiesoutput", "html");
 pref("extensions.wmsinspector.hidecontextmenu", false);
 pref("extensions.wmsinspector.libraryconfirmbeforedelete", true);
 pref("extensions.wmsinspector.exportseparator", ",");
+pref("extensions.wmsinspector.logtoconsole", true);
+pref("extensions.wmsinspector.logtofile", true);

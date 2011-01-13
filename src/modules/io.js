@@ -15,8 +15,8 @@ var IO = {
     //Default permissions for new temporary files
     tempFilesPermissions: 0666,
 
-    //Permissions for new temporary directory
-    tempDirPermissions: 0700,
+    //Permissions for new directories
+    tempDirPermissions: 0755,
 
     fileCounter:0,
 
