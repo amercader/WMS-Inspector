@@ -335,14 +335,16 @@ WMSInspector.Overlay = {
     },
 
     onTreeDoubleClicked: function(event){
+
         var t = document.getElementById("wiTree");
         if (t.view == null) return;
-      
+
         var treeSel = this.getTreeSelectionAt(event.clientX, event.clientY, "wiTree");
 
         if (treeSel.row.value != -1 && treeSel.part.value != "twisty"){
             var cellValues = t.view.getCellValue(treeSel.row.value,treeSel.column.value).split("_");
-            if (cellValues[1] == "3"){
+
+            if (cellValues[1] == "3" || cellValues[1] == "4"){
                 var col = t.columns.getNamedColumn("wiTreeNameColumn");
                 var cellText = t.view.getCellText(t.currentIndex,col);
                 var paramName = cellText;
