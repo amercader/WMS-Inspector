@@ -84,7 +84,10 @@ var logger = function(){
 
     this.log = function(level,out){
 
+        if (out === null) out = "";
+
         var msg = "";
+
         // instanceof Error does not work
         var isError = (
             (typeof(out.message) != "undefined" &&
