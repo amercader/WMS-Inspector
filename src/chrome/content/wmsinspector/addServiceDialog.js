@@ -7,6 +7,8 @@ var AddServiceDialog = {
     
     serviceId: false,
 
+    version: false,
+
     prefs: null,
 
     wis: null,
@@ -25,7 +27,7 @@ var AddServiceDialog = {
         if (params){
             if (params.id) this.serviceId = params.id;
             url = (params.url) ? params.url : false;
-            version = (params.version) ? params.version : false;
+            this.version = (params.version) ? params.version : false;
 
         }
 
@@ -56,18 +58,7 @@ var AddServiceDialog = {
  
         if (!this.serviceId){
             //If no id provided, open dialog in add mode
-
             if (url) document.getElementById("wiAddServiceURL").value = url;
-            if (version){
-                var versionsList = document.getElementById("wiAddServiceVersionMenu");
-                for (let i=0; i < versionsList.itemCount; i++){
-                    let item = versionsList.getItemAtIndex(i);
-                    if (item.getAttribute("label") == version) {
-                        versionsList.selectedItem = item;
-                        break;
-                    }
-                }
-            }
 
         } else {
             //Else, edit an existing service
@@ -91,13 +82,16 @@ var AddServiceDialog = {
         var serviceTypes = AddServiceDialog.serviceTypes;
         var selectedType = document.getElementById("wiAddServiceTypeMenu").selectedItem.value;
 
+        var versionToSet;
+
         for (let i=0; i < serviceTypes.length; i++){
             if (serviceTypes[i].name == selectedType){
                 var versionsList = document.getElementById("wiAddServiceVersionMenu");
                 versionsList.removeAllItems()
                 for (let j=0; j < serviceTypes[i].versions.length; j++){
                     versionsList.appendItem(serviceTypes[i].versions[j],serviceTypes[i].versions[j]);
-                    if (serviceTypes[i].versions[j] == serviceTypes[i].defaultVersion)
+                    versionToSet = this.version || serviceTypes[i].defaultVersion
+                    if (serviceTypes[i].versions[j] == versionToSet)
                         versionsList.selectedIndex = j;
                 }
                 if (versionsList.selectedIndex == -1) versionsList.selectedIndex = 0;
