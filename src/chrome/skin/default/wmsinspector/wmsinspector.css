@@ -9,7 +9,7 @@
 }
 
 .wiSmallIcon {
-    margin: 0 5px
+    margin-right: 3px
 }
 
 #wiCloseButton {
@@ -22,6 +22,14 @@
 
 #wiCloseButton:hover:active {
     list-style-image: url("chrome://wmsinspector/skin/icons/closeActive.png");
+}
+
+.wiDetachButton{
+    list-style-image: url("chrome://wmsinspector/skin/icons/detach.png");
+}
+
+.wiAttachButton{
+    list-style-image: url("chrome://wmsinspector/skin/icons/attach.png");
 }
 
 #wiConfigButton {

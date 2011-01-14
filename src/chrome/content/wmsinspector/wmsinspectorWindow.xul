@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xul-overlay href="chrome://wmsinspector/content/wmsinspectorOverlay.xul"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE window SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="wiWindow"
+        width="1000" height="750"
+        title="&wmsinspector.common.appname;"
+        windowtype="WMSInspector"
+        persist="screenX,screenY,width,height,sizemode"
+>
+
+	<!-- scripts start -->
+    <script type="application/x-javascript" src="chrome://global/content/globalOverlay.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
+	<!-- scripts end -->
+
+    <vbox id="wiContent" flex="1"  />
+
+</window>

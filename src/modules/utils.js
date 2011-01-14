@@ -54,18 +54,22 @@ var Utils = {
         .getMostRecentWindow('navigator:browser');
     },
 
+    getBrowser: function(){
+        return this.getWindow().gBrowser;
+    },
+
     getSelectedBrowser: function(){
         return this.getWindow().top.getBrowser().selectedBrowser;
     },
 
 
     getContentWindow: function(){
-        return this.getSelectedBrowser().contentWindow;
+        return this.getBrowser().contentWindow;
     },
 
 
     getContentDocument: function(){
-        return this.getSelectedBrowser().contentDocument;
+        return this.getBrowser().contentDocument;
     },
 
     getWMSInspectorService: function(){
@@ -187,6 +191,23 @@ var Utils = {
             }
         }
         return tags;
+    },
+
+    openWindow: function(windowType, url, features, params){
+        var wm = this.getService("@mozilla.org/appshell/window-mediator;1","nsIWindowMediator");
+        var win = windowType ? wm.getMostRecentWindow(windowType) : null;
+        if (win) {
+          if ("initWithParams" in win)
+            win.initWithParams(params);
+          win.focus();
+        }
+        else {
+          var winFeatures = "resizable,dialog=no,centerscreen" + (features != "" ? ("," + features) : "");
+          var window = this.getWindow();
+          var parentWindow = (!window.opener || window.opener.closed) ? window : window.opener;
+          win = parentWindow.openDialog(url, "_blank", winFeatures, params);
+        }
+        return win;
     }
 
 }

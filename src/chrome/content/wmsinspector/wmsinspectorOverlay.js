@@ -10,7 +10,7 @@ Components.utils.import("resource://wmsinspector/requests.js",WMSInspector);
 Components.utils.import("resource://wmsinspector/log.js",WMSInspector);
 
 WMSInspector.Overlay = {
-	
+
     currentServiceImages: false,
 
     currentGroupMode: 0,
@@ -25,9 +25,15 @@ WMSInspector.Overlay = {
 
     libraryWindow: null,
 
+    wiWindow: null,
+
+    windowMode: (window.location == "chrome://wmsinspector/content/wmsinspectorWindow.xul"),
+
     serviceTypes: [],
 
     wis: null,
+
+    checkedForUpgrades: false,
 
     init: function(){
 
@@ -37,25 +43,51 @@ WMSInspector.Overlay = {
         //Set preferences observer
         WMSInspector.Utils.setPreferenceObserver(this.prefs,this);
 
-        // Check if first run or upgrade actions must be performed.
-        // Set up operations will be performed asynchronously on the
-        // onReady method
-        this.checkForUpgrades();
+
+        if (window.arguments && window.arguments[0] && window.arguments[0].state && window.arguments[0].state.checkedForUpgrades){
+            // We already checked for upgrades, set up the DB connection and we
+            // are ready to roll.
+            WMSInspector.DB.checkDB();
+
+            this.onReady();
+
+        } else {
+            // Check if first run or upgrade actions must be performed.
+            // Set up operations will be performed asynchronously on the
+            // onReady method
+            this.checkForUpgrades();
+        }
 
     },
 
     unload: function(){
-        this.prefs.removeObserver("", this);
-        if (WMSInspector.DB.conn){
-            if (WMSInspector.Utils.compareFirefoxVersions(WMSInspector.Utils.currentFirefoxVersion,"4.0b")< 0){
-                // FF 3.6
-                WMSInspector.DB.conn.close();
-            } else {
-                // FF 4.0
-                WMSInspector.DB.conn.asyncClose();
+        try{
+            this.prefs.removeObserver("", this);
+
+            if (!this.windowMode){
+                if (WMSInspector.DB.conn && WMSInspector.DB.conn.connectionReady){
+                    if (WMSInspector.Utils.compareFirefoxVersions(WMSInspector.Utils.currentFirefoxVersion,"4.0b")< 0){
+                        // FF 3.6
+                        WMSInspector.DB.conn.close();
+                    } else {
+                        // FF 4.0
+                        WMSInspector.DB.conn.asyncClose();
+                    }
+
+                }
             }
-            
+
+        } catch (error){
+            WMSInspector.Log.error(error);
+        } finally {
+            // If the window is opened and the main Firefox window is closed,
+            // close it.
+            if (this.wiWindow)
+                this.wiWindow.close();
+
+            WMSInspector = null;
         }
+
     },
 
     onReady: function(){
@@ -67,12 +99,24 @@ WMSInspector.Overlay = {
         WMSInspector.IO.checkWITmpDir();
 
         //Show/Hide Context menu
-        document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
+        if (!this.windowMode)
+            document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
 
         this.wis.getServiceTypes(function(results){
             if (results)
                 WMSInspector.Overlay.serviceTypes = results;
         });
+
+        // Set up detach / attach button
+        var button = document.getElementById("wiDetachButton");
+        button.className = "wiSmallIcon wiImgLink";
+        button.className += (this.windowMode) ? " wiAttachButton" : " wiDetachButton";
+        button.tooltipText = (this.windowMode) ? WMSInspector.Utils.getString("wi_toolbar_attach") : WMSInspector.Utils.getString("wi_toolbar_detach")
+
+        // If switching between panel or window, try to restore the state
+        if (window.arguments && window.arguments[0] && window.arguments[0].state)
+            this.setState(window.arguments[0].state);
+
     },
 
     checkForUpgrades: function(){
@@ -82,6 +126,7 @@ WMSInspector.Overlay = {
         // Starting from Firefox 4.0, Addon related functions are asynchronous
         WMSInspector.Utils.getExtensionVersion(
             function(currentVersion){
+
                 var prefs = WMSInspector.Overlay.prefs;
                 try {
                     installedVersion = prefs.getCharPref("version");
@@ -108,19 +153,21 @@ WMSInspector.Overlay = {
                         //Check if the database schema needs to be updated
                         WMSInspector.DB.checkDB();
 
-                    } else {
+                    }else {
                         // No first run nor upgrade
 
                         //This will set up the DB connection
                         WMSInspector.DB.checkDB();
                     }
 
+                    WMSInspector.Overlay.checkedForUpgrades = true;
+
                     // The overlay is ready to be loaded
                     WMSInspector.Overlay.onReady();
 
                 }
             }
-        );
+            );
     },
 
 
@@ -130,23 +177,68 @@ WMSInspector.Overlay = {
         }
     },
 
+    open: function(){
+        if (this.wiWindow && !this.wiWindow.closed) {
+            this.wiWindow.focus();
+        } else {
+            this.togglePanel();
+        }
+    },
+
+    close: function(){
+        if (this.windowMode) {
+            window.close();
+        } else {
+            this.togglePanel();
+        }
+    },
+
+
+    detach: function(){
+
+        var state = this.getCurrentState();
+
+        if (this.windowMode){
+            // Set the main window panel visible and close the window
+            var parentWindow = (!window.opener || window.opener.closed) ? window : window.opener;
+
+            parentWindow.WMSInspector.Overlay.togglePanel();
+            parentWindow.WMSInspector.Overlay.setState(state);
+            window.close();
+
+        } else {
+            // Hide the panel and open the window
+            var args = {
+                "state": state
+            }
+
+            this.wiWindow = WMSInspector.Utils.openWindow("WMSInspector",
+                "chrome://wmsinspector/content/wmsinspectorWindow.xul",
+                "chrome,centerscreen,resizable=yes",
+                args);
+            this.togglePanel();
+        }
+
+
+    },
+
     togglePanel: function(){
         var panel = document.getElementById("wiContent");
         var splitter = document.getElementById("wiContentSplitter");
         var newvalue = !panel.hidden;
         panel.setAttribute("hidden",newvalue);
         splitter.setAttribute("hidden",newvalue);
-		
+
     },
-	
+
     refreshServiceImages: function(){
         this.currentServiceImages = [];
         WMSInspector.ServiceImages.refreshImages();
         this.currentServiceImages = WMSInspector.ServiceImages.currentServiceImages;
-        
+
         this.buildServiceImagesTree();
     },
-	
+
     groupTree: function(mode){
         if (this.currentGroupMode != mode) {
             this.currentGroupMode = mode;
@@ -170,7 +262,7 @@ WMSInspector.Overlay = {
         var tCeImage;
         var label;
         var value;
-		
+
         var windowServiceImages;
         var serviceImage;
         var serviceImageParam;
@@ -206,7 +298,7 @@ WMSInspector.Overlay = {
 
                     tRImage = document.createElement("treerow");
                     tCeImage = document.createElement("treecell");
-                   
+
                     value = this.getTreeCellId(2,serviceImage.id)
                     tCeImage.setAttribute("id",value);
                     tCeImage.setAttribute("value",value);
@@ -311,10 +403,10 @@ WMSInspector.Overlay = {
         }
         return out;
     },
-    
+
     onTreeClicked: function(event){
         var t = document.getElementById("wiTree");
-        
+
         if (t.view == null) return;
 
         var treeSel = this.getTreeSelectionAt(event.clientX, event.clientY, "wiTree");
@@ -327,11 +419,11 @@ WMSInspector.Overlay = {
 
                     //TODO: reuse, errors, default page, loading, cache?
                     WMSInspector.Overlay.showURLInPreviewBrowser(newSrc);
-                   
+
                 }
             }
         }
-		
+
     },
 
     onTreeDoubleClicked: function(event){
@@ -357,7 +449,7 @@ WMSInspector.Overlay = {
                 dialog.focus();
             }
         }
-		
+
     },
 
     onContextMenu: function(event){
@@ -381,7 +473,7 @@ WMSInspector.Overlay = {
             }
         }
     },
-    
+
     doContextMenuAction: function(mode,event){
         var t = document.getElementById("wiTree");
 
@@ -453,7 +545,7 @@ WMSInspector.Overlay = {
                 break;
         }
     },
-    
+
     copyTreeItem: function(cellValues,cellText,tree){
         var out = false;
         switch (cellValues[1]){
@@ -474,15 +566,15 @@ WMSInspector.Overlay = {
         }
         var clipboardService = WMSInspector.Utils.getService("@mozilla.org/widget/clipboardhelper;1","nsIClipboardHelper");
         if (out && clipboardService) clipboardService.copyString(out);
-        
+
     },
-	
+
     openServiceImageInNewTab: function(url){
         if (url){
-            gBrowser.addTab(url);
+            this.getBrowser().addTab(url);
         }
     },
-	
+
     onParamUpdated: function(imageId,paramId,paramName,paramValue){
 
         if (imageId && paramId && (paramValue || paramValue === "")) {
@@ -494,7 +586,7 @@ WMSInspector.Overlay = {
             if (cell) cell.setAttribute("label",paramValue);
             cell = document.getElementById(this.getTreeCellId(2,imageId));
             if (cell) cell.setAttribute("label",newURL);
-            
+
             this.showURLInPreviewBrowser(newURL);
 
         }
@@ -510,7 +602,7 @@ WMSInspector.Overlay = {
             var cell = document.getElementById(this.getTreeCellId(2,imageId));
 
             if (cell) cell.setAttribute("label",newURL);
-            
+
             var tChParams = cell.parentNode.parentNode.lastChild;
             var index = tChParams.childNodes.length;
             this.addParamRow(tChParams,imageId,paramName,paramValue,index);
@@ -529,14 +621,14 @@ WMSInspector.Overlay = {
         }
         return false;
     },
-	
+
     getTreeSelectionAt: function(x,y,id){
         var t = document.getElementById(id);
         if (t){
             var row = Object();
             var column = Object();
             var part = Object();
-		  
+
             var boxObject = t.boxObject;
             boxObject.QueryInterface(Components.interfaces.nsITreeBoxObject);
             boxObject.getCellAt(x, y, row, column, part);
@@ -545,7 +637,7 @@ WMSInspector.Overlay = {
             out.row = row;
             out.column = column;
             out.part = part;
-		  
+
             return out;
         }
         return false;
@@ -554,7 +646,7 @@ WMSInspector.Overlay = {
         var server = false;
         var version = false;
         var t = document.getElementById("wiTree");
-		
+
         if (t.columns){
             var col = t.columns.getNamedColumn("wiTreeNameColumn");
 
@@ -562,7 +654,7 @@ WMSInspector.Overlay = {
                 var cellValue = t.view.getCellValue(t.currentIndex,col)
                 if (cellValue){
                     var cellValues = cellValue.split("_");
-		
+
                     if (cellValues[1] == "1"){
                         if (this.currentGroupMode == 0){
                             var cellText = t.view.getCellText(t.currentIndex,col);
@@ -573,7 +665,7 @@ WMSInspector.Overlay = {
                                 version = this.serviceTypes[i].defaultVersion;
                             }
                         }
-			
+
                     } else if (cellValues[1] == "2"){
                         var serviceImage = this.getServiceImage(cellValues[2]);
                         var param = serviceImage.getParamByName("VERSION");
@@ -591,13 +683,13 @@ WMSInspector.Overlay = {
             },
             out:null
         };
-        
+
         window.openDialog(
             "chrome://wmsinspector/content/getCapabilitiesDialog.xul",
             "wiGetCapabilitiesDialog",
             "chrome, dialog, modal,centerscreen, resizable=yes",
             params).focus();
-            
+
         if (params.out) {
             var url = this.getGetCapabilitiesURL(params.out.url,params.out.service,params.out.version);
             if (params.out.outputHTML){
@@ -628,7 +720,7 @@ WMSInspector.Overlay = {
                 return false;
             }
 
-            
+
         } else {
             WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + WMSInspector.Utils.getString("wi_request_servernotfound"));
             return false;
@@ -664,7 +756,7 @@ WMSInspector.Overlay = {
             processor.importStylesheet(xsl);
 
             var newDoc = processor.transformToDocument(xhr.responseXML);
-           
+
             var serializer = new XMLSerializer();
             var data = serializer.serializeToString(newDoc);
 
@@ -700,7 +792,7 @@ WMSInspector.Overlay = {
     getGetCapabilitiesURL: function(server,type,version){
         if (!server) return false;
         type = type || "WMS";
-        
+
         if (server.substring(server.length-1) != "?" && server.indexOf("?") == -1 ) {
             server += "?";
         } else if (server.substring(server.length-1) != "?" && server.indexOf("?") !== -1 ) {
@@ -721,7 +813,7 @@ WMSInspector.Overlay = {
             this.showGetCapabilitiesReportVersion,
             this.onRequestError
             ).send();
-        
+
     },
 
     requestDocument: function(url,outputEditor){
@@ -748,7 +840,7 @@ WMSInspector.Overlay = {
                 if (check !== true) contents = check;
                 extension = "txt";
             }
-                
+
             if (!contents) {
                 contents = xhr.responseText;
                 extension = WMSInspector.Overlay.getExtensionFromMimeType(xhr.getResponseHeader("Content-type"));
@@ -764,7 +856,7 @@ WMSInspector.Overlay = {
         return false;
 
     },
-    
+
     checkXMLParsing: function(xmlDoc){
         if (!xmlDoc.documentElement) return false;
         if (xmlDoc.documentElement.nodeName == "parsererror") {
@@ -781,7 +873,7 @@ WMSInspector.Overlay = {
         if (!url) return false;
 
         var IOService = WMSInspector.Utils.getService("@mozilla.org/network/io-service;1",Components.interfaces.nsIIOService);
-        
+
         var channel = IOService.newChannel(url, null, null);
         if (!(channel instanceof Components.interfaces.nsIHttpChannel))
             return false;
@@ -796,8 +888,8 @@ WMSInspector.Overlay = {
         while(size = binaryStream.available()) {
             data += binaryStream.readBytes(size);
         }
-        
-        
+
+
 
         var extension = this.getExtensionFromMimeType(channel.getResponseHeader("Content-type"))
 
@@ -808,7 +900,7 @@ WMSInspector.Overlay = {
     },
 
     getExtensionFromMimeType: function(mimeType){
-        
+
         if (mimeType.indexOf(";") != -1){
             mimeType = mimeType.substring(0,mimeType.indexOf(";"))
         }
@@ -838,7 +930,7 @@ WMSInspector.Overlay = {
     },
 
     onRequestError: function(xhr){
-        
+
         if (xhr.status == 0){
             //No connection or Server not found
             WMSInspector.Utils.showAlert(WMSInspector.Utils.getString("wi_request_connectionerror") + ": " + WMSInspector.Utils.getString("wi_request_servernotfound"));
@@ -866,8 +958,9 @@ WMSInspector.Overlay = {
     },
 
     showFileInBrowser: function(file,focus){
-        var tab = gBrowser.addTab(file.path);
-        if (focus !== false) gBrowser.selectedTab = tab;
+        var browser = this.getBrowser();
+        var tab = browser.addTab(file.path);
+        if (focus !== false) browser.selectedTab = tab;
     },
 
     showFileInEditor: function(file){
@@ -913,7 +1006,7 @@ WMSInspector.Overlay = {
         }
 
         return true;
-        
+
     },
 
     openOptionsDialog: function() {
@@ -922,11 +1015,10 @@ WMSInspector.Overlay = {
     },
 
     openLibrary: function(){
-        if (this.libraryWindow == null || this.libraryWindow.closed){
-            this.libraryWindow = window.open("chrome://wmsinspector/content/library.xul", "wiLibrary", "chrome,centerscreen,resizable=yes");
-        } else {
-            this.libraryWindow.focus();
-        }
+        this.libraryWindow = WMSInspector.Utils.openWindow("WMSInspectorLibrary",
+            "chrome://wmsinspector/content/library.xul",
+            "chrome,centerscreen,resizable=yes",
+            "");
     },
 
     openAddServiceDialog: function(id,url,version) {
@@ -956,7 +1048,7 @@ WMSInspector.Overlay = {
         }
 
     },
-    
+
     onServiceOperationFinished: function(result){
         if (result === false){
             //Errors were found
@@ -966,7 +1058,61 @@ WMSInspector.Overlay = {
             if (WMSInspector.Overlay.libraryWindow)
                 WMSInspector.Overlay.libraryWindow.Library.search();
         }
+    },
+
+    getCurrentState: function(){
+        var t = document.getElementById("wiTree");
+        var treeView = t.treeBoxObject.view;
+        var openRows = null;
+        if (treeView){
+            openRows = [];
+            for (var i = 0; i < treeView.rowCount; i++) {
+                if (treeView.isContainer(i) && treeView.isContainerOpen(i))
+                    openRows.push(i)
+            }
+        }
+        var browser = document.getElementById("wiBrowser");
+        var currentURI = (browser.contentWindow && browser.contentWindow.location) ?
+        browser.contentWindow.location.href :
+        null;
+
+        return {
+            serviceImages: this.currentServiceImages,
+            groupMode: this.currentGroupMode,
+            openRows: openRows,
+            currentURI: currentURI,
+            checkedForUpgrades: this.checkedForUpgrades
+        }
+    },
+
+    setState: function(state){
+
+        if (state.serviceImages !== false) {
+            this.currentServiceImages = state.serviceImages;
+            if (state.groupMode)
+                document.getElementById("wiGroupByMenu").selectedIndex = this.currentGroupMode = state.groupMode;
+
+            this.buildServiceImagesTree();
+
+            if (state.openRows !== null){
+                var t = document.getElementById("wiTree");
+                var treeView = t.treeBoxObject.view;
+
+                for (var i = 0; i < treeView.rowCount; i++) {
+                    if (treeView.isContainer(i) && state.openRows.indexOf(i) != -1)
+                        treeView.toggleOpenState(i);
+                }
+
+            }
+        }
+        if (state.currentURI)  document.getElementById("wiBrowser").loadURI(state.currentURI);
+
+    },
+
+    getBrowser: function(){
+        return (typeof(gBrowser) != "undefined") ? gBrowser : WMSInspector.Utils.getBrowser()
     }
+
 
 
 }

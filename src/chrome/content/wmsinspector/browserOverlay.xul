@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<?xul-overlay href="chrome://wmsinspector/content/wmsinspectorOverlay.xul"?>
+
+<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
+
+<!DOCTYPE window SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspectorOverlay.js"/>
+    <script type="application/x-javascript" src="chrome://wmsinspector/content/wmsinspector.js"/>
+
+    <!-- Context menu -->
+    <popup id="contentAreaContextMenu">
+        <menu label="&wmsinspector.common.appname;" id="wiContextMenu" insertafter="devToolsSeparator">
+            <menupopup id="wiContextPopUp" onpopupshowing="WMSInspector.Overlay.checkSelection()">
+                <menuitem id="wiContextGetCapabilitesReport"
+                          label="&wmsinspector.context.capabilitiesreport;"
+                          oncommand="WMSInspector.Overlay.doBrowserContextMenuAction(1)"/>
+                <menuitem id="wiContextAddToLibrary"
+                          label="&wmsinspector.addservice.title;"
+                          oncommand="WMSInspector.Overlay.doBrowserContextMenuAction(2);"
+                          class="menuitem-iconic"
+                          image="chrome://wmsinspector/skin/icons/library_add.png" />
+            </menupopup>
+        </menu>
+    </popup>
+
+
+    <vbox id="appcontent" >
+        <splitter id="wiContentSplitter" hidden="true"/>
+        <vbox id="wiContent" hidden="true"/>
+    </vbox>
+
+
+    <!-- Status bar panel-->
+    <statusbar id="status-bar">
+        <statusbarpanel id="wiStatusBar" onclick="WMSInspector.Overlay.open()">
+            <image id="wiStatusBarImage" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
+        </statusbarpanel>
+    </statusbar>
+
+    <!-- Firefox toolbar palette -->
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="wiToolbarOpenLibrary" class="toolbarbutton-1"
+                   label="&wmsinspector.toolbar.openlibrary;" oncommand="WMSInspector.Overlay.openLibrary()" tooltiptext="&wmsinspector.common.appname; - &wmsinspector.toolbar.openlibrary;"/>
+    </toolbarpalette>
+
+
+
+</overlay>

@@ -3,7 +3,7 @@ content wmsinspector chrome/content/wmsinspector/
 skin wmsinspector default/1.0 chrome/skin/default/wmsinspector/
 style chrome://global/content/customizeToolbar.xul chrome://wmsinspector/skin/wmsinspector.css
 
-overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/wmsinspectorOverlay.xul
+overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/browserOverlay.xul
 
 resource wmsinspector modules/
 
