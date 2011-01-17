@@ -1,4 +1,5 @@
 @import "chrome://wmsinspector/skin/wmsinspector.css";
+@import "chrome://wmsinspector-os/skin/wmsinspector.css";
 
 #wiContent {
     height: 300px;

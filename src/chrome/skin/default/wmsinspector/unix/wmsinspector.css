@@ -1,0 +1,15 @@
+#wiMainToolbarButton {
+  list-style-image: url("chrome://wmsinspector-os/skin/wmsinspector24.png");
+}
+
+toolbar[iconsize="small"] #wiMainToolbarButton {
+  list-style-image: url("chrome://wmsinspector-os/skin/wmsinspector16.png");
+}
+
+#wiLibraryToolbarButton {
+  list-style-image: url("chrome://wmsinspector-os/skin/wmsinspector_library24.png");
+}
+
+toolbar[iconsize="small"] #wiLibraryToolbarButton {
+  list-style-image: url("chrome://wmsinspector-os/skin/wmsinspector_library16.png");
+}

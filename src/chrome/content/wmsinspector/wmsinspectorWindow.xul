@@ -2,7 +2,6 @@
 <?xul-overlay href="chrome://wmsinspector/content/wmsinspectorOverlay.xul"?>
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
 
 <!DOCTYPE window SYSTEM "chrome://wmsinspector/locale/strings.dtd">
 

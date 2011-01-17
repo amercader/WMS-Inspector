@@ -9,7 +9,7 @@
     <!-- Status bar panel (to be removed) -->
     <statusbar id="status-bar">
         <statusbarpanel id="wiStatusBar" onclick="WMSInspector.Overlay.open()">
-            <image id="wiStatusBarImage" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
+            <image id="wiMainToolbarButton" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
         </statusbarpanel>
     </statusbar>
 
