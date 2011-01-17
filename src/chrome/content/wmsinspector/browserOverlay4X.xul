@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<?xul-overlay href="chrome://wmsinspector/content/browserOverlay.xul"?>
+
+<!DOCTYPE window SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!-- Addon bar panel-->
+    <toolbar id="addon-bar">
+        <toolbarpanel id="wiAddonsBar">
+            <toolbarbutton id="wiMainToolbarButton" tooltiptext="&wmsinspector.common.appname;" oncommand="WMSInspector.Overlay.open()" />
+        </toolbarpanel>
+    </toolbar>
+    
+
+
+</overlay>

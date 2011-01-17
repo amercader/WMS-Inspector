@@ -2,8 +2,6 @@
 
 <?xul-overlay href="chrome://wmsinspector/content/wmsinspectorOverlay.xul"?>
 
-<?xml-stylesheet href="chrome://wmsinspector/content/wmsinspector.css"?>
-
 <!DOCTYPE window SYSTEM "chrome://wmsinspector/locale/strings.dtd">
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -33,17 +31,11 @@
     </vbox>
 
 
-    <!-- Status bar panel-->
-    <statusbar id="status-bar">
-        <statusbarpanel id="wiStatusBar" onclick="WMSInspector.Overlay.open()">
-            <image id="wiStatusBarImage" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
-        </statusbarpanel>
-    </statusbar>
-
     <!-- Firefox toolbar palette -->
     <toolbarpalette id="BrowserToolbarPalette">
-        <toolbarbutton id="wiToolbarOpenLibrary" class="toolbarbutton-1"
+        <toolbarbutton id="wiLibraryToolbarButton" class="toolbarbutton-1 chromeclass-toolbar-additional"
                    label="&wmsinspector.toolbar.openlibrary;" oncommand="WMSInspector.Overlay.openLibrary()" tooltiptext="&wmsinspector.common.appname; - &wmsinspector.toolbar.openlibrary;"/>
+        <toolbarbutton id="wiMainToolbarButton" class="toolbarbutton-1 chromeclass-toolbar-additional" label="&wmsinspector.common.appname;" tooltiptext="&wmsinspector.common.appname;" oncommand="WMSInspector.Overlay.open()"/>
     </toolbarpalette>
 
 

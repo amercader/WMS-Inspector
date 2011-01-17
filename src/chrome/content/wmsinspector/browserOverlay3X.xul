@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<?xul-overlay href="chrome://wmsinspector/content/browserOverlay.xul"?>
+
+<!DOCTYPE window SYSTEM "chrome://wmsinspector/locale/strings.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!-- Status bar panel (to be removed) -->
+    <statusbar id="status-bar">
+        <statusbarpanel id="wiStatusBar" onclick="WMSInspector.Overlay.open()">
+            <image id="wiStatusBarImage" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
+        </statusbarpanel>
+    </statusbar>
+
+</overlay>

@@ -3,7 +3,10 @@ content wmsinspector chrome/content/wmsinspector/
 skin wmsinspector default/1.0 chrome/skin/default/wmsinspector/
 style chrome://global/content/customizeToolbar.xul chrome://wmsinspector/skin/wmsinspector.css
 
-overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/browserOverlay.xul
+# When support for Firefox 3.6 is dropped, we should fall back to one overlay only
+#overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/browserOverlay.xul
+overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/browserOverlay3X.xul appversion<4.0b1
+overlay chrome://browser/content/browser.xul chrome://wmsinspector/content/browserOverlay4X.xul appversion>=4.0b1
 
 resource wmsinspector modules/
 
