@@ -9,10 +9,13 @@
     <!-- Addon bar panel-->
     <toolbar id="addon-bar">
         <toolbarpanel id="wiAddonsBar">
-            <toolbarbutton id="wiMainToolbarButton" tooltiptext="&wmsinspector.common.appname;" oncommand="WMSInspector.Overlay.open()" />
+            <toolbarbutton
+                id="wiMainToolbarButton"
+                tooltiptext="&wmsinspector.common.appname;"
+                oncommand="WMSInspector.Overlay.open()"
+                context="wiMainButtonPopUp"
+                />
         </toolbarpanel>
     </toolbar>
-    
-
-
+ 
 </overlay>

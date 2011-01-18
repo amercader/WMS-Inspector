@@ -28,6 +28,7 @@
 <!ENTITY wmsinspector.index.description "Clique em &quot;Atualizar solicitações&quot; para verificar se o documento atual possui solicitações padrão WMS (Web Map Service).">
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Relatório de compatibilidade">
+<!ENTITY wmsinspector.context.alwaysinwindow "Always open in a new window">
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Atualizar solicitações">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar por">

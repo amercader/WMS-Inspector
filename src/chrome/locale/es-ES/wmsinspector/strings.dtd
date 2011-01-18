@@ -28,6 +28,7 @@
 <!ENTITY wmsinspector.index.description "Haga clic en &quot;Actualizar solicitudes&quot; para comprobar si el documento actual contiene solicitudes a servicios WMS.">
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Informe de capacidades">
+<!ENTITY wmsinspector.context.alwaysinwindow "Abrir siempre en una nueva ventana">
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Actualizar solicitudes">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar por">

@@ -30,12 +30,42 @@
         <vbox id="wiContent" hidden="true"/>
     </vbox>
 
+    <popupset id="mainPopupSet">
+        <!-- Main button context menu, shared by the addons bar button and the
+        customizable button from the palette-->
+        <menupopup id="wiMainButtonPopUp"
+                   onpopupshowing="WMSInspector.Overlay.onMainPopupShowing()">
+            <menuitem id="wiContextAlwaysInWindow"
+                      label="&wmsinspector.context.alwaysinwindow;"
+                      oncommand="WMSInspector.Overlay.setOpenInWindow()"
+                      type="checkbox"/>
+            <menuseparator/>
+            <menuitem id="wiContextOpenOptions"
+                      label="&wmsinspector.options.title;"
+                      oncommand="WMSInspector.Overlay.openOptionsDialog();"
+                      class="menuitem-iconic"
+                      image="chrome://wmsinspector/skin/icons/config.png" />
+        </menupopup>
+    </popupset>
+
 
     <!-- Firefox toolbar palette -->
     <toolbarpalette id="BrowserToolbarPalette">
-        <toolbarbutton id="wiLibraryToolbarButton" class="toolbarbutton-1 chromeclass-toolbar-additional"
-                   label="&wmsinspector.toolbar.openlibrary;" oncommand="WMSInspector.Overlay.openLibrary()" tooltiptext="&wmsinspector.common.appname; - &wmsinspector.toolbar.openlibrary;"/>
-        <toolbarbutton id="wiMainToolbarButton" class="toolbarbutton-1 chromeclass-toolbar-additional" label="&wmsinspector.common.appname;" tooltiptext="&wmsinspector.common.appname;" oncommand="WMSInspector.Overlay.open()"/>
+        <toolbarbutton
+            id="wiLibraryToolbarButton"
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            label="&wmsinspector.toolbar.openlibrary;"
+            oncommand="WMSInspector.Overlay.openLibrary()"
+            tooltiptext="&wmsinspector.common.appname; - &wmsinspector.toolbar.openlibrary;"
+            />
+        <toolbarbutton
+            id="wiMainToolbarButton"
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            label="&wmsinspector.common.appname;"
+            tooltiptext="&wmsinspector.common.appname;"
+            oncommand="WMSInspector.Overlay.open()"
+                context="wiMainButtonPopUp"
+            />
     </toolbarpalette>
 
 

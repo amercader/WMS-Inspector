@@ -28,6 +28,7 @@
 <!ENTITY wmsinspector.index.description "Kliknij &quot;Odśwież żądania&quot; aby sprawdzić, czy strona zawiera żądania WMS.">
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Raport Capabilities">
+<!ENTITY wmsinspector.context.alwaysinwindow "Always open in a new window">
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Odśwież żądania">
 <!ENTITY wmsinspector.toolbar.groupby "Grupuj według">

@@ -28,6 +28,7 @@
 <!ENTITY wmsinspector.index.description "Click &quot;Refresh requests&quot; to check if the current document contains WMS requests.">
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Capabilities report">
+<!ENTITY wmsinspector.context.alwaysinwindow "Always open in a new window">
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Refresh requests">
 <!ENTITY wmsinspector.toolbar.groupby "Group By">

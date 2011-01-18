@@ -28,6 +28,7 @@
 <!ENTITY wmsinspector.index.description "Feu clic en &quot;Actualitzar crides&quot; per comprovar si el document actual cont&#233; crides a serveis WMS.">
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Informe de capacitats">
+<!ENTITY wmsinspector.context.alwaysinwindow "Obrir sempre en un nova finestra">
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Actualitzar crides">
 <!ENTITY wmsinspector.toolbar.groupby "Agrupar per">

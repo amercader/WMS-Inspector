@@ -31,6 +31,7 @@
                         <caption label="&wmsinspector.options.appearance;"/>
                         <vbox pack="center" flex="1">
                             <checkbox id="wiHideContextMenu" label="&wmsinspector.options.hidecontextmenu;"/>
+                            <checkbox id="wiAlwaysInWindow" label="&wmsinspector.context.alwaysinwindow;"/>
                         </vbox>
                     </groupbox>
                     <groupbox>

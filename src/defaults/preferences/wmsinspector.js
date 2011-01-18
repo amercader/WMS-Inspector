@@ -6,3 +6,4 @@ pref("extensions.wmsinspector.libraryconfirmbeforedelete", true);
 pref("extensions.wmsinspector.exportseparator", ",");
 pref("extensions.wmsinspector.logtoconsole", true);
 pref("extensions.wmsinspector.logtofile", true);
+pref("extensions.wmsinspector.alwaysopeninwindow", false);

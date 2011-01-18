@@ -6,10 +6,12 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+
+
     <!-- Status bar panel (to be removed) -->
     <statusbar id="status-bar">
-        <statusbarpanel id="wiStatusBar" onclick="WMSInspector.Overlay.open()">
-            <image id="wiMainToolbarButton" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
+        <statusbarpanel id="wiStatusBar">
+            <toolbarbutton id="wiMainToolbarButton" oncommand="WMSInspector.Overlay.open()" context="wiMainButtonPopUp" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
         </statusbarpanel>
     </statusbar>
 

@@ -28,6 +28,7 @@
 <!ENTITY wmsinspector.index.description "Cliquer sur &quot;Rafraîchir les requêtes&quot; pour voir si le document actuel contients des requêtes WMS.">
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "Rapport du Capabilities">
+<!ENTITY wmsinspector.context.alwaysinwindow "Always open in a new window">
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "Rafraîchir les requêtes">
 <!ENTITY wmsinspector.toolbar.groupby "Trier par">

@@ -15,6 +15,8 @@ var OptionsDialog = {
         
 
         document.getElementById("wiHideContextMenu").checked = this.prefs.getBoolPref("hidecontextmenu");
+
+        document.getElementById("wiAlwaysInWindow").checked = this.prefs.getBoolPref("alwaysopeninwindow");
         
         document.getElementById("wiEditorPath").value = this.prefs.getCharPref("editor");
 
@@ -86,6 +88,9 @@ var OptionsDialog = {
 
         //Hide context menu
         this.prefs.setBoolPref("hidecontextmenu",(document.getElementById("wiHideContextMenu").checked === true));
+
+        //Open always in a new window
+        this.prefs.setBoolPref("alwaysopeninwindow",(document.getElementById("wiAlwaysInWindow").checked === true));
 
         //Default editor
         this.prefs.setCharPref("editor",document.getElementById("wiEditorPath").value);

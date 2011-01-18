@@ -180,6 +180,8 @@ WMSInspector.Overlay = {
     open: function(){
         if (this.wiWindow && !this.wiWindow.closed) {
             this.wiWindow.focus();
+        } else if (WMSInspector.Overlay.prefs.getBoolPref("alwaysopeninwindow")) {
+            this.detach();
         } else {
             this.togglePanel();
         }
@@ -216,7 +218,9 @@ WMSInspector.Overlay = {
                 "chrome://wmsinspector/content/wmsinspectorWindow.xul",
                 "chrome,centerscreen,resizable=yes",
                 args);
-            this.togglePanel();
+
+            if (!document.getElementById("wiContentSplitter").hidden)
+                this.togglePanel();
         }
 
 
@@ -1008,6 +1012,16 @@ WMSInspector.Overlay = {
         return true;
 
     },
+
+    onMainPopupShowing: function(){
+        document.getElementById("wiContextAlwaysInWindow").setAttribute("checked" ,WMSInspector.Overlay.prefs.getBoolPref("alwaysopeninwindow"));
+    },
+
+    setOpenInWindow: function(){
+        WMSInspector.Overlay.prefs.setBoolPref("alwaysopeninwindow",!WMSInspector.Overlay.prefs.getBoolPref("alwaysopeninwindow"));
+
+    },
+
 
     openOptionsDialog: function() {
         var dialog = window.openDialog("chrome://wmsinspector/content/optionsDialog.xul", "wiOptionsDialog", "chrome,centerscreen");

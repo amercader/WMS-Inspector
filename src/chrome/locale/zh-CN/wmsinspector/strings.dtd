@@ -28,6 +28,7 @@
 <!ENTITY wmsinspector.index.description "点「刷新请求」可检查当前文档是否包含 WMS 请求。">
 <!-- Context menu -->
 <!ENTITY wmsinspector.context.capabilitiesreport "能力报告">
+<!ENTITY wmsinspector.context.alwaysinwindow "Always open in a new window">
 <!-- Toolbar -->
 <!ENTITY wmsinspector.toolbar.refresh "刷新请求">
 <!ENTITY wmsinspector.toolbar.groupby "分类">
