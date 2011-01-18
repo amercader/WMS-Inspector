@@ -1,13 +1,16 @@
 #! /bin/sh
 
-usage="Usage: $0 [-v version] directory"
+usage="Usage: $0 [-j -v version] directory"
 
 version=""
+dojar=false
 
-while getopts 'v:' option
+while getopts 'jv:' option
 do	case "$option" in
 	v)	version="$OPTARG";;
-	[?])	print >&2 $usage
+    j)	dojar=true;;
+    #[?])	print >&2 $usage
+    [?])	echo $usage
 		exit 1;;
 	esac
 done
@@ -41,12 +44,15 @@ cp -R $1 $tmpdir
 
 cd $tmpdir
 
-cd chrome
-zip -qrm wmsinspector.jar .
+if [ $dojar = true ]
+then
+    cd chrome
+    zip -qrm wmsinspector.jar .
 
-cd ..
+    cd ..
 
-sed -i 's/chrome\//jar:chrome\/wmsinspector.jar!\//g' chrome.manifest
+    sed -i 's/chrome\//jar:chrome\/wmsinspector.jar!\//g' chrome.manifest
+fi
 
 zip -qr ../$extensionname . -x .git\*
 
