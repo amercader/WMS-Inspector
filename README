@@ -7,7 +7,7 @@ This document describes the repository structure. For details regarding the
 project, how to install a development version or support options please refer to
 the file src/README or to the following wiki page:
 
-http://wiki.github.com/amercader/WMS-Inspector/
+http://github.com/amercader/WMS-Inspector/wiki
 
 Here is a description of the repository folders contents:
 * build: scripts to build the XPI file from the sources

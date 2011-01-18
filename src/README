@@ -18,7 +18,7 @@ http://www.opengeospatial.org/standards/wms
 Install
 ----------
 WMS Inspector can be downloaded from addons.mozilla.org (AMO)
-https://addons.mozilla.org/firefox/addon/91406
+http://addons.mozilla.org/addon/wms-inspector/
 
 If you want to install a development version follow this steps:
 1.	Clone a git repository from the GitHub repository:
