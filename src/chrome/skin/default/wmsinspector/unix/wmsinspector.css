@@ -13,3 +13,8 @@ toolbar[iconsize="small"] #wiMainToolbarButton {
 toolbar[iconsize="small"] #wiLibraryToolbarButton {
   list-style-image: url("chrome://wmsinspector-os/skin/wmsinspector_library16.png");
 }
+
+/* To be removed */
+.wiMainToolbarButton3X {
+  list-style-image: url("chrome://wmsinspector-os/skin/wmsinspector16.png") !important;
+}

@@ -11,7 +11,7 @@
     <!-- Status bar panel (to be removed) -->
     <statusbar id="status-bar">
         <statusbarpanel id="wiStatusBar">
-            <toolbarbutton id="wiMainToolbarButton" oncommand="WMSInspector.Overlay.open()" context="wiMainButtonPopUp" class="wiImgLink" tooltiptext="&wmsinspector.common.appname;" />
+            <toolbarbutton id="wiMainToolbarButton" oncommand="WMSInspector.Overlay.open()" context="wiMainButtonPopUp" class="wiImgLink wiMainToolbarButton3X" tooltiptext="&wmsinspector.common.appname;" />
         </statusbarpanel>
     </statusbar>
 
