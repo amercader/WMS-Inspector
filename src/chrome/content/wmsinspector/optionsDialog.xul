@@ -13,6 +13,8 @@
         onload="OptionsDialog.init();"
         ondialogaccept="OptionsDialog.onAccept();"
         persist="width height"
+        width="400"
+        height="410"
 >
 
     <script type="application/x-javascript" src="chrome://wmsinspector/content/optionsDialog.js"/>

@@ -472,7 +472,7 @@ var Library = {
         window.openDialog(
             "chrome://wmsinspector/content/addServiceDialog.xul",
             "wiAddServiceDialog",
-            "chrome,centerscreen,modal,dialog",
+            "chrome,centerscreen,modal,dialog,resizable=yes",
             params // If a service id provided, dialog will be shown in edit mode
             ).focus();
 
