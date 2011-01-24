@@ -23,6 +23,8 @@ var DB = {
 
     conn: null,
 
+    operationCallback: false,
+
     getDBConnection: function(){
         var file = IO.getProfileDir();
         file.append(this.DBName);
@@ -30,13 +32,13 @@ var DB = {
         return this.storageService.openDatabase(file);
     },
 
-    checkDB: function(){
+    checkDB: function(callback){
         var file = IO.getProfileDir();
         file.append(this.DBName);
 
         //DB does not exist, copy the default one to profile dir
         if (!file.exists()){
-            this.restoreDB();
+            this.restoreDB(callback);
         } else {
             //DB exists, open connection
             this.conn = this.getDBConnection();
@@ -46,14 +48,16 @@ var DB = {
             if (!DBInitialized){
                 //This should never happen if everything went right
                 this.conn.close();
-                this.restoreDB();
+                this.restoreDB(callback);
             } else if (this.conn.schemaVersion < this.schemaVersion) {
                 //Upgrade schema version if necessary
-
+                if (callback) this.operationCallback = callback
                 if (this.conn.schemaVersion < 2){
                     this.upgradeToV2();
                 }
 
+            } else {
+                if (callback) callback(true);
             }
         }
     },
@@ -130,6 +134,8 @@ var DB = {
 
                 Log.info("Database schema successfully upgraded to version " + DB.schemaVersion);
 
+                if (DB.operationCallback) DB.operationCallback(true)
+
                 return true;
             }
         }
@@ -140,6 +146,9 @@ var DB = {
     },
 
     exceptionHandler: function(error,callback){
+
+        callback = callback || DB.operationCallback;
+
         Log.error(error);
         if (DB.conn.lastErrorString && DB.conn.lastErrorString != "not an error")
             Log.error(DB.conn.lastErrorString);
@@ -148,32 +157,64 @@ var DB = {
         return false;
     },
 
-    restoreDB: function(){
+    restoreDB: function(callback){
         try{
             //Copy default database to profile folder
             var src = IO.getDefaultsDir();
-
             if (src){
                 src.append(this.DBName);
+
                 var dest = IO.getProfileDir();
                 if (dest){
-                    try {
-                        src.copyTo(dest,"");
-                    } catch (error) {
-                        Log.error(error);
-                        return false;
+                    if (Utils.compareFirefoxVersions(Utils.currentFirefoxVersion,"4.0b")< 0){
+                        // FF 3.6
+                        try {
+                            src.copyTo(dest,"");
+                        } catch (error) {
+                            Log.error(error);
+                            return false;
+                        }
+                        //Open DB connection
+                        this.conn = this.getDBConnection();
+
+                        Log.info("New database successfully restored (Schema version " + this.conn.schemaVersion + ")");
+
+                        if (callback) callback(true);
+
+                        return true;
+                    } else {
+                        // FF 4.X
+                        // In FF 4, the extension's contents are packed inside
+                        // the XPI file, we must extract the default database.
+
+                        Components.utils.import("resource://gre/modules/AddonManager.jsm");
+
+                        dest.append(DB.DBName);
+                        AddonManager.getAddonByID("wmsinspector@flentic.net", function(addon) {
+                            try{
+                                var file = "defaults/" + DB.DBName;
+                                var uri = addon.getResourceURI(file);
+
+                                IO.saveURItoFile(uri, dest);
+
+                                //Open DB connection
+                                DB.conn = DB.getDBConnection();
+
+                                Log.info("New database successfully restored (Schema version " + DB.conn.schemaVersion + ")");
+
+                                if (callback) callback(true);
+                            } catch (error){
+                                Log.error(error);
+                                if (callback) callback(false);
+                            }
+
+                        });
                     }
-                    //Open DB connection
-                    this.conn = this.getDBConnection();
-
-                    Log.info("New database successfully restored (Schema version " + this.conn.schemaVersion);
-
-                    return true;
                 }
             }
-            return false;
         } catch (error){
             Log.error(error);
+            if (callback) callback(false);
         }
     },
 

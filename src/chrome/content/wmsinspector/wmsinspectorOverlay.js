@@ -47,9 +47,7 @@ WMSInspector.Overlay = {
         if (window.arguments && window.arguments[0] && window.arguments[0].state && window.arguments[0].state.checkedForUpgrades){
             // We already checked for upgrades, set up the DB connection and we
             // are ready to roll.
-            WMSInspector.DB.checkDB();
-
-            this.onReady();
+            WMSInspector.DB.checkDB(this.onReady);
 
         } else {
             // Check if first run or upgrade actions must be performed.
@@ -93,16 +91,16 @@ WMSInspector.Overlay = {
     onReady: function(){
 
         // Get a WMSInspector service instance
-        this.wis = WMSInspector.Utils.getWMSInspectorService();
+        WMSInspector.Overlay.wis = WMSInspector.Utils.getWMSInspectorService();
 
         //Check if tmp dir exists
         WMSInspector.IO.checkWITmpDir();
 
         //Show/Hide Context menu
-        if (!this.windowMode)
-            document.getElementById("wiContextMenu").setAttribute("hidden",this.prefs.getBoolPref("hidecontextmenu"));
+        if (!WMSInspector.Overlay.windowMode)
+            document.getElementById("wiContextMenu").setAttribute("hidden",WMSInspector.Overlay.prefs.getBoolPref("hidecontextmenu"));
 
-        this.wis.getServiceTypes(function(results){
+        WMSInspector.Overlay.wis.getServiceTypes(function(results){
             if (results)
                 WMSInspector.Overlay.serviceTypes = results;
         });
@@ -110,12 +108,12 @@ WMSInspector.Overlay = {
         // Set up detach / attach button
         var button = document.getElementById("wiDetachButton");
         button.className = "wiSmallIcon wiImgLink";
-        button.className += (this.windowMode) ? " wiAttachButton" : " wiDetachButton";
-        button.tooltipText = (this.windowMode) ? WMSInspector.Utils.getString("wi_toolbar_attach") : WMSInspector.Utils.getString("wi_toolbar_detach")
+        button.className += (WMSInspector.Overlay.windowMode) ? " wiAttachButton" : " wiDetachButton";
+        button.tooltipText = (WMSInspector.Overlay.windowMode) ? WMSInspector.Utils.getString("wi_toolbar_attach") : WMSInspector.Utils.getString("wi_toolbar_detach")
 
         // If switching between panel or window, try to restore the state
         if (window.arguments && window.arguments[0] && window.arguments[0].state)
-            this.setState(window.arguments[0].state);
+            WMSInspector.Overlay.setState(window.arguments[0].state);
 
     },
 
@@ -132,7 +130,7 @@ WMSInspector.Overlay = {
                     installedVersion = prefs.getCharPref("version");
                     firstRun = prefs.getBoolPref("firstrun");
                 } catch(error){
-                    WMSInspector.Log.error(error);
+                    // The preferences are probably not set
                 } finally {
                     if (firstRun){
                         prefs.setBoolPref("firstrun",false);
@@ -142,7 +140,7 @@ WMSInspector.Overlay = {
                         WMSInspector.Log.info("First run (version " + currentVersion + ")");
 
                         //Copy an empty database to the profile directory
-                        WMSInspector.DB.restoreDB();
+                        WMSInspector.DB.restoreDB(WMSInspector.Overlay.onReady);
 
                     } else if (installedVersion != currentVersion && !firstRun) {
                         prefs.setCharPref("version",currentVersion);
@@ -151,19 +149,16 @@ WMSInspector.Overlay = {
                         WMSInspector.Log.info("Upgrading from version " + installedVersion + " to " + currentVersion);
 
                         //Check if the database schema needs to be updated
-                        WMSInspector.DB.checkDB();
+                        WMSInspector.DB.checkDB(WMSInspector.Overlay.onReady);
 
                     }else {
                         // No first run nor upgrade
 
                         //This will set up the DB connection
-                        WMSInspector.DB.checkDB();
+                        WMSInspector.DB.checkDB(WMSInspector.Overlay.onReady);
                     }
 
                     WMSInspector.Overlay.checkedForUpgrades = true;
-
-                    // The overlay is ready to be loaded
-                    WMSInspector.Overlay.onReady();
 
                 }
             }

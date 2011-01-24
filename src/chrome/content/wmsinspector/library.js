@@ -34,16 +34,19 @@ var Library = {
 
         this.list = document.getElementById("wiServicesListbox");
 
-        DB.checkDB();
+        DB.checkDB(this.onReady);
 
-        if (DB.conn == null){
+    },
+
+    onReady: function(result){
+        if (result === false){
             document.getElementById("wiLibraryDBError").setAttribute("style","visibility: visible");
-            this.list.setAttribute("style","visibility: collapse");
+            Library.list.setAttribute("style","visibility: collapse");
             return;
         }
 
         //Get tags from DB
-        this.wis.getTags(function(tags){
+        Library.wis.getTags(function(tags){
             if (tags){
                 var tagsList = document.getElementById("wiLibraryTagsList");
                 for (let i = 0; i < tags.length; i++){
@@ -54,7 +57,7 @@ var Library = {
         });
 
         //Get the service types and versions from the DB and call onWindowReady
-        this.wis.getServiceTypes(function(results){
+        Library.wis.getServiceTypes(function(results){
             if (results){
                 Library.serviceTypes = results;
 
@@ -68,10 +71,6 @@ var Library = {
                 Library.onWindowReady()
             }
         });
-
-
-        //this.fetchList("types",typesList,function (){Library.onWindowReady()});
-
     },
 
     onWindowReady: function(){

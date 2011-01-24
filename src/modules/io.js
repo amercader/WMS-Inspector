@@ -127,6 +127,26 @@ var IO = {
         return file;
     },
 
+    saveURItoFile: function(uri,file) {
+        var IOService = Utils.getService("@mozilla.org/network/io-service;1","nsIIOService");
+        var channel = IOService.newChannelFromURI(uri);
+
+        var stream = channel.open();
+
+        var binaryStream = Utils.getInstance("@mozilla.org/binaryinputstream;1","nsIBinaryInputStream");
+        binaryStream.setInputStream(stream);
+
+        var size = 0;
+        var data = "";
+        while(size = binaryStream.available()) {
+            data += binaryStream.readBytes(size);
+        }
+
+        this.write(file,data);
+
+        return file;
+    },
+
     read: function(file){
 
         var data = "";
