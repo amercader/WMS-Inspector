@@ -2,7 +2,7 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>wmsinspector@flentic.net</em:id>
-		<em:version>0.2.0</em:version>
+		<em:version>0.2.1</em:version>
 		<em:type>2</em:type>
 		
 		<!-- Target Application this extension can install into, with minimum and maximum supported versions. -->
@@ -13,7 +13,7 @@
 				<em:maxVersion>4.0.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
-		
+
 		<!-- Front End MetaData -->
 		<em:name>WMS Inspector</em:name>
 		<em:description>Adds tools for working with Web Map Services (WMS) and other map services.</em:description>
